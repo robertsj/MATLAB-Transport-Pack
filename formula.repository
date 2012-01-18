@@ -1,0 +1,38 @@
+\form#0:$ \nu \Sigma_f $
+\form#1:$ \chi $
+\form#2:$ f = \sum_g \nu\Sigma_{f,g} \phi_g $
+\form#3:$ \textrm{scale} \times f $
+\form#4:\[ f = \sum_g \nu\Sigma_{f,g} \phi_g \, . \]
+\form#5:\[ q_{f,g} = \frac{\chi_g}{4\pi k} \sum_g \nu\Sigma_{f,g} \phi_g \, . \]
+\form#6:$ 4\pi $
+\form#7:$ k $
+\form#8:\[ \mathbf{T}\psi = \frac{\Sigma_{sg\to g}}{4\pi} \sum_n w_n \psi_n(\vec{r},\hat{\Omega},g) + Q_{ng} \, , \]
+\form#9:$ \mathbf{T} $
+\form#10:$ Q $
+\form#11:\[ (\mathbf{T} - \frac{1}{4\pi}\mathbf{SD})\psi = Q \, , \]
+\form#12:$ \mathbf{D}$
+\form#13:$\mathbf{T}^{-1}$
+\form#14:\[ (\mathbf{I} - \frac{1}{4\pi}\mathbf{T}^{-1}\mathbf{SD}) \psi = \mathbf{T}^{-1} Q \, . \]
+\form#15:\[ (\mathbf{I} - \frac{1}{4\pi}\mathbf{D}\mathbf{T}^{-1}\mathbf{S})\phi = \mathbf{D} \mathbf{T}^{-1} Q \, . \]
+\form#16:$\mathbf{A}x =b$
+\form#17:\[ \phi^{(l+1)} = \frac{1}{4\pi}\mathbf{D}\mathbf{T}^{-1}\mathbf{S} \phi^{(l)} + \mathbf{D} \mathbf{T}^{-1} Q \, . \]
+\form#18:\[ \phi^{(l+1)} = \mathbf{H} \phi^{(l)} + q\, . \]
+\form#19:\[ \phi^{(l+1)} = \phi^{(l)} + \mu R^{(l+1)}\, , \]
+\form#20:$ \mu $
+\form#21:$R$
+\form#22:\[ R^{(l+1)} = R^{(l)} + \mu \Big ( \mathbf{H} R^{(l)}-R^{(l)} \Big ) \, . \]
+\form#23:$L_2 $
+\form#24:\[ \mu^{(l)} = -\frac{ (R^{(l)})^T (\mathbf{H} R^{(l)}-\mathbf{R}^{(l)}) } { || \mathbf{H} \mathbf{R}^{(l)}-\mathbf{R}^{(l)} ||^2_2 } \, . \]
+\form#25:\[ \Phi^{(0)} = \phi^{(l)} \, , \]
+\form#26:\[ \Phi^{(1)} = \mathbf{H} \Phi^{(0)} + q\, , \]
+\form#27:\[ \Phi^{(2)} = \mathbf{H} \Phi^{(1)} + q\, . \]
+\form#28:\[ e_0 = \Phi^{(1)} - \Phi^{(0)} = R^{(l)} \, . \]
+\form#29:\[ e_1 = \Phi^{(2)} - \Phi^{(1)} \, . \]
+\form#30:\[ \mu^{(l)} = -\frac{e^T_0(e_1-e_0) } { ||e_1 - e_0)||^2_2 } \, . \]
+\form#31:\[ \phi^{(l+1)} = \phi^{(l)} + \mu^{(l)} R^{(l)} \, . \]
+\form#32:\[ \tilde{\Phi}^{(0)} = \phi^{(l+1)} \, , \]
+\form#33:\[ \tilde{\Phi}^{(1)} = \mathbf{H} \tilde{\Phi}^{(0)} + q = \mu^{(l)} \Phi^{(2)} + (1-\mu^{(l)})\Phi^{(1)}\, , \]
+\form#34:\[ \tilde{\Phi}^{(2)} = \mathbf{H} \tilde{\Phi}^{(1)} + q\, . \]
+\form#35:$\tilde{\Phi}$
+\form#36:\[ \mathbf{T}\psi = Q \, , \]
+\form#37:$ \mathbf{T}^{-1} $

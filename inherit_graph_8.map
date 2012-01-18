@@ -1,0 +1,19 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$classhandle.html" title="handle" alt="" coords="7,271,65,302"/>
+<area shape="rect" id="node3" href="$class_boundary.html" title="Holds the incident and outgoing boundary fluxes." alt="" coords="141,5,219,35"/>
+<area shape="rect" id="node5" href="$class_boundary_condition.html" title="Base boundary condition class." alt="" coords="115,58,245,89"/>
+<area shape="rect" id="node11" href="$class_equation.html" title="Base equation class for spatial discretization." alt="" coords="144,111,216,142"/>
+<area shape="rect" id="node15" href="$class_fission_source.html" title="Defines the isotropic source from fission reactions." alt="" coords="128,165,232,195"/>
+<area shape="rect" id="node17" href="$class_inner_iteration.html" title="Solve the within&#45;group transport equation." alt="" coords="131,218,229,249"/>
+<area shape="rect" id="node23" href="$class_input.html" title="Stores and processes user input from a driver script." alt="" coords="155,271,205,302"/>
+<area shape="rect" id="node25" href="$class_materials.html" title="Materials" alt="" coords="143,325,217,355"/>
+<area shape="rect" id="node27" href="$class_mesh.html" title="2&#45;D Cartesian mesh." alt="" coords="153,378,207,409"/>
+<area shape="rect" id="node29" href="$class_source.html" title="Source" alt="" coords="149,431,211,462"/>
+<area shape="rect" id="node31" href="$class_state.html" title="Represents the state of the problem." alt="" coords="153,485,207,515"/>
+<area shape="rect" id="node33" href="$class_sweep2_d.html" title="Sweep over a 2D mesh." alt="" coords="141,538,219,569"/>
+<area shape="rect" id="node7" href="$class_reflective.html" title="Reflective boundary condition." alt="" coords="309,5,389,35"/>
+<area shape="rect" id="node9" href="$class_vacuum.html" title="Vacuum boundary condition." alt="" coords="315,58,384,89"/>
+<area shape="rect" id="node13" href="$class_d_d2_d.html" title="Diamond difference approximation in two dimensions." alt="" coords="321,111,377,142"/>
+<area shape="rect" id="node19" href="$class_livolant.html" title="Livolant acceleration for inner iterations." alt="" coords="316,191,383,222"/>
+<area shape="rect" id="node21" href="$class_source_iteration.html" title="Source iteration for inner iterations." alt="" coords="295,245,404,275"/>
+</map>
