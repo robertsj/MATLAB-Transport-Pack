@@ -39,13 +39,13 @@
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#pri-attribs">Private Attributes</a>  </div>
+<a href="#pro-attribs">Protected Attributes</a>  </div>
   <div class="headertitle">
 <h1>Mesh Class Reference</h1>  </div>
 </div>
 <div class="contents">
 <!-- doxytag: class="Mesh" --><!-- doxytag: inherits="handle" -->
-<p>2-D Cartesian mesh.  
+<p>Base Cartesian mesh.  
 <a href="#_details">More...</a></p>
 <div class="dynheader">
 Inheritance diagram for Mesh:</div>
@@ -66,21 +66,30 @@ Collaboration diagram for Mesh:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a69b40b8f2c550723238c1526e6eff4d6">Mesh</a> (in xfm, in yfm, in xcm, in ycm, in material_map)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#a69b40b8f2c550723238c1526e6eff4d6"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a9bf054a9a8065e21f93ac319ceebed59">add_mesh_map</a> (in obj, in mesh_map, in map_key)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a2f1444d754ab3328ec0bbbae3b4174b4">Mesh</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#a2f1444d754ab3328ec0bbbae3b4174b4"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a742d7d0a568874170ceda75ba0adac12">widths</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get cell array of width vectors.  <a href="#a742d7d0a568874170ceda75ba0adac12"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a141c16b51fda77109bd81e7dd8476bbb">dx</a> (in obj, in i)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Width along x-axis for a cell.  <a href="#a141c16b51fda77109bd81e7dd8476bbb"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#aea0ab5a5d5efe5d35b650ca9ad8e521e">dy</a> (in obj, in i)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Width along y-axis for a cell.  <a href="#aea0ab5a5d5efe5d35b650ca9ad8e521e"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a670287db3c0acebabf067144b731b119">dz</a> (in obj, in i)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Width along z-axis for a cell.  <a href="#a670287db3c0acebabf067144b731b119"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a9d97c6189b4cee252abff1282aa8be54">number_cells</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the total number of cells.  <a href="#a9d97c6189b4cee252abff1282aa8be54"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a363d0e4855d63ee7b5af97811855fdc2">number_cells_x</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of cells along the x axis.  <a href="#a363d0e4855d63ee7b5af97811855fdc2"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a77503ffc4fc12219c55d6c55b2425ecb">number_cells_y</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of cells along the y axis.  <a href="#a77503ffc4fc12219c55d6c55b2425ecb"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a4786e6e6e6d9244b76f66bfc83857003">number_cells_z</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of cells along the z axis.  <a href="#a4786e6e6e6d9244b76f66bfc83857003"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a0a4d6ca4a4949a1e3098a462a0aee57c">dim</a> (in obj, in i)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a3fc8541d23d752ca18b1dc025dfee99f">index</a> (in obj, in i, in j)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of cells along the an axis.  <a href="#a0a4d6ca4a4949a1e3098a462a0aee57c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a994ba1991d6bdf654ea234e43c7be93e">index</a> (in obj, in i, in j, in k)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the cardinal index for i, j, and k.  <a href="#a994ba1991d6bdf654ea234e43c7be93e"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a9f08f658434ab144198c1dc4dcf9404a">mesh_map</a> (in obj, in map_key)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a3b195e78297b940e9b45ebdd32a341b7">plot_mesh_map</a> (in obj, in mapkey)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a92b8a659bd7da9e20b3b72ba7a689335">plot_flux</a> (in obj, in f)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a0c6bf1945a45d80c15d230fbcf0bece5">mesh_axes</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a mesh map.  <a href="#a9f08f658434ab144198c1dc4dcf9404a"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Constant Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#aa7e9caff0fe286a2640463b57039cfcb">LEFT</a> = 1</td></tr>
@@ -89,127 +98,61 @@ Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Constant Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a2d01c516796d8d6b04d0ea71bad97117">TOP</a> = 4</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Constant Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a2f23633dd3e38a9a3ac771540bb4de3e">SOUTH</a> = 5</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Constant Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#af05f59cee6f575301a58e05826e4a843">NORTH</a> = 6</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">Constant Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a6b6a6ab6a827aec2cb2417c3e4cc981f">DIM</a> = 2</td></tr>
-<tr><td colspan="2"><h2><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
+<tr><td colspan="2"><h2><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a80a211deedd49812f5e068c35a2fcdd6">d_xcm</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">x coarse mesh boundaries  <a href="#a80a211deedd49812f5e068c35a2fcdd6"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#adb15c5937c5ef1444bfca8d2f43f71e9">d_ycm</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">y coarse mesh boundaries  <a href="#adb15c5937c5ef1444bfca8d2f43f71e9"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a79d714514041a94b5e8f2f6b6cd6eaaa">d_zcm</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">z coarse mesh boundaries  <a href="#a79d714514041a94b5e8f2f6b6cd6eaaa"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a1ec26b0b8b1f0c9c8e3eeb9d919d9709">d_xfm</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">x fine meshes in each x coarse mesh  <a href="#a1ec26b0b8b1f0c9c8e3eeb9d919d9709"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a7d5f5c159ef37436dedbfcf0fdb429dd">d_yfm</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">y fine meshes in each y coarse mesh  <a href="#a7d5f5c159ef37436dedbfcf0fdb429dd"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#aba0d8e14cf856aa6fa987add25e1fc02">d_zfm</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">z fine meshes in each y coarse mesh  <a href="#aba0d8e14cf856aa6fa987add25e1fc02"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a9a994a076c83fe686b912ca908f3fd01">d_dx</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">x widths  <a href="#a9a994a076c83fe686b912ca908f3fd01"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#acccd139b056ae599a5814b0afda32392">d_dy</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">y widths  <a href="#acccd139b056ae599a5814b0afda32392"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a9b5217d1dd1d0e2ccb8787fd3ac480da">d_dz</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">z widths  <a href="#a9b5217d1dd1d0e2ccb8787fd3ac480da"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#ae1d9d2e608dd551814e9886eb8a726d6">d_number_cells</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Total number of cells.  <a href="#ae1d9d2e608dd551814e9886eb8a726d6"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#ae5b1294f875104e41cf73b04d51e50b7">d_number_cells_x</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of cells in x direction.  <a href="#ae5b1294f875104e41cf73b04d51e50b7"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#ae948037f2557b7efed00478f26d623fc">d_number_cells_y</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of cells in y direction.  <a href="#ae948037f2557b7efed00478f26d623fc"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#afec3856c4a5ece7f32e9c820ca33bd38">d_number_cells_z</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of cells in y direction.  <a href="#afec3856c4a5ece7f32e9c820ca33bd38"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a771cbbf734a49cadfd195780c0f3e6a5">d_mesh_map</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Map container containing a key describing a mesh property and a fine mesh map defining the property in each cell.  <a href="#a771cbbf734a49cadfd195780c0f3e6a5"></a><br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>2-D Cartesian mesh. </p>
+<div class="textblock"><p>Base Cartesian mesh. </p>
 <p>Finish me. </p>
 </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a69b40b8f2c550723238c1526e6eff4d6"></a><!-- doxytag: member="Mesh::Mesh" ref="a69b40b8f2c550723238c1526e6eff4d6" args="(in xfm, in yfm, in xcm, in ycm, in material_map)" -->
+<a class="anchor" id="a2f1444d754ab3328ec0bbbae3b4174b4"></a><!-- doxytag: member="Mesh::Mesh" ref="a2f1444d754ab3328ec0bbbae3b4174b4" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">function <a class="el" href="class_mesh.html">Mesh</a> </td>
           <td>(</td>
-          <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>xfm</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
-          <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>yfm</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>xcm</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>ycm</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>material_map</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>Class constructor. </p>
-<p>The mesh is defined in terms of .</p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">xfm</td><td>Number of fine mesh per x coarse mesh. </td></tr>
-    <tr><td class="paramname">yfm</td><td>Number of fine mesh per y coarse mesh. </td></tr>
-    <tr><td class="paramname">xcm</td><td>Coarse mesh edges along x axis. </td></tr>
-    <tr><td class="paramname">ycm</td><td>Coarse mesh edges along y axis. </td></tr>
-    <tr><td class="paramname">material_map</td><td>Coarse mesh material map.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>Instance of the <a class="el" href="class_mesh.html" title="2-D Cartesian mesh.">Mesh</a> class. </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Instance of the <a class="el" href="class_mesh.html" title="Base Cartesian mesh.">Mesh</a> class. </dd></dl>
 
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a9bf054a9a8065e21f93ac319ceebed59"></a><!-- doxytag: member="Mesh::add_mesh_map" ref="a9bf054a9a8065e21f93ac319ceebed59" args="(in obj, in mesh_map, in map_key)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">function add_mesh_map </td>
-          <td>(</td>
-          <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>obj</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>mesh_map</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>map_key</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a0a4d6ca4a4949a1e3098a462a0aee57c"></a><!-- doxytag: member="Mesh::dim" ref="a0a4d6ca4a4949a1e3098a462a0aee57c" args="(in obj, in i)" -->
 <div class="memitem">
 <div class="memproto">
@@ -234,6 +177,11 @@ Private Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Get the number of cells along the an axis. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Number of cells. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_mesh1_d.html#a0a4d6ca4a4949a1e3098a462a0aee57c">Mesh1D</a>.</p>
 
 </div>
 </div>
@@ -262,6 +210,11 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p>Width along x-axis for a cell. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Width. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_mesh1_d.html#a141c16b51fda77109bd81e7dd8476bbb">Mesh1D</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aea0ab5a5d5efe5d35b650ca9ad8e521e"></a><!-- doxytag: member="Mesh::dy" ref="aea0ab5a5d5efe5d35b650ca9ad8e521e" args="(in obj, in i)" -->
@@ -289,9 +242,44 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p>Width along y-axis for a cell. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Width. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_mesh1_d.html#aea0ab5a5d5efe5d35b650ca9ad8e521e">Mesh1D</a>.</p>
+
 </div>
 </div>
-<a class="anchor" id="a3fc8541d23d752ca18b1dc025dfee99f"></a><!-- doxytag: member="Mesh::index" ref="a3fc8541d23d752ca18b1dc025dfee99f" args="(in obj, in i, in j)" -->
+<a class="anchor" id="a670287db3c0acebabf067144b731b119"></a><!-- doxytag: member="Mesh::dz" ref="a670287db3c0acebabf067144b731b119" args="(in obj, in i)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function dz </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>i</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Width along z-axis for a cell. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Width. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a994ba1991d6bdf654ea234e43c7be93e"></a><!-- doxytag: member="Mesh::index" ref="a994ba1991d6bdf654ea234e43c7be93e" args="(in obj, in i, in j, in k)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -311,7 +299,13 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>j</em>&#160;</td>
+          <td class="paramname"><em>j</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>k</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -322,22 +316,9 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
-</div>
-</div>
-<a class="anchor" id="a0c6bf1945a45d80c15d230fbcf0bece5"></a><!-- doxytag: member="Mesh::mesh_axes" ref="a0c6bf1945a45d80c15d230fbcf0bece5" args="(in obj)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">function mesh_axes </td>
-          <td>(</td>
-          <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>obj</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
+<p>Returns the cardinal index for i, j, and k. </p>
+<p>For efficiency, the client may want to hardcode the indexing into their routine, as this is suboptimal within a loop.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Index. </dd></dl>
 
 </div>
 </div>
@@ -366,6 +347,17 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p>Get a mesh map. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mesh_key</td><td>A mesh map key. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The map. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_mesh1_d.html#a9f08f658434ab144198c1dc4dcf9404a">Mesh1D</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a9d97c6189b4cee252abff1282aa8be54"></a><!-- doxytag: member="Mesh::number_cells" ref="a9d97c6189b4cee252abff1282aa8be54" args="(in obj)" -->
@@ -382,6 +374,11 @@ Private Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Get the total number of cells. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Number of cells. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_mesh1_d.html#a9d97c6189b4cee252abff1282aa8be54">Mesh1D</a>.</p>
 
 </div>
 </div>
@@ -400,6 +397,11 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p>Get the number of cells along the x axis. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Number of cells. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_mesh1_d.html#a363d0e4855d63ee7b5af97811855fdc2">Mesh1D</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a77503ffc4fc12219c55d6c55b2425ecb"></a><!-- doxytag: member="Mesh::number_cells_y" ref="a77503ffc4fc12219c55d6c55b2425ecb" args="(in obj)" -->
@@ -417,59 +419,30 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p>Get the number of cells along the y axis. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Number of cells. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_mesh1_d.html#a77503ffc4fc12219c55d6c55b2425ecb">Mesh1D</a>.</p>
+
 </div>
 </div>
-<a class="anchor" id="a92b8a659bd7da9e20b3b72ba7a689335"></a><!-- doxytag: member="Mesh::plot_flux" ref="a92b8a659bd7da9e20b3b72ba7a689335" args="(in obj, in f)" -->
+<a class="anchor" id="a4786e6e6e6d9244b76f66bfc83857003"></a><!-- doxytag: member="Mesh::number_cells_z" ref="a4786e6e6e6d9244b76f66bfc83857003" args="(in obj)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">function plot_flux </td>
+          <td class="memname">function number_cells_z </td>
           <td>(</td>
           <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>obj</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>f</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-</div>
-</div>
-<a class="anchor" id="a3b195e78297b940e9b45ebdd32a341b7"></a><!-- doxytag: member="Mesh::plot_mesh_map" ref="a3b195e78297b940e9b45ebdd32a341b7" args="(in obj, in mapkey)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">function plot_mesh_map </td>
-          <td>(</td>
-          <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>obj</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>mapkey</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
+<p>Get the number of cells along the z axis. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Number of cells. </dd></dl>
 
 </div>
 </div>
@@ -487,6 +460,11 @@ Private Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Get cell array of width vectors. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Cell array of width vectors. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_mesh1_d.html#a742d7d0a568874170ceda75ba0adac12">Mesh1D</a>.</p>
 
 </div>
 </div>
@@ -509,7 +487,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_mesh.html#a9a994a076c83fe686b912ca908f3fd01">d_dx</a><code> [private]</code></td>
+          <td class="memname">Property <a class="el" href="class_mesh.html#a9a994a076c83fe686b912ca908f3fd01">d_dx</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -524,7 +502,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_mesh.html#acccd139b056ae599a5814b0afda32392">d_dy</a><code> [private]</code></td>
+          <td class="memname">Property <a class="el" href="class_mesh.html#acccd139b056ae599a5814b0afda32392">d_dy</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -534,12 +512,27 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a9b5217d1dd1d0e2ccb8787fd3ac480da"></a><!-- doxytag: member="Mesh::d_dz" ref="a9b5217d1dd1d0e2ccb8787fd3ac480da" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#a9b5217d1dd1d0e2ccb8787fd3ac480da">d_dz</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>z widths </p>
+
+</div>
+</div>
 <a class="anchor" id="a771cbbf734a49cadfd195780c0f3e6a5"></a><!-- doxytag: member="Mesh::d_mesh_map" ref="a771cbbf734a49cadfd195780c0f3e6a5" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_mesh.html#a771cbbf734a49cadfd195780c0f3e6a5">d_mesh_map</a><code> [private]</code></td>
+          <td class="memname">Property <a class="el" href="class_mesh.html#a771cbbf734a49cadfd195780c0f3e6a5">d_mesh_map</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -555,7 +548,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_mesh.html#ae1d9d2e608dd551814e9886eb8a726d6">d_number_cells</a><code> [private]</code></td>
+          <td class="memname">Property <a class="el" href="class_mesh.html#ae1d9d2e608dd551814e9886eb8a726d6">d_number_cells</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -570,7 +563,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_mesh.html#ae5b1294f875104e41cf73b04d51e50b7">d_number_cells_x</a><code> [private]</code></td>
+          <td class="memname">Property <a class="el" href="class_mesh.html#ae5b1294f875104e41cf73b04d51e50b7">d_number_cells_x</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -585,7 +578,22 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_mesh.html#ae948037f2557b7efed00478f26d623fc">d_number_cells_y</a><code> [private]</code></td>
+          <td class="memname">Property <a class="el" href="class_mesh.html#ae948037f2557b7efed00478f26d623fc">d_number_cells_y</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Number of cells in y direction. </p>
+
+</div>
+</div>
+<a class="anchor" id="afec3856c4a5ece7f32e9c820ca33bd38"></a><!-- doxytag: member="Mesh::d_number_cells_z" ref="afec3856c4a5ece7f32e9c820ca33bd38" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#afec3856c4a5ece7f32e9c820ca33bd38">d_number_cells_z</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -600,7 +608,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_mesh.html#a80a211deedd49812f5e068c35a2fcdd6">d_xcm</a><code> [private]</code></td>
+          <td class="memname">Property <a class="el" href="class_mesh.html#a80a211deedd49812f5e068c35a2fcdd6">d_xcm</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -615,7 +623,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_mesh.html#a1ec26b0b8b1f0c9c8e3eeb9d919d9709">d_xfm</a><code> [private]</code></td>
+          <td class="memname">Property <a class="el" href="class_mesh.html#a1ec26b0b8b1f0c9c8e3eeb9d919d9709">d_xfm</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -630,7 +638,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_mesh.html#adb15c5937c5ef1444bfca8d2f43f71e9">d_ycm</a><code> [private]</code></td>
+          <td class="memname">Property <a class="el" href="class_mesh.html#adb15c5937c5ef1444bfca8d2f43f71e9">d_ycm</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -645,7 +653,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_mesh.html#a7d5f5c159ef37436dedbfcf0fdb429dd">d_yfm</a><code> [private]</code></td>
+          <td class="memname">Property <a class="el" href="class_mesh.html#a7d5f5c159ef37436dedbfcf0fdb429dd">d_yfm</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
@@ -655,16 +663,33 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a6b6a6ab6a827aec2cb2417c3e4cc981f"></a><!-- doxytag: member="Mesh::DIM" ref="a6b6a6ab6a827aec2cb2417c3e4cc981f" args="" -->
+<a class="anchor" id="a79d714514041a94b5e8f2f6b6cd6eaaa"></a><!-- doxytag: member="Mesh::d_zcm" ref="a79d714514041a94b5e8f2f6b6cd6eaaa" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Constant Property <a class="el" href="class_mesh.html#a6b6a6ab6a827aec2cb2417c3e4cc981f">DIM</a> = 2</td>
+          <td class="memname">Property <a class="el" href="class_mesh.html#a79d714514041a94b5e8f2f6b6cd6eaaa">d_zcm</a><code> [protected]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p>z coarse mesh boundaries </p>
+
+</div>
+</div>
+<a class="anchor" id="aba0d8e14cf856aa6fa987add25e1fc02"></a><!-- doxytag: member="Mesh::d_zfm" ref="aba0d8e14cf856aa6fa987add25e1fc02" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#aba0d8e14cf856aa6fa987add25e1fc02">d_zfm</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>z fine meshes in each y coarse mesh </p>
 
 </div>
 </div>
@@ -737,7 +762,7 @@ Private Attributes</h2></td></tr>
 <li>/home/robertsj/Research/matlab_transport_pack/source/<a class="el" href="_mesh_8m.html">Mesh.m</a></li>
 </ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Tue Jan 17 2012 22:31:41 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Jan 18 2012 17:37:40 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

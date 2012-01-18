@@ -70,8 +70,12 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fission_source.html#ab0c49448ed359ba7e3fceb4db0f60bbe">initialize</a> (in obj)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the fission source.  <a href="#ab0c49448ed359ba7e3fceb4db0f60bbe"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fission_source.html#a049f0be4557b6f3e48a0b7dc1431fcef">initialized</a> (in obj)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fission_source.html#ab02a9c2326205cc627fc6aef4dacdbb6">update</a> (in obj, in scale)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the fission density.  <a href="#ab02a9c2326205cc627fc6aef4dacdbb6"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fission_source.html#aa12ac94e4a975df69f338a5d2e761bdf">update</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the fission density.  <a href="#aa12ac94e4a975df69f338a5d2e761bdf"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fission_source.html#add9ea70477f28f103b89a455fbdcf22e">normalize</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalize the fission density.  <a href="#add9ea70477f28f103b89a455fbdcf22e"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fission_source.html#a4d2336a68b01ab76df615e8ca5efe340">setup_outer</a> (in obj, in scale)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup the fission source for an outer iteration.  <a href="#a4d2336a68b01ab76df615e8ca5efe340"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fission_source.html#a50611cf6b8bff7c05fd206729e969381">source</a> (in obj, in g)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the fission source in a group.  <a href="#a50611cf6b8bff7c05fd206729e969381"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fission_source.html#a2bd33bea2241a640c5d974721dfe460f">density</a> (in obj)</td></tr>
@@ -93,7 +97,7 @@ Private Attributes</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Fission source, <img class="formulaInl" alt="$ \textrm{scale} \times f $" src="form_3.png"/>.  <a href="#ad6f82336625e3ac7774f2bdca1a637ee"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fission_source.html#a7ff0056886fdca60563e66ef2cb6c263">d_scale</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Fission source scaling term.  <a href="#a7ff0056886fdca60563e66ef2cb6c263"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fission_source.html#aeecf6c885a8dccd1825f877af7bf67f5">d_inv_four_pi</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fission_source.html#a3284096fcc083d229f12cb92733bc249">d_angular_norm</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fission_source.html#a8410343e7ac75665543e39432d3b21d7">d_initialized</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Are we initialized?  <a href="#a8410343e7ac75665543e39432d3b21d7"></a><br/></td></tr>
 </table>
@@ -198,6 +202,62 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="add9ea70477f28f103b89a455fbdcf22e"></a><!-- doxytag: member="FissionSource::normalize" ref="add9ea70477f28f103b89a455fbdcf22e" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function normalize </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Normalize the fission density. </p>
+<p>This can be useful if one wants the initial guess to be normalized. </p>
+
+</div>
+</div>
+<a class="anchor" id="a4d2336a68b01ab76df615e8ca5efe340"></a><!-- doxytag: member="FissionSource::setup_outer" ref="a4d2336a68b01ab76df615e8ca5efe340" args="(in obj, in scale)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function setup_outer </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>scale</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Setup the fission source for an outer iteration. </p>
+<p>This sets a new scaling factor <img class="formulaInl" alt="$ k $" src="form_7.png"/> and precomputes the quantity <img class="formulaInl" alt="$ v = (4\pi k)^{-1} $" src="form_41.png"/>.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">scale</td><td>Scaling factor (typically 1/keff) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a50611cf6b8bff7c05fd206729e969381"></a><!-- doxytag: member="FissionSource::source" ref="a50611cf6b8bff7c05fd206729e969381" args="(in obj, in g)" -->
 <div class="memitem">
 <div class="memproto">
@@ -224,11 +284,11 @@ Private Attributes</h2></td></tr>
 <div class="memdoc">
 
 <p>Return the fission source in a group. </p>
-<p>The group fission source is just that component of the density released in a particular group. Mathematically, this is just </p>
+<p>The group fission source is just that component of the density released in a particular group. Mathematically, this is just</p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[ q_{f,g} = \frac{\chi_g}{4\pi k} \sum_g \nu\Sigma_{f,g} \phi_g \, . \]" src="form_5.png"/>
 </p>
-<p> Note, the scaling factor is actually arbitrary. For 2-D and 3-D, it is <img class="formulaInl" alt="$ 4\pi $" src="form_6.png"/>, possibly with the eigenvalue <img class="formulaInl" alt="$ k $" src="form_7.png"/>. The client sets this in <a class="el" href="class_fission_source.html#ab02a9c2326205cc627fc6aef4dacdbb6">update</a>.</p>
+<p>Note, the scaling factor is actually arbitrary. For 2-D and 3-D, it is <img class="formulaInl" alt="$ 4\pi $" src="form_6.png"/>, possibly with the eigenvalue <img class="formulaInl" alt="$ k $" src="form_7.png"/>. The client sets this in <a class="el" href="class_fission_source.html#aa12ac94e4a975df69f338a5d2e761bdf">update</a>.</p>
 <p>Note also that this returns a <em>discrete</em> source, ready for use in sweeping.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
@@ -240,7 +300,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab02a9c2326205cc627fc6aef4dacdbb6"></a><!-- doxytag: member="FissionSource::update" ref="ab02a9c2326205cc627fc6aef4dacdbb6" args="(in obj, in scale)" -->
+<a class="anchor" id="aa12ac94e4a975df69f338a5d2e761bdf"></a><!-- doxytag: member="FissionSource::update" ref="aa12ac94e4a975df69f338a5d2e761bdf" args="(in obj)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -248,18 +308,8 @@ Private Attributes</h2></td></tr>
           <td class="memname">function update </td>
           <td>(</td>
           <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>obj</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>scale</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div>
@@ -281,6 +331,19 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Data Documentation</h2>
+<a class="anchor" id="a3284096fcc083d229f12cb92733bc249"></a><!-- doxytag: member="FissionSource::d_angular_norm" ref="a3284096fcc083d229f12cb92733bc249" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_fission_source.html#a3284096fcc083d229f12cb92733bc249">d_angular_norm</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a1eaea6cd3e99f0a9102044e81446ada0"></a><!-- doxytag: member="FissionSource::d_chi" ref="a1eaea6cd3e99f0a9102044e81446ada0" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -338,19 +401,6 @@ Private Attributes</h2></td></tr>
 <div class="memdoc">
 
 <p>Are we initialized? </p>
-
-</div>
-</div>
-<a class="anchor" id="aeecf6c885a8dccd1825f877af7bf67f5"></a><!-- doxytag: member="FissionSource::d_inv_four_pi" ref="aeecf6c885a8dccd1825f877af7bf67f5" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Property <a class="el" href="class_fission_source.html#aeecf6c885a8dccd1825f877af7bf67f5">d_inv_four_pi</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
 
 </div>
 </div>
@@ -433,7 +483,7 @@ Private Attributes</h2></td></tr>
 <li>/home/robertsj/Research/matlab_transport_pack/source/<a class="el" href="_fission_source_8m.html">FissionSource.m</a></li>
 </ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Tue Jan 17 2012 22:31:41 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Jan 18 2012 17:37:39 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

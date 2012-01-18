@@ -50,8 +50,6 @@
 Collaboration diagram for Eigensolver:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_eigensolver__coll__graph.png" border="0" usemap="#_eigensolver_coll__map" alt="Collaboration graph"/></div>
-<map name="_eigensolver_coll__map" id="_eigensolver_coll__map">
-</map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="class_eigensolver-members.html">List of all members.</a></p>
@@ -61,6 +59,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_eigensolver.html#ae8dff1aba3bfa30de47e84301d0443f1">Eigensolver</a> (in input, in)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#ae8dff1aba3bfa30de47e84301d0443f1"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_eigensolver.html#a077a00b2045df1090c697fa20d4ae4fa">solve</a> (in obj)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_eigensolver.html#aeb6b27827eeac3fdc74447aefdbeb658">print_iteration</a> (in obj, in it, in sweeps, in e0, in e1, in e2, in k)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_eigensolver.html#abc4c1c33f348e1785b286dd07ff598e9">d_input</a></td></tr>
@@ -77,6 +76,10 @@ Public Attributes</h2></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="class_solver.html">Solver</a> for k-eigenvalue problems. </p>
+<p>The homogeneous transport equation in operator form is </p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ \mathbf{T}\psi = \mathbf{MSD}\psi + \frac{1}{k} \mathbf{MFD} \psi \, , \]" src="form_38.png"/>
+</p>
 <p>The standard power iteration method is employed. </p>
 </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ae8dff1aba3bfa30de47e84301d0443f1"></a><!-- doxytag: member="Eigensolver::Eigensolver" ref="ae8dff1aba3bfa30de47e84301d0443f1" args="(in input, in)" -->
@@ -123,6 +126,63 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="aeb6b27827eeac3fdc74447aefdbeb658"></a><!-- doxytag: member="Eigensolver::print_iteration" ref="aeb6b27827eeac3fdc74447aefdbeb658" args="(in obj, in it, in sweeps, in e0, in e1, in e2, in k)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function print_iteration </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>it</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>sweeps</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>e0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>e1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>e2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>k</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a077a00b2045df1090c697fa20d4ae4fa"></a><!-- doxytag: member="Eigensolver::solve" ref="a077a00b2045df1090c697fa20d4ae4fa" args="(in obj)" -->
 <div class="memitem">
 <div class="memproto">
@@ -277,7 +337,7 @@ Public Attributes</h2></td></tr>
 <li>/home/robertsj/Research/matlab_transport_pack/source/<a class="el" href="_eigensolver_8m.html">Eigensolver.m</a></li>
 </ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Tue Jan 17 2012 22:31:41 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Jan 18 2012 17:37:39 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

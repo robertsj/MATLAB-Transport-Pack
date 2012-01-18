@@ -1,18 +1,23 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$class_boundary.html" title="Holds the incident and outgoing boundary fluxes." alt="" coords="5,322,131,598"/>
-<area shape="rect" id="node5" href="$class_boundary_condition.html" title="Base boundary condition class." alt="" coords="155,406,304,514"/>
-<area shape="rect" id="node11" href="$class_equation.html" title="Base equation class for spatial discretization." alt="" coords="328,341,429,579"/>
-<area shape="rect" id="node15" href="$class_fission_source.html" title="Defines the isotropic source from fission reactions." alt="" coords="453,285,584,635"/>
-<area shape="rect" id="node17" href="$class_inner_iteration.html" title="Solve the within&#45;group transport equation." alt="" coords="608,238,768,682"/>
-<area shape="rect" id="node23" href="$class_input.html" title="Stores and processes user input from a driver script." alt="" coords="792,229,923,691"/>
-<area shape="rect" id="node25" href="$class_materials.html" title="{Materials\n|&#45; d_number_groups\l&#45; d_number_materials\l&#45; d_downscatter\l&#45; d_sigma_t\l&#45; d_nu_sigma_f\l&#45; d_chi\l&#45; d_sigma_s\l&#45; d_scatter_bounds\l&#45; d_upscatter_cutoff\l|+ Materials()\l+ set_sigma_t()\l+ set_nu_sigma_f()\l+ set_chi()\l+ set_sigma_s()\l+ sigma_t()\l+ nu_sigma_f()\l+ chi()\l+ sigma_s()\l+ number_groups()\l+ lower()\l+ upper()\l+ downscatter()\l+ finalize()\l&#45; check()\l}" alt="" coords="947,210,1093,710"/>
-<area shape="rect" id="node27" href="$class_mesh.html" title="2&#45;D Cartesian mesh." alt="" coords="1117,145,1251,775"/>
-<area shape="rect" id="node29" href="$class_source.html" title="{Source\n|+ d_mesh\l+ d_sources\l+ d_source_map\l+ d_number_groups\l+ d_source_vec\l+ d_initialized\l|+ Source()\l+ set_sources()\l+ cell_source()\l+ source()\l+ initialized()\l}" alt="" coords="1275,331,1411,589"/>
-<area shape="rect" id="node31" href="$class_state.html" title="Represents the state of the problem." alt="" coords="1435,341,1581,579"/>
-<area shape="rect" id="node33" href="$class_sweep2_d.html" title="Sweep over a 2D mesh." alt="" coords="1605,303,1733,617"/>
-<area shape="rect" id="node7" href="$class_reflective.html" title="Reflective boundary condition." alt="" coords="73,918,172,1026"/>
-<area shape="rect" id="node9" href="$class_vacuum.html" title="Vacuum boundary condition." alt="" coords="196,918,284,1026"/>
-<area shape="rect" id="node13" href="$class_d_d2_d.html" title="Diamond difference approximation in two dimensions." alt="" coords="320,871,437,1073"/>
-<area shape="rect" id="node19" href="$class_livolant.html" title="Livolant acceleration for inner iterations." alt="" coords="533,825,699,1119"/>
-<area shape="rect" id="node21" href="$class_source_iteration.html" title="Source iteration for inner iterations." alt="" coords="723,909,853,1035"/>
+<area shape="rect" id="node3" href="$class_boundary.html" title="Holds the incident and outgoing boundary fluxes." alt="" coords="5,331,131,607"/>
+<area shape="rect" id="node5" href="$class_boundary_condition.html" title="Base boundary condition class." alt="" coords="155,415,304,523"/>
+<area shape="rect" id="node11" href="$class_equation.html" title="Base equation class for spatial discretization." alt="" coords="328,350,429,589"/>
+<area shape="rect" id="node17" href="$class_fission_source.html" title="Defines the isotropic source from fission reactions." alt="" coords="453,275,584,663"/>
+<area shape="rect" id="node19" href="$class_inner_iteration.html" title="Solve the within&#45;group transport equation." alt="" coords="608,219,768,719"/>
+<area shape="rect" id="node27" href="$class_input.html" title="Stores and processes user input from a driver script." alt="" coords="792,238,923,701"/>
+<area shape="rect" id="node29" href="$class_materials.html" title="{Materials\n|&#45; d_number_groups\l&#45; d_number_materials\l&#45; d_downscatter\l&#45; d_sigma_t\l&#45; d_nu_sigma_f\l&#45; d_chi\l&#45; d_sigma_s\l&#45; d_scatter_bounds\l&#45; d_upscatter_cutoff\l|+ Materials()\l+ set_sigma_t()\l+ set_nu_sigma_f()\l+ set_chi()\l+ set_sigma_s()\l+ sigma_t()\l+ nu_sigma_f()\l+ chi()\l+ sigma_s()\l+ number_groups()\l+ lower()\l+ upper()\l+ downscatter()\l+ upscatter_cutoff()\l+ finalize()\l&#45; check()\l}" alt="" coords="947,210,1093,729"/>
+<area shape="rect" id="node31" href="$class_mesh.html" title="Base Cartesian mesh." alt="" coords="1117,145,1256,794"/>
+<area shape="rect" id="node37" href="$class_source.html" title="{Source\n|+ d_mesh\l+ d_sources\l+ d_source_map\l+ d_number_groups\l+ d_source_vec\l+ d_initialized\l|+ Source()\l+ set_sources()\l+ cell_source()\l+ source()\l+ initialized()\l}" alt="" coords="1280,341,1416,598"/>
+<area shape="rect" id="node39" href="$class_state.html" title="Represents the state of the problem." alt="" coords="1440,350,1587,589"/>
+<area shape="rect" id="node41" href="$class_sweep1_d.html" title="Sweep over a 1D mesh." alt="" coords="1611,313,1739,626"/>
+<area shape="rect" id="node43" href="$class_sweep2_d.html" title="Sweep over a 2D mesh." alt="" coords="1763,313,1891,626"/>
+<area shape="rect" id="node7" href="$class_reflective.html" title="Reflective boundary condition." alt="" coords="63,955,161,1063"/>
+<area shape="rect" id="node9" href="$class_vacuum.html" title="Vacuum boundary condition." alt="" coords="185,955,273,1063"/>
+<area shape="rect" id="node13" href="$class_d_d1_d.html" title="Diamond difference approximation in one dimension." alt="" coords="297,918,415,1101"/>
+<area shape="rect" id="node15" href="$class_d_d2_d.html" title="Diamond difference approximation in two dimensions." alt="" coords="439,909,556,1110"/>
+<area shape="rect" id="node21" href="$class_g_m_r_e_s_iteration.html" title="Source iteration for inner iterations." alt="" coords="580,937,716,1082"/>
+<area shape="rect" id="node23" href="$class_livolant.html" title="Livolant acceleration for inner iterations." alt="" coords="740,862,905,1157"/>
+<area shape="rect" id="node25" href="$class_source_iteration.html" title="Source iteration for inner iterations." alt="" coords="929,946,1060,1073"/>
+<area shape="rect" id="node33" href="$class_mesh1_d.html" title="1&#45;D Cartesian mesh." alt="" coords="1101,843,1235,1175"/>
+<area shape="rect" id="node35" href="$class_mesh2_d.html" title="2&#45;D Cartesian mesh." alt="" coords="1259,927,1392,1091"/>
 </map>

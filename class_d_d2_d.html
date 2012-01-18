@@ -72,10 +72,10 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup the equations for a group.  <a href="#add52d46f4d49fc9b2204fb6c0aa49856"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_d2_d.html#aa269b76f66e0d64be704512d40fba8e4">setup_octant</a> (in obj, in octant)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup the equations for an octant.  <a href="#aa269b76f66e0d64be704512d40fba8e4"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_d2_d.html#a371400065328eed784a6131cb2dfcc8b">setup_angle</a> (in obj, in mu, in eta)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup the equations for an angle.  <a href="#a371400065328eed784a6131cb2dfcc8b"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_d2_d.html#a544b2f71a8c9af8391f90d6a548eb10a">solve</a> (in obj, in psi_in, in s, in i, in j, in g)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Solve for the cell-center and outgoing edge fluxes.  <a href="#a544b2f71a8c9af8391f90d6a548eb10a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_d2_d.html#a594a0342b4146a16205f7be327129b16">setup_angle</a> (in obj, in mu, in eta, in xi)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup the equations for an angle.  <a href="#a594a0342b4146a16205f7be327129b16"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_d2_d.html#aa68470b81fe3d99b077c97800bc8b643">solve</a> (in obj, in g, in psi_in, in s, in i, in j, in k)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Solve for the cell-center and outgoing edge fluxes.  <a href="#aa68470b81fe3d99b077c97800bc8b643"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_d2_d.html#a74aa1e6889733c43319c8e4435905320">d_con_x</a></td></tr>
@@ -143,7 +143,7 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a371400065328eed784a6131cb2dfcc8b"></a><!-- doxytag: member="DD2D::setup_angle" ref="a371400065328eed784a6131cb2dfcc8b" args="(in obj, in mu, in eta)" -->
+<a class="anchor" id="a594a0342b4146a16205f7be327129b16"></a><!-- doxytag: member="DD2D::setup_angle" ref="a594a0342b4146a16205f7be327129b16" args="(in obj, in mu, in eta, in xi)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -163,7 +163,13 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>eta</em>&#160;</td>
+          <td class="paramname"><em>eta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>xi</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -179,6 +185,7 @@ Protected Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">mu</td><td>Cosine with respect to x axis. </td></tr>
     <tr><td class="paramname">eta</td><td>Cosine with respect to y axis. </td></tr>
+    <tr><td class="paramname">xi</td><td>Cosine with respect to y axis. </td></tr>
   </table>
   </dd>
 </dl>
@@ -256,7 +263,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a544b2f71a8c9af8391f90d6a548eb10a"></a><!-- doxytag: member="DD2D::solve" ref="a544b2f71a8c9af8391f90d6a548eb10a" args="(in obj, in psi_in, in s, in i, in j, in g)" -->
+<a class="anchor" id="aa68470b81fe3d99b077c97800bc8b643"></a><!-- doxytag: member="DD2D::solve" ref="aa68470b81fe3d99b077c97800bc8b643" args="(in obj, in g, in psi_in, in s, in i, in j, in k)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -265,6 +272,12 @@ Protected Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype">in&#160;</td>
           <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -294,7 +307,7 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>g</em>&#160;</td>
+          <td class="paramname"><em>k</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -308,11 +321,12 @@ Protected Attributes</h2></td></tr>
 <p>Solve for the cell-center and outgoing edge fluxes. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
+    <tr><td class="paramname">g</td><td>Group index </td></tr>
     <tr><td class="paramname">psi_in</td><td>Incident flux vector, [horz=1, vert=2] </td></tr>
     <tr><td class="paramname">s</td><td>Cell source </td></tr>
     <tr><td class="paramname">i</td><td>Cell x index </td></tr>
     <tr><td class="paramname">j</td><td>Cell y index </td></tr>
-    <tr><td class="paramname">g</td><td>Group index</td></tr>
+    <tr><td class="paramname">k</td><td>Cell z index (NOT PRESENT)</td></tr>
   </table>
   </dd>
 </dl>
@@ -495,7 +509,7 @@ Protected Attributes</h2></td></tr>
 <li>/home/robertsj/Research/matlab_transport_pack/source/<a class="el" href="_d_d2_d_8m.html">DD2D.m</a></li>
 </ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Tue Jan 17 2012 22:31:41 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Jan 18 2012 17:37:39 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

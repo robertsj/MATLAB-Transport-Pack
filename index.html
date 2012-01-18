@@ -33,16 +33,23 @@
 <h1>MATLAB TransportPack </h1>  </div>
 </div>
 <div class="contents">
-<div class="textblock"><dl class="note"><dt><b>Note:</b></dt><dd>Copyright (c) 2012 Jeremy Roberts </dd></dl>
-<h2><a class="anchor" id="intro"></a>
+<div class="textblock"><h2><a class="anchor" id="intro"></a>
 Introduction</h2>
 <p>This package of MATLAB classes and functions provides a basic neutron transport capability in an easy-to-use environment with which many engineering students are already familiar. The purpose of this package is two-fold. First, it is to provide illustrative implementations of transport algorithms for use in the classroom. Second, it is to provide a simple framework where new algorithms may be quickly implemented and tested.</p>
 <h2><a class="anchor" id="problems"></a>
 Problems Solved</h2>
 <p>TransportPack solves a variety of neutron transport problems. These include both fixed source and eigenvalue problems in one, two, or three dimensions. Currently, only the discrete ordinates method is implemented, but other approaches may be added in the future (including other deterministic approaches like the Method of Characteristics and stochastic (i.e. Monte Carlo) methods.</p>
+<dl class="note"><dt><b>Note:</b></dt><dd>One and three dimensional routines are under development.</dd></dl>
 <h2><a class="anchor" id="solver"></a>
 Solvers</h2>
-<p>For the deterministic problems, a main goal was to illustrate use of advanced solution techniques. These include Krylov solvers for within-group iterations and various acceleration techniques for both source iteration and eigenvalue (i.e. power) iteration.</p>
+<p>For the deterministic problems, a main goal was to illustrate use of advanced solution techniques. These include Krylov solvers for within-group iterations and various acceleration techniques for both source iteration and eigenvalue (i.e. power) iteration. In particular, for the within-group ("inner") problem, the solvers available are</p>
+<ul>
+<li>source iteration</li>
+<li>Livolant acceleration</li>
+<li>GMRES iteration</li>
+</ul>
+<p>Preconditioners such as diffusion synthetic acceleration (DSA), coarse mesh finite difference (CMFD) acceleration, and coarse mesh rebalance (CMR) are possible future additions applicable to all inner iteration solvers.</p>
+<p>For eigenvalue problems, currently only an unaccelerated power method is employed. Future additions will be use of the Arnoldi method via MATLAB's own "eigs" function, CMFD acceleration, and possible other "low order" schemes.</p>
 <h2><a class="anchor" id="other"></a>
 Structure and Documentation</h2>
 <p>This package is written completely in an object-oriented fashion, making extensive use of MATLAB classes. While this approach may be foreign to new (and old) users of MATLAB, we hope users will quickly see the benefits of such an approach. Chief examples include</p>
@@ -52,7 +59,7 @@ Structure and Documentation</h2>
 </ul>
 <p>Worth noting is the documenation, which is created automatically by Doxygen. However, Doxygen doesn't have support for MATLAB directly, and so a tool is used that makes the .m files appear to be in c++ syntax. </p>
 </div></div>
-<hr class="footer"/><address class="footer"><small>Generated on Tue Jan 17 2012 22:31:41 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Jan 18 2012 17:37:39 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

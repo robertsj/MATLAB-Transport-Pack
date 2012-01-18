@@ -38,8 +38,8 @@
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
@@ -68,14 +68,26 @@ Collaboration diagram for Livolant:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_livolant.html#af6bfb8efcaca6d22783b31309215f4e5">SourceIteration</a> ()</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#af6bfb8efcaca6d22783b31309215f4e5"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_livolant.html#a2dd4141cc3b30a4b50b04ee4b1291a6e">Livolant</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#a2dd4141cc3b30a4b50b04ee4b1291a6e"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_livolant.html#aebcbca728b7c4e5cc5eb476943de6903">setup</a> (in obj, in)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup the solver.  <a href="#aebcbca728b7c4e5cc5eb476943de6903"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_livolant.html#ae85c283be4beba9fba54b6cae5b3093c">solve</a> (in obj, in g)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Solve the within-group problem.  <a href="#ae85c283be4beba9fba54b6cae5b3093c"></a><br/></td></tr>
-<tr><td colspan="2"><h2><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
+<tr><td colspan="2"><h2><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a20b1a39e3eb630cb842f75f0f79d729e">setup_base</a> (in obj, in)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Solve the within-group problem.  <a href="#a20b1a39e3eb630cb842f75f0f79d729e"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a0ad796ae32fde3a06e7d0e44b18a4f96">initialize_scatter</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Prebuild scattering matrix for each cell.  <a href="#a0ad796ae32fde3a06e7d0e44b18a4f96"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a3fc92e0fed95a5ce566f1f0fef25617a">build_scatter_source</a> (in obj, in g, in phi)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Build the within-group scattering source.  <a href="#a3fc92e0fed95a5ce566f1f0fef25617a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#af71a76407a9d8e9cd42a4f4f24b90d68">build_fixed_source</a> (in obj, in g)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Build source for this group excluding within-group scatter.  <a href="#af71a76407a9d8e9cd42a4f4f24b90d68"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a577d753857b7076612e01a41dcda25cc">check_convergence</a> (in obj, in iteration, in flux_error)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a6521ac626243d13fa187db94b46bf7d7">print_iteration</a> (in obj, in it, in e0, in e1, in e2)</td></tr>
+<tr><td colspan="2"><h2><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#abc4c1c33f348e1785b286dd07ff598e9">d_input</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a38eee99b593eb74e0865fd7e08aa068c">d_state</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a76ed28b4b2c303c4668a3f5557e96149">d_boundary</a></td></tr>
@@ -96,17 +108,9 @@ Public Attributes</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Scattering cross-section vector for faster source computation.  <a href="#a9aaac6b46517fc8da97236c5c13cab41"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a159b3efc31946f48d126625403c25d75">d_max_iters</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a1e03c16fca26f3bdb7e055dbe935af07">d_tolerance</a></td></tr>
-<tr><td colspan="2"><h2><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a20b1a39e3eb630cb842f75f0f79d729e">setup_base</a> (in obj, in)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Solve the within-group problem.  <a href="#a20b1a39e3eb630cb842f75f0f79d729e"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a0ad796ae32fde3a06e7d0e44b18a4f96">initialize_scatter</a> (in obj)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Prebuild scattering matrix for each cell.  <a href="#a0ad796ae32fde3a06e7d0e44b18a4f96"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a3fc92e0fed95a5ce566f1f0fef25617a">build_scatter_source</a> (in obj, in g, in phi)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Build the within-group scattering source.  <a href="#a3fc92e0fed95a5ce566f1f0fef25617a"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#af71a76407a9d8e9cd42a4f4f24b90d68">build_fixed_source</a> (in obj, in g)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Build source for this group excluding within-group scatter.  <a href="#af71a76407a9d8e9cd42a4f4f24b90d68"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a577d753857b7076612e01a41dcda25cc">check_convergence</a> (in obj, in iteration, in flux_error)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a631a77bf64364cb27ca5639a3317ed30">d_g</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a7425d5935105d1b50919d9ff54305b3b">d_M</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Moments to discrete operator.  <a href="#a7425d5935105d1b50919d9ff54305b3b"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_livolant.html#a2b64c2946ddd5bf5b1e6a1b2ef49cd92">accelerated_iterations</a> (in obj, in g, in mu)</td></tr>
@@ -203,7 +207,27 @@ Private Attributes</h2></td></tr>
 <p>For other relevant parameters, see <a class="el" href="class_inner_iteration.html" title="Solve the within-group transport equation.">InnerIteration</a>.</p>
 <p>Reference: Hebert, A. <em>Applied Reactor Physics</em>. See pp. 147-148 and 345-347.</p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="class_source_iteration.html" title="Source iteration for inner iterations.">SourceIteration</a> </dd></dl>
-</div><hr/><h2>Member Function Documentation</h2>
+</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a2dd4141cc3b30a4b50b04ee4b1291a6e"></a><!-- doxytag: member="Livolant::Livolant" ref="a2dd4141cc3b30a4b50b04ee4b1291a6e" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function <a class="el" href="class_livolant.html">Livolant</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Class constructor. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Instance of the <a class="el" href="class_source_iteration.html" title="Source iteration for inner iterations.">SourceIteration</a> class. </dd></dl>
+
+</div>
+</div>
+<hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="a2b64c2946ddd5bf5b1e6a1b2ef49cd92"></a><!-- doxytag: member="Livolant::accelerated_iterations" ref="a2b64c2946ddd5bf5b1e6a1b2ef49cd92" args="(in obj, in g, in mu)" -->
 <div class="memitem">
 <div class="memproto">
@@ -374,6 +398,51 @@ Private Attributes</h2></td></tr>
 
 <p>Prebuild scattering matrix for each cell. </p>
 <p>While not the most *memory* efficient, this saves *time* by eliminate lots of loops. </p>
+
+</div>
+</div>
+<a class="anchor" id="a6521ac626243d13fa187db94b46bf7d7"></a><!-- doxytag: member="Livolant::print_iteration" ref="a6521ac626243d13fa187db94b46bf7d7" args="(in obj, in it, in e0, in e1, in e2)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function print_iteration </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>it</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>e0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>e1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>e2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
 
 </div>
 </div>
@@ -603,25 +672,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af6bfb8efcaca6d22783b31309215f4e5"></a><!-- doxytag: member="Livolant::SourceIteration" ref="af6bfb8efcaca6d22783b31309215f4e5" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">function <a class="el" href="class_source_iteration.html">SourceIteration</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Class constructor. </p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>Instance of the <a class="el" href="class_source_iteration.html" title="Source iteration for inner iterations.">SourceIteration</a> class. </dd></dl>
-
-</div>
-</div>
 <hr/><h2>Member Data Documentation</h2>
 <a class="anchor" id="a8ecb5287ab81c45cb9dc13ad7d6d1100"></a><!-- doxytag: member="Livolant::d_0" ref="a8ecb5287ab81c45cb9dc13ad7d6d1100" args="" -->
 <div class="memitem">
@@ -688,7 +738,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a76ed28b4b2c303c4668a3f5557e96149">d_boundary</a><code> [inherited]</code></td>
+          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a76ed28b4b2c303c4668a3f5557e96149">d_boundary</a><code> [protected, inherited]</code></td>
         </tr>
       </table>
 </div>
@@ -701,7 +751,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a7a2fcc3c6c24a9733333c98d0f63f72c">d_equation</a><code> [inherited]</code></td>
+          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a7a2fcc3c6c24a9733333c98d0f63f72c">d_equation</a><code> [protected, inherited]</code></td>
         </tr>
       </table>
 </div>
@@ -714,7 +764,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_inner_iteration.html#ae86a46e183bf9e376def5751925ef97e">d_external_source</a><code> [inherited]</code></td>
+          <td class="memname">Property <a class="el" href="class_inner_iteration.html#ae86a46e183bf9e376def5751925ef97e">d_external_source</a><code> [protected, inherited]</code></td>
         </tr>
       </table>
 </div>
@@ -729,7 +779,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_inner_iteration.html#ad6f82336625e3ac7774f2bdca1a637ee">d_fission_source</a><code> [inherited]</code></td>
+          <td class="memname">Property <a class="el" href="class_inner_iteration.html#ad6f82336625e3ac7774f2bdca1a637ee">d_fission_source</a><code> [protected, inherited]</code></td>
         </tr>
       </table>
 </div>
@@ -744,7 +794,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a55ba17ea0bb53d0316eb36517fa9c2de">d_fixed_source</a><code> [inherited]</code></td>
+          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a55ba17ea0bb53d0316eb36517fa9c2de">d_fixed_source</a><code> [protected, inherited]</code></td>
         </tr>
       </table>
 </div>
@@ -769,16 +819,44 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a631a77bf64364cb27ca5639a3317ed30"></a><!-- doxytag: member="Livolant::d_g" ref="a631a77bf64364cb27ca5639a3317ed30" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a631a77bf64364cb27ca5639a3317ed30">d_g</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="abc4c1c33f348e1785b286dd07ff598e9"></a><!-- doxytag: member="Livolant::d_input" ref="abc4c1c33f348e1785b286dd07ff598e9" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_inner_iteration.html#abc4c1c33f348e1785b286dd07ff598e9">d_input</a><code> [inherited]</code></td>
+          <td class="memname">Property <a class="el" href="class_inner_iteration.html#abc4c1c33f348e1785b286dd07ff598e9">d_input</a><code> [protected, inherited]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a7425d5935105d1b50919d9ff54305b3b"></a><!-- doxytag: member="Livolant::d_M" ref="a7425d5935105d1b50919d9ff54305b3b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a7425d5935105d1b50919d9ff54305b3b">d_M</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Moments to discrete operator. </p>
 
 </div>
 </div>
@@ -787,7 +865,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a6713318a4ce4406dea21e7c7b3c82453">d_mat</a><code> [inherited]</code></td>
+          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a6713318a4ce4406dea21e7c7b3c82453">d_mat</a><code> [protected, inherited]</code></td>
         </tr>
       </table>
 </div>
@@ -800,7 +878,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a159b3efc31946f48d126625403c25d75">d_max_iters</a><code> [inherited]</code></td>
+          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a159b3efc31946f48d126625403c25d75">d_max_iters</a><code> [protected, inherited]</code></td>
         </tr>
       </table>
 </div>
@@ -813,7 +891,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a1d60598afe83dd4c518b6f698814686b">d_mesh</a><code> [inherited]</code></td>
+          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a1d60598afe83dd4c518b6f698814686b">d_mesh</a><code> [protected, inherited]</code></td>
         </tr>
       </table>
 </div>
@@ -841,7 +919,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_inner_iteration.html#ae403c267d85e827e85d343e1d2636f85">d_quadrature</a><code> [inherited]</code></td>
+          <td class="memname">Property <a class="el" href="class_inner_iteration.html#ae403c267d85e827e85d343e1d2636f85">d_quadrature</a><code> [protected, inherited]</code></td>
         </tr>
       </table>
 </div>
@@ -854,7 +932,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a06aa521e0ca1b107d33c3e00554352b8">d_scatter_source</a><code> [inherited]</code></td>
+          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a06aa521e0ca1b107d33c3e00554352b8">d_scatter_source</a><code> [protected, inherited]</code></td>
         </tr>
       </table>
 </div>
@@ -869,7 +947,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a9aaac6b46517fc8da97236c5c13cab41">d_sigma_s</a><code> [inherited]</code></td>
+          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a9aaac6b46517fc8da97236c5c13cab41">d_sigma_s</a><code> [protected, inherited]</code></td>
         </tr>
       </table>
 </div>
@@ -884,7 +962,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a38eee99b593eb74e0865fd7e08aa068c">d_state</a><code> [inherited]</code></td>
+          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a38eee99b593eb74e0865fd7e08aa068c">d_state</a><code> [protected, inherited]</code></td>
         </tr>
       </table>
 </div>
@@ -897,7 +975,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a6e008b8b78d0143c216d1286a134b295">d_sweeper</a><code> [inherited]</code></td>
+          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a6e008b8b78d0143c216d1286a134b295">d_sweeper</a><code> [protected, inherited]</code></td>
         </tr>
       </table>
 </div>
@@ -910,7 +988,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a1e03c16fca26f3bdb7e055dbe935af07">d_tolerance</a><code> [inherited]</code></td>
+          <td class="memname">Property <a class="el" href="class_inner_iteration.html#a1e03c16fca26f3bdb7e055dbe935af07">d_tolerance</a><code> [protected, inherited]</code></td>
         </tr>
       </table>
 </div>
@@ -922,7 +1000,7 @@ Private Attributes</h2></td></tr>
 <li>/home/robertsj/Research/matlab_transport_pack/source/<a class="el" href="_livolant_8m.html">Livolant.m</a></li>
 </ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Tue Jan 17 2012 22:31:41 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Wed Jan 18 2012 17:37:40 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

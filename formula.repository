@@ -36,3 +36,7 @@
 \form#35:$\tilde{\Phi}$
 \form#36:\[ \mathbf{T}\psi = Q \, , \]
 \form#37:$ \mathbf{T}^{-1} $
+\form#38:\[ \mathbf{T}\psi = \mathbf{MSD}\psi + \frac{1}{k} \mathbf{MFD} \psi \, , \]
+\form#39:$ v = (4\pi k)^{-1} f @param scale Scaling factor (typically 1/keff) public: function setup_outer(in obj,in scale); @brief Return the fission source in a group. The group fission source is just that component of the density released in a particular group. Mathematically, this is just \f[ q_{f,g} = \frac{\chi_g}{4\pi k} \sum_g \nu\Sigma_{f,g} \phi_g \, . \f] Note, the scaling factor is actually arbitrary. For 2-D and 3-D, it is $
+\form#40:$, possibly with the eigenvalue $
+\form#41:$ v = (4\pi k)^{-1} $
