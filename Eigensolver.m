@@ -26,6 +26,9 @@ classdef Eigensolver
         d_state                 % State variables.
         d_solver                % Multigroup solver.
         d_boundary
+        %
+        d_tolerance
+        d_max_iters
     end
     
     methods
@@ -60,6 +63,9 @@ classdef Eigensolver
            obj.d_quadrature = quadrature;
            obj.d_boundary   = boundary;
            obj.d_fission_source = fission_source;
+           
+           obj.d_max_iters = input.max_fission;
+           obj.d_tolerance = input.tol_fission;
            
            % Setup the multigroup solver.
            obj.d_solver = ...
@@ -100,14 +106,12 @@ classdef Eigensolver
             k_eff         = 1.0;
             k_eff_1       = 1.0;
             iteration     = 0;
-            
 
-            
             sweeps = 0;
             
             % Perform outer iteration.
-            while (flux_error > obj.d_input.tol_fission && ...
-                   iteration < obj.d_input.max_fission )
+            while (flux_error > obj.d_tolerance && ...
+                   iteration  < obj.d_max_iters )
                
                 % Setup the fission source.
                 setup_outer(obj.d_fission_source, 1/k_eff);

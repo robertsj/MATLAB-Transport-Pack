@@ -28,6 +28,8 @@ classdef Mesh2D < Mesh
         % ======================================================================
         function obj = Mesh2D(xfm, yfm, xcm, ycm, material_map)
             
+            if nargin > 0
+            
             % Preconditions.
             DBC.Require('length(xfm) > 0') 
             DBC.Require('length(yfm) > 0')
@@ -90,6 +92,8 @@ classdef Mesh2D < Mesh
             % Insert the material map to the mesh map container.
             obj.d_mesh_map = containers.Map('MATERIAL', ...
                                             tmp_material_map);
+                                        
+            end
         end
        
         

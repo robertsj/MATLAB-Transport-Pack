@@ -99,7 +99,7 @@ elseif n == 2
     mat = set_sigma_s(mat, 3, 2, 2, 0.9014);    % 1 <- 1
 
     % ---------------------------
-    % Material 4: Fuel III           
+    % Material 4: Fuel II + Gd          
     % ---------------------------
     
     % Total

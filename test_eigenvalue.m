@@ -67,7 +67,7 @@ toc
 
 subplot(2, 1, 1)
 f = flux(state, 1);
-plot_flux(mesh, f)
+plot_flux(mesh, f), axis equal
 subplot(2, 1, 2)
 f = flux(state, 2);
-plot_flux(mesh, f)
+plot_flux(mesh, f), axis equal

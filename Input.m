@@ -37,7 +37,7 @@ classdef Input < handle
         max_fission      = 100;     % Maximum fission source iterations.  This 
                                     %   applies to eigenproblems and fixed
                                     %   source problems with multiplication.
-        tol_fission      = 1e-4;    % Pointwise fission source relative error 
+        tol_fission      = 1e-3;    % Pointwise fission source relative error 
                                     %   tolerance
         tol_eigenvalue   = 1e-4;    % Absolute tolerance on eigenvalue.
         

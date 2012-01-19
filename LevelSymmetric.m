@@ -23,10 +23,11 @@ classdef LevelSymmetric < Quadrature
             %   order --    Quadrature order. This differs from quadrature to
             %               quadrature, but e.g. for level symmetric, it's the
             %               number of unique directional cosines.
-            obj = obj@Quadrature(order); % Call base class.
-            obj.d_order = order;         % Set order.
+            obj = obj@Quadrature(order, 2); % Call base class.
+            obj.d_order = order;            % Set order.
             % Get data from an old table function.
             [obj.d_mu, obj.d_eta, obj.d_weights] = level_sym_table(order);
+            
             obj.d_number_angles = length(obj.d_weights);
             if (obj.d_number_angles ~= 0.5*(order+2)*order)
                 error('Whoops! LevelSymmetric table has an error.')
