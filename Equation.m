@@ -66,8 +66,9 @@ classdef Equation < handle
         %>
         %> @param mu    Cosine with respect to x axis.
         %> @param eta   Cosine with respect to y axis.
+        %> @param xi    Cosine with respect to z axis.
         % ======================================================================
-        obj = setup_angle(obj, mu, eta)
+        obj = setup_angle(obj, mu, eta, xi)
         
         % ======================================================================
         %> @brief Solve for the cell-center and outgoing edge fluxes.
@@ -80,7 +81,7 @@ classdef Equation < handle
         %>
         %> @return Cell center angular flux and outgoing edge fluxes.
         % ======================================================================
-        [psi_out psi_center] = solve(obj, psi_in, s, i, j, g)
+        [psi_out psi_center] = solve(obj, g, psi_in, s, i, j, k)
         
         % ======================================================================
         %> @brief Number of unknowns per cell.

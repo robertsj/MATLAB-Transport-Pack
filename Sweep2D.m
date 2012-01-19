@@ -133,7 +133,7 @@ classdef Sweep2D < handle
                             % Solve for this cell.
                             [psi_out, psi_center] = ...
                                 solve(obj.d_equation, ...
-                                    psi_in, source(k), i, j, g);
+                                    g, psi_in, source(k), i, j);
                             phi(k) = phi(k) + w*psi_center;
                             % Save the outgoing angular flux.
                             psi_h(i) = psi_out(1);

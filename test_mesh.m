@@ -17,7 +17,7 @@ if n == 1
     % Material map
     mat_map = [1];
     % Make the mesh.
-    mesh = Mesh(xfm, yfm, xcm, ycm, mat_map);
+    mesh = Mesh2D(xfm, yfm, xcm, ycm, mat_map);
     
 elseif n == 2
     
@@ -29,7 +29,7 @@ elseif n == 2
     mat_map = [ 1  3     % ^
                 2  2 ];  % | y   x -->
 
-    mesh = Mesh(xfm, yfm, xcm, ycm, mat_map);
+    mesh = Mesh2D(xfm, yfm, xcm, ycm, mat_map);
 
     DBC.Assert('dx(mesh,  1) == 1.0')
     DBC.Assert('dy(mesh, 21) == 15/40')
@@ -43,14 +43,14 @@ elseif n == 2
     
 elseif n == 3
     
-    xcm    = [ 0.0  15.0  20.0];
-    xfm    = [    20    10    ];
-    ycm    = [ 0.0  15.0  20.0];
-    yfm    = [    20    10    ];
+    xcm    = [ 0.0  45.0  50.0];
+    xfm    = [    45     5    ];
+    ycm    = [ 0.0  45.0  50.0];
+    yfm    = [    45     5    ];
 
     mat_map = [ 1  1     % ^
                 2  1 ];  % | y   x -->
 
-    mesh = Mesh(xfm, yfm, xcm, ycm, mat_map);
+    mesh = Mesh2D(xfm, yfm, xcm, ycm, mat_map);
 
 end

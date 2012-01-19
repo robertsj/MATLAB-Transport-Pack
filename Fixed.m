@@ -59,6 +59,8 @@ classdef Fixed
                obj.d_inner_solver = SourceIteration();
            elseif strcmp(inner, 'Livolant')
                obj.d_inner_solver = Livolant(); 
+           elseif strcmp(inner, 'GMRES')
+               obj.d_inner_solver = GMRESIteration(); 
            end
            setup(obj.d_inner_solver,	...
                  input,                 ...
@@ -90,15 +92,13 @@ classdef Fixed
                 [flux_g_error(g), inners] = ...
                     solve(obj.d_inner_solver, g);%, obj.d_source);
                 
-                fprintf('group %4i flux residual = %6.4e in %6i iterations \n', ...
-                    g, flux_g_error(g), inners);
-                
                 total_inners = total_inners + inners;
             end
-            
             flux_error = max(flux_g_error);
+            print_iteration(obj, 1, flux_error, total_inners)
+            
             flux_error = 1;
-            iteration  = 0;
+            iteration  = 1;
             % Outer group iterations for upscatter, if not a
             % downscatter-only problem.
             if (~downscatter(obj.d_mat))
@@ -107,25 +107,31 @@ classdef Fixed
                     
                     % Iterate only on those groups for which upscattering
                     % occurs.
-                    for g = 1:number_groups(obj.d_mat)
+                    for g = upscatter_cutoff(obj.d_mat):number_groups(obj.d_mat)
                         
                         [flux_g_error(g), inners] = ...
                             solve(obj.d_inner_solver, g);%, obj.d_source);
                         
-                        fprintf('group %4i flux residual = %6.4e in %6i iterations \n', ...
-                            g, flux_g_error(g), inners);
-                        
                         total_inners = total_inners + inners;
-                        
+                        print_iteration(obj, iteration, flux_error, ...
+                            total_inners)
                     end
-                    flux_error = max(flux_g_error);
                     iteration  = iteration + 1;
+                    flux_error = max(flux_g_error);
+                    
+
                 end
             end
+            output.flux_error   = flux_error;
+            output.total_inners = total_inners;
             
-            output.flux_error = flux_error;
-            output.flux_error = total_inners;
-            
+        end
+        
+        function print_iteration(obj, iteration, flux_error, total_inners)
+            fprintf('-------------------------------------------------------\n')
+            fprintf('       Iter: %5i, Error: %12.8f, Inners: %5i\n',...
+                iteration, flux_error, total_inners);
+            fprintf('-------------------------------------------------------\n')
         end
         
     end

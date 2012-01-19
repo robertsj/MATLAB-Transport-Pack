@@ -3,16 +3,21 @@ classdef MomentsToDiscrete
     % we're limiting ourselves to isotropic scattering, we need only divide by
     % four pi.  We'll do this with a static vectorized function.
     
-    properties (Constant)
-        
-       d_scale = 1.0 / 4.0 / pi; 
-       
+    properties (Access = private)
+        %> Angular norm
+        d_scale = 1.0 / 4.0 / pi; 
     end
     
-    methods (Static)
+    methods (Access = public)
         
-        function q = apply(v)
-            q = v * MomentsToDiscrete.d_scale;
+        function obj = MomentsToDiscrete(dim)
+            if dim == 1
+                obj.d_scale = 0.5;
+            end
+        end
+
+        function q = apply(obj, v)
+            q = v * obj.d_scale;
         end
         
     end

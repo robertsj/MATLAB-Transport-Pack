@@ -46,7 +46,7 @@
 % ==============================================================================
 classdef InnerIteration < handle
     
-    properties
+    properties (Access = protected)
         %>
         d_input
         d_state
@@ -69,7 +69,10 @@ classdef InnerIteration < handle
         % 
         d_max_iters
         d_tolerance
-        
+        %
+        d_g
+        %> Moments to discrete operator.
+        d_M
     end
     
     methods (Access = public)    
@@ -161,12 +164,36 @@ classdef InnerIteration < handle
             % Initialize scatter data.
             initialize_scatter(obj);
             
-            % Equation.
-            obj.d_equation = DD2D(mesh, mat);
+            % Initialize moment to discrete.
+            obj.d_M = MomentsToDiscrete(mesh.DIM);
             
-            % Sweeper
-            obj.d_sweeper = Sweep2D(input, mesh, mat, quadrature, ...
-                obj.d_boundary, obj.d_equation);                   
+            if mesh.DIM == 1
+                
+                % Equation.
+                obj.d_equation = DD1D(mesh, mat);
+
+                % Sweeper
+                obj.d_sweeper = Sweep1D(input, mesh, mat, quadrature, ...
+                    obj.d_boundary, obj.d_equation); 
+                
+            elseif mesh.DIM == 2
+                
+                % Equation.
+                obj.d_equation = DD2D(mesh, mat);
+
+                % Sweeper
+                obj.d_sweeper = Sweep2D(input, mesh, mat, quadrature, ...
+                    obj.d_boundary, obj.d_equation); 
+                
+            elseif mesh.DIM == 3
+                
+            elseif mesh.MOC 
+                 % Example of how MOC can be plugges right in.
+            else
+                error('Invalid mesh dimension.')
+            end
+            
+                  
         end
         
         
@@ -210,8 +237,7 @@ classdef InnerIteration < handle
                 phi .* obj.d_sigma_s{g}(:, g);
             
             % Apply moments-to-discrete operator.
-            obj.d_scatter_source = ...
-                MomentsToDiscrete.apply(obj.d_scatter_source); 
+            obj.d_scatter_source = apply(obj.d_M, obj.d_scatter_source); 
             
         end % end function build_scatter_source
         
@@ -225,6 +251,8 @@ classdef InnerIteration < handle
         %   This builds the source (excluding within-group scatter) for the
         %   sweep.  Specifically, a *discrete* source is generated, i.e. the
         %   source appropriate for T*psi = Q.
+            obj.d_g = g;
+            fprintf('          Group: %5i\n', g);
             
             obj.d_fixed_source(:) = 0;
             
@@ -254,7 +282,7 @@ classdef InnerIteration < handle
             end
             
             % Apply the moments-to-discrete operator.
-            obj.d_fixed_source = MomentsToDiscrete.apply(obj.d_fixed_source);
+            obj.d_fixed_source = apply(obj.d_M, obj.d_fixed_source);
             
             % Add the fission source if required.
             if (initialized(obj.d_fission_source))
@@ -285,6 +313,16 @@ classdef InnerIteration < handle
                     'Maximum iterations reached without convergence.')
             end
         end % end function check_convergence
+
+    
+        function print_iteration(obj, it, e0, e1, e2)
+            fprintf('           Iter: %5i, Error: %12.8f\n', it, e0);
+            if it > 2
+                fprintf('                         Rate: %12.8f\n', ...
+                    (e0 - e1) / (e1 - e2));
+            end
+        end
         
     end
+        
 end

@@ -6,16 +6,12 @@
 %> Finish me.
 % ==============================================================================
 classdef Input < handle
-    % Class Input
-    %
-    % Stores and processes user input from a driver script.  
     
     properties (Access = private)
         %> Input data map, consisting of "keys" with "values"
         d_map = containers.Map();
     end
-        
-        
+         
     % Input parameters.  Some of these are optional/defaulted, as denoted.
     properties (Access = public)
         
@@ -28,22 +24,22 @@ classdef Input < handle
         bc_top    = 'vacuum';
         
         % Materials
-        number_groups    = 2;
+        number_groups    = 1;
         
         % Discretization
         equations = 'DD'; % DD, SD, SC, or varied
         
         % Convergence criteria.
-        inner_max_iters        = 300;     % Maximum inner (within-group) iterations
-        inner_tolerance        = 1e-5;    % Pointwise flux relative error tolerance
+        inner_max_iters  = 900;     % Maximum inner (within-group) iterations
+        inner_tolerance  = 1e-5;    % Pointwise flux relative error tolerance
         max_outer        = 100;     % Maximum outer (group) iterations. 
         tol_outer        = 1e-5;    % Pointwise flux relative error tolerance
         max_fission      = 100;     % Maximum fission source iterations.  This 
                                     %   applies to eigenproblems and fixed
                                     %   source problems with multiplication.
-        tol_fission      = 1e-5;    % Pointwise fission source relative error 
+        tol_fission      = 1e-4;    % Pointwise fission source relative error 
                                     %   tolerance
-        tol_eigenvalue   = 1e-5;    % Absolute tolerance on eigenvalue.
+        tol_eigenvalue   = 1e-4;    % Absolute tolerance on eigenvalue.
         
         % Quadrature selection
         quadrature_type = QuadratureTypes.LEVELSYMMETRIC; % Quadrature type.

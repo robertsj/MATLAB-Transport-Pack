@@ -7,12 +7,16 @@
 %> All quadratures must be ordered so that the signs of the cosines are 
 %> arranged in the following manner:
 %>
-%>    indices | mu(range) | eta(indices)
+%>    indices | mu  | eta | xi  
 %>    ----------------------------------
-%>       1: N |    +      |      +           (first octant)
-%>     N+1:2N |    -      |      +           (second octant)
-%>    2N+1:3N |    -      |      -           (third octant)
-%>    3N+1:4N |    +      |      -           (fourth octant)
+%>       1: N | +   |  +  | +        (first octant)
+%>     N+1:2N | -   |  +  | +        (second octant)
+%>    2N+1:3N | -   |  -  | +        (third octant)
+%>    3N+1:4N | +   |  -  | +        (fourth octant)
+%>    4N+1:5N | +   |  +  | -        ...
+%>    5N+1:6N | -   |  +  | -       
+%>    6N+1:7N | -   |  -  | -      
+%>    7N+1:8N | +   |  -  | -       
 %>
 %> Note that N is the number of angles per quadrant.  Outside of the given
 %> pattern, the angles need only be consistently ordered, i.e.
@@ -29,9 +33,14 @@ classdef Quadrature
   
     properties (Constant)
         %> Octant cosign signs.  
-        octant = [1 1; -1 1; -1 -1; 1 -1];      
-        %> Number of octants.
-        number_octants = 4;
+        octant = [  1  1  1 
+                   -1  1  1  
+                    1 -1  1
+                   -1 -1  1
+                    1  1 -1
+                   -1  1 -1
+                    1 -1 -1
+                   -1 -1 -1  ];
     end
     
     properties (Access = protected)
@@ -41,10 +50,16 @@ classdef Quadrature
         d_mu
         %> y-axis cosines
         d_eta
+        %> z-axis cosines
+        d_xi
         %> type of quadrature being used
         d_name
         %> number of angles
         d_number_angles
+        %> number of octants
+        d_number_octants
+        %> problem dimension
+        d_dim
     end
     
     methods
@@ -60,11 +75,22 @@ classdef Quadrature
         %>
         %> @return Instance of the Quadrature class.
         % ======================================================================
-        function obj = Quadrature(order)
+        function obj = Quadrature(order, dim)
             if (order < 1)
                 error('Quadrature order must be greater than 1.')
             end
             obj.d_order = order;
+            obj.d_dim = dim;
+            if dim == 1
+                obj.d_number_octants = 2;
+            elseif dim == 2
+                obj.d_number_octants = 4;
+            elseif dim == 3
+                obj.d_number_octants = 8;
+            else
+                error('Invalid dimension.')
+            end
+                
         end
         
     end
@@ -75,66 +101,103 @@ classdef Quadrature
         % Public Interface
         % ----------------------------------------------------------------------
         
+        % ======================================================================
+        %> @brief Return weights for all angles.
+        %> @return  Vector of weights.
+        % ======================================================================
         function w = weights(obj)
-        % function w = weights(obj)
-        %   Returns the quadrature weights.
             w = obj.d_weights;
         end
         
+        % ======================================================================
+        %> @brief Return weight for an angle (indexed by cardinal index)
+        %> @return  Vector of weights.
+        % ======================================================================
         function w = weight(obj, a)
-        % function w = weight(obj)
-        %   Returns the quadrature weight for a given cardinal index a.  
-            %check_index(obj, a);
             w = obj.d_weights(a);
         end
         
-        function [mu, eta] = angles(obj)
-        % function [mu, eta] = angles(obj);
-        %   Returns the quadrature points.
-            mu = obj.d_mu;
+        % ======================================================================
+        %> @brief Return all angles.
+        %> @return  Vector of weights.
+        % ======================================================================
+        function [mu, eta, xi] = angles(obj)
+            mu  = obj.d_mu;
             eta = obj.d_eta;
+            xi  = obj.d_xi;
         end
         
-        function [mu, eta] = angle(obj, o, a)
-        % function [mu, eta] = angle(obj, a);
-        %   Returns the quadrature points for a given cardinal index a
-            check_index(obj, a);        
+        % ======================================================================
+        %> @brief Return angles for a given cardinal index.
+        %> @return  Set of angles.
+        % ======================================================================
+        function [mu, eta, xi] = angle(obj, o, a)
+            check_index(obj, a);
             mu  = obj.d_mu(a)  * obj.octant(o, 1);
-            eta = obj.d_eta(a) * obj.octant(o, 2);
+            if obj.d_dim > 1
+            	eta = obj.d_eta(a) * obj.octant(o, 2);
+            else
+                eta = 0;
+            end
+            if obj.d_dim > 2
+            	xi = obj.d_eta(a) * obj.octant(o, 3);
+            else
+                xi = 0;
+            end
         end   
         
+        % ======================================================================
+        %> @brief Total number of angles.
+        %> @return  Number of angles.
+        % ======================================================================
         function y = number_angles(obj)
-        % function y = number_angles(obj)
-        %   Return the number of angles in the quadrature.
             y = obj.d_number_angles;
         end
         
+        % ======================================================================
+        %> @brief Total number of angles in an octant.
+        %> @return  Number of angles.
+        % ======================================================================
         function y = number_angles_octant(obj)
-        % function y = number_angles(obj)
-        %   Return the number of angles in the quadrature.
-            y = obj.d_number_angles/4;
-        end      
+            y = obj.d_number_angles/obj.d_number_octants;
+        end     
         
+        % ======================================================================
+        %> @brief Total number of octants.
+        %> @return  Number of octants.
+        % ======================================================================
+        function y = number_octants(obj)
+            y = obj.d_number_octants;
+        end   
         
+        % ======================================================================
+        %> @brief Angle bounds within an octant.
+        %> @return  Bounds.
+        % ======================================================================
         function b = bounds(obj, o)
-            n = number_angles_octant(obj);
-            if o == 1
-                b(1) = 1;
-                b(2) = n;
-            elseif o == 2
-                b(1) = n + 1;
-                b(2) = 2*n;
-            elseif o == 3
-                b(1) = 2*n + 1;
-                b(2) = 3*n;
-            else
-                b(1) = 3*n + 1;
-                b(2) = 4*n;
-            end
+            DBC.Require('o > 0 && o <=  number_octants(obj)') 
+            n_a = number_angles_octant(obj);
+            b(1) = (o - 1)*n_a + 1; 
+            b(2) = n_a * o; 
         end
         
+        % ======================================================================
+        %> @brief Computes cardinal angle index.
+        %> @return  Index.
+        % ======================================================================
         function y = index(obj, o, a)
             y = a + (o - 1) * number_angles_octant(obj);
+        end
+        
+    end
+    
+    methods (Static)
+        
+        function y = angular_norm(dim)
+            y = 1.0 / 4.0 / pi;
+            if dim == 1
+                y = 1.0 / 2.0;
+            end
         end
         
     end
@@ -150,6 +213,7 @@ classdef Quadrature
             end
         end 
     end
+    
 end
 
 

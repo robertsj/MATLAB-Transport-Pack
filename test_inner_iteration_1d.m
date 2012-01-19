@@ -13,7 +13,7 @@ clear
 % ==============================================================================
 input = Input();
 put(input, 'number_groups',         1);
-put(input, 'inner_solver',          'GMRES');
+put(input, 'inner_solver',          'Livolant');
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  3);
 
@@ -70,7 +70,8 @@ toc
 
 
 % subplot(2, 1, 1)
-% f = flux(state, 1);
+f = flux(state, 1);
+f(1:10)
 % plot_flux(mesh, f)
 % subplot(2, 1, 2)
 % f = flux(state, 2);

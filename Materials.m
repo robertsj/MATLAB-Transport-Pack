@@ -26,7 +26,7 @@ classdef Materials < handle
         
         % Upscatter cutoff.  Only groups equal to or above this cutoff are 
         % subject to upscatter iterations.
-        d_upscatter_cutoff = 0;
+        d_upscatter_cutoff = 1;
         
     end
     
@@ -127,6 +127,10 @@ classdef Materials < handle
             b = obj.d_downscatter;
         end
         
+        function b = upscatter_cutoff(obj)
+            b = obj.d_upscatter_cutoff; 
+        end
+        
         function obj = finalize(obj)
             
             % Set the scatter group bounds.  For each group, we compute the
@@ -163,6 +167,7 @@ classdef Materials < handle
             % upper scatter bound is larger than g, then upscatter exists
             % from that lower energy group.  The first group g for which
             % this occurs is the upscatter cutoff.
+            obj.d_upscatter_cutoff = obj.d_number_groups + 1;
             for g = 1:obj.d_number_groups
                 if obj.d_scatter_bounds(g, 2) > g
                     obj.d_upscatter_cutoff = g;
@@ -172,7 +177,11 @@ classdef Materials < handle
             
             % If our materials have no upscatter, then we set the
             % downscatter-only flag.
-            if obj.d_upscatter_cutoff == 0
+            if obj.d_upscatter_cutoff == obj.d_number_groups + 1
+                if obj.d_downscatter == 0
+                   warning('user:input', ...
+                       'Upscatter is being turned off since no upscatter exists in the data.');
+                end
                 obj.d_downscatter = 1;
             end
             

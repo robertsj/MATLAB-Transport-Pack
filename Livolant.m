@@ -129,7 +129,7 @@ classdef Livolant < InnerIteration
         %
         %> @return  Instance of the SourceIteration class.
         % ======================================================================
-        function obj = SourceIteration()
+        function obj = Livolant()
             % Nothing here for now.
         end
         
@@ -236,13 +236,9 @@ classdef Livolant < InnerIteration
                 flux_error_1 = flux_error;
                 flux_error   = abs(err);  
                                 
-                fprintf('*** Iter: %5i, Error: %12.8f\n', ...
-                    iteration, flux_error);
-                
-                if iteration > 2
-                    fprintf('                  Rate: %12.8f\n', ...
-                    (flux_error-flux_error_1) / (flux_error_1-flux_error_2)); 
-                end
+                print_iteration(obj, iteration, flux_error, ...
+                    flux_error_1, flux_error_2)
+
             end
            
             % Did we converge?

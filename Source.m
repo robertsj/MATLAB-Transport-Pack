@@ -17,7 +17,7 @@ classdef Source < handle
         % ----------------------------------------------------------------------
         
         function obj = Source(mesh, number_groups)
-            obj.d_mesh          = mesh;
+            obj.d_mesh = mesh;
             obj.d_number_groups = number_groups;
         end
         
@@ -30,9 +30,13 @@ classdef Source < handle
         function obj = set_sources(obj, sources, source_map)
         %  function obj = set_sources(obj, sources, source_map)
             DBC.Require('length(sources(:, 1)) == obj.d_number_groups');
-%             DBC.Require('length(material_map(1, :))==length(xfm)')
-%             DBC.Require('length(material_map(:, 1))==length(yfm)')
-            obj.d_sources = sources/4.0/pi; % Scale strengths to isotropic.
+            % DBC.Require('length(material_map(1, :))==length(xfm)')
+            % DBC.Require('length(material_map(:, 1))==length(yfm)')
+
+            % Scale strengths to isotropic using appropriate angular norm.
+            obj.d_sources = sources * Quadrature.angular_norm(obj.d_mesh.DIM);
+            
+            % Add the source map.
             obj.d_mesh = add_mesh_map(obj.d_mesh, source_map, 'EXTERNALSOURCE');
             obj.d_source_map = mesh_map(obj.d_mesh, 'EXTERNALSOURCE');
             
@@ -44,10 +48,8 @@ classdef Source < handle
 
             for cell = 1:number_cells(obj.d_mesh)
                 for group = 1:obj.d_number_groups
-                    a=1;
                     obj.d_source_vec(cell, group) = ...
-                        obj.d_sources(group, src(cell));  
-%                     
+                        obj.d_sources(group, src(cell));            
                 end
             end
             

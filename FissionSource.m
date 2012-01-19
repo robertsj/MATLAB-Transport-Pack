@@ -24,7 +24,7 @@ classdef FissionSource < handle
         d_fission_source    
         %> Fission source scaling term.
         d_scale = 1.0;   
-        d_inv_four_pi = 1.0 / 4.0 / pi;
+        d_angular_norm = 0;
         %> Are we initialized?
         d_initialized = 0;
     end
@@ -42,6 +42,8 @@ classdef FissionSource < handle
             obj.d_state = state;
             obj.d_mesh  = mesh;
             obj.d_mat   = mat;
+            % Get the right angular norm for this dimension.
+            obj.d_angular_norm = Quadrature.angular_norm(mesh.DIM);
         end
         
         % ======================================================================
@@ -53,7 +55,7 @@ classdef FissionSource < handle
         function obj = initialize(obj)
             
             % Fission density and source are both one group vectors.
-            %obj.d_fission_density = zeros(number_cells(obj.d_mesh), 1);
+            obj.d_fission_density = zeros(number_cells(obj.d_mesh), 1);
             obj.d_fission_source  = zeros(number_cells(obj.d_mesh), 1);
             
             % Grab the material map and reshape it to a vector.
@@ -80,7 +82,8 @@ classdef FissionSource < handle
             end
             
             % Set the fission density to be equal to the thermal nuSigmaF
-            obj.d_fission_density = obj.d_nu_sigma_f(:, end);
+           % obj.d_fission_density = obj.d_nu_sigma_f(:, end);
+            
             % and normalize to unity.
             obj.d_fission_density = obj.d_fission_density / ...
                 norm(obj.d_fission_density);
@@ -108,16 +111,9 @@ classdef FissionSource < handle
         %>
         %> @param   scale   Scaling factor (typically 1/keff)
         % ======================================================================
-        function obj = update(obj, scale)
-            
-            % Set scaling factor (optional)
-            if nargin == 1
-                obj.d_scale = 1.0;
-            else
-                obj.d_scale = scale * obj.d_inv_four_pi;
-            end
-            
+        function obj = update(obj)
             % Update the density.
+            obj.d_fission_density(:) = 0.0;
             for g = 1:number_groups(obj.d_mat)
                 % Get the group flux from the state.
                 phi = flux(obj.d_state, g);
@@ -125,12 +121,30 @@ classdef FissionSource < handle
                 obj.d_fission_density = obj.d_fission_density + ...
                     phi .* obj.d_nu_sigma_f(:, g);
             end
-            
-            % Scale the density.
-            if obj.d_scale ~= 1.0
-                obj.d_fission_density = obj.d_fission_density * obj.d_scale;
-            end
-            
+        end
+        
+        % ======================================================================
+        %> @brief Normalize the fission density.
+        %
+        %> This can be useful if one wants the initial guess to be 
+        %> normalized.
+        % ======================================================================  
+        function obj = normalize(obj)
+            nrm = norm(obj.d_fission_density, 2);
+            obj.d_fission_density = obj.d_fission_density / nrm;
+        end
+        
+        % ======================================================================
+        %> @brief Setup the fission source for an outer iteration.
+        %
+        %> This sets a new scaling factor \f$ k \f$ and precomputes the 
+        %> quantity \f$ v = (4\pi k)^{-1} \f$.
+        %>
+        %> @param   scale   Scaling factor (typically 1/keff)
+        % ======================================================================  
+        function obj = setup_outer(obj, scale)
+            obj.d_scale = scale * obj.d_angular_norm;
+            obj.d_fission_source = obj.d_fission_density(:) * obj.d_scale;
         end
         
         % ======================================================================
@@ -138,9 +152,11 @@ classdef FissionSource < handle
         %
         %> The group fission source is just that component of the density
         %> released in  a particular group.  Mathematically, this is just
+        %>
         %> \f[
         %>   q_{f,g} = \frac{\chi_g}{4\pi k} \sum_g \nu\Sigma_{f,g} \phi_g \, .
         %> \f]
+        %>
         %> Note, the scaling factor is actually arbitrary.  For 2-D and 3-D, it
         %> is \f$ 4\pi \f$, possibly with the eigenvalue \f$ k \f$.  The client
         %> sets this in \ref update.  
@@ -152,7 +168,7 @@ classdef FissionSource < handle
         %> @return      Source vector
         % ======================================================================
         function q = source(obj, g)
-            q = obj.d_fission_density(:) .* obj.d_chi(:, g) * obj.d_scale;   
+            q = obj.d_fission_source .* obj.d_chi(:, g);   
         end
         
         function f = density(obj)

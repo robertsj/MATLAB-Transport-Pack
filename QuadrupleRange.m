@@ -22,7 +22,7 @@ classdef QuadrupleRange < Quadrature
             %   order --    Quadrature order. This differs from quadrature to
             %               quadrature, but e.g. for level symmetric, it's the
             %               number of unique directional cosines.
-            obj = obj@Quadrature(order); % Call base class.
+            obj = obj@Quadrature(order, 2); % Call base class.
             obj.d_order = order;         % Set order.
             
             % Get data from an old table function.

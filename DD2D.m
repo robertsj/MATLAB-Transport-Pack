@@ -73,8 +73,9 @@ classdef DD2D < Equation
         %>
         %> @param mu    Cosine with respect to x axis.
         %> @param eta   Cosine with respect to y axis.
+        %> @param xi    Cosine with respect to y axis.
         % ======================================================================
-        function obj = setup_angle(obj, mu, eta)
+        function obj = setup_angle(obj, mu, eta, xi)
             % Get the widths from mesh.
             w = widths(obj.d_mesh);
             % Build the two constants.
@@ -85,15 +86,16 @@ classdef DD2D < Equation
         % ======================================================================
         %> @brief Solve for the cell-center and outgoing edge fluxes.
         %
+        %> @param g         Group index
         %> @param psi_in    Incident flux vector, [horz=1, vert=2]
         %> @param s         Cell source
         %> @param i         Cell x index
         %> @param j         Cell y index
-        %> @param g         Group index
+        %> @param k         Cell z index (NOT PRESENT)
         %>
         %> @return Cell center angular flux and outgoing edge fluxes.
         % ======================================================================
-        function [psi_out, psi_center] = solve(obj, psi_in, s, i, j, g)
+        function [psi_out, psi_center] = solve(obj, g, psi_in, s, i, j, k)
             %sig  = obj.d_sig(i, j);
             coef = 1.0 / (obj.d_sig(i, j) + obj.d_con_x(i) + obj.d_con_y(j));
             psi_center = coef * (s + obj.d_con_x(i) * psi_in(2) + ...

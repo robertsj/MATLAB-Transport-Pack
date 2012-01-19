@@ -35,7 +35,7 @@ placement   = [ 1 ];
 set_sources(q_e, spectra, placement);
 
 % Empty fission source.
-q_f = FissionSource(mesh, mat);
+q_f = FissionSource(state, mesh, mat);
 
 % Make the inner iteration.
 solver= Fixed(input,        ...

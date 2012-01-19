@@ -3,6 +3,13 @@
 % ==============================================================================
 %> @brief  Solver for k-eigenvalue problems.
 %
+%> The homogeneous transport equation in operator form is
+%> \f[
+%>      \mathbf{T}\psi = 
+%>        \mathbf{MSD}\psi + \frac{1}{k} \mathbf{MFD} \psi \, ,
+%> \f]
+%>
+%> 
 %> The standard power iteration method is employed.
 % ==============================================================================
 classdef Eigensolver
@@ -71,6 +78,19 @@ classdef Eigensolver
             % Initialize the fission source.
             initialize(obj.d_fission_source)
             
+            % Initialize the flux to unity in all groups.
+            phi = ones(number_cells(obj.d_mesh), 1);
+            for g = 1:number_groups(obj.d_mat)
+               set_phi(obj.d_state, phi, g);
+            end
+            
+            % Do initial fission density setup
+            update(obj.d_fission_source);
+            
+            % Normalize the density to unity
+            normalize(obj.d_fission_source);
+            fd = density(obj.d_fission_source);
+            
             % Group-wise flux residual.  All residuals are *relative* and
             % are based on the L-infinity norm. "1" and "2" are "one time ago"
             % and "two times ago".
@@ -81,23 +101,27 @@ classdef Eigensolver
             k_eff_1       = 1.0;
             iteration     = 0;
             
-            % Do initial fission density setup
-            update(obj.d_fission_source, k_eff);
-            fd = density(obj.d_fission_source);
+
+            
+            sweeps = 0;
             
             % Perform outer iteration.
             while (flux_error > obj.d_input.tol_fission && ...
                    iteration < obj.d_input.max_fission )
-
                
-                disp(' Outer iteration....')
+                % Setup the fission source.
+                setup_outer(obj.d_fission_source, 1/k_eff);
+               
                 % Solve the multigroup equations.
-                solve(obj.d_solver);
+                out     = solve(obj.d_solver);
+                
+                % Track number of sweeps.
+                sweeps  = sweeps + out.total_inners;
                 
                 % Save density and recompute.
+                update(obj.d_fission_source);
                 fd_old = fd;
-                update(obj.d_fission_source, k_eff);
-                fd = density(obj.d_fission_source);
+                fd     = density(obj.d_fission_source);
                 
                 % Compute L-1 fission density error.
                 flux_error_2 = flux_error_1;
@@ -109,19 +133,25 @@ classdef Eigensolver
                 k_eff   = k_eff_1 * sum(fd) / sum(fd_old);
                 
                 iteration = iteration + 1;
-                
-                fprintf('*** Outer Iter: %5i, Error: %12.8f\n', ...
-                    iteration, flux_error);
-                
-                if iteration > 2
-                    fprintf('                  Rate: %12.8f\n', ...
-                    (flux_error-flux_error_1) / (flux_error_1-flux_error_2)); 
-                end
+                print_iteration(obj, iteration, sweeps, ...
+                    flux_error, flux_error_1, flux_error_2, k_eff)
             end
             
             output.flux_error = flux_error;
-            output.flux_error = total_inners;
+            output.sweeps = sweeps;
             
+        end
+        
+        
+        function print_iteration(obj, it, sweeps, e0, e1, e2, k)
+            fprintf('=========================================================================\n')
+            fprintf('    Iter: %5i, Error: %12.8f, keff: %10.6f, Sweeps: %5i\n',...
+                it, e0, k, sweeps);
+            if it > 2
+                fprintf('                      Rate: %12.8f\n', ...
+                    (e0 - e1) / (e1 - e2));
+            end
+            fprintf('=========================================================================\n')
         end
         
     end

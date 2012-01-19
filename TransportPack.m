@@ -1,8 +1,6 @@
 %------------------------------------------------------------------------------%
 %> @file    TransportPack.m
 %> @brief   Main page documentation.
-%
-%> @note    Copyright (c) 2012 Jeremy Roberts
 %------------------------------------------------------------------------------%
 
 %------------------------------------------------------------------------------%
@@ -29,14 +27,28 @@
 %> approaches like the Method of Characteristics and stochastic (i.e. Monte 
 %> Carlo) methods.
 %>
+%> @note One and three dimensional routines are under development.
 %>
 %> @section solver Solvers
 %> 
 %> For the deterministic problems, a main goal was to illustrate use of advanced
 %> solution techniques.  These include Krylov solvers for within-group
 %> iterations and various acceleration techniques for both source iteration and
-%> eigenvalue (i.e. power) iteration.
+%> eigenvalue (i.e. power) iteration.  In particular, for the within-group
+%> ("inner") problem, the solvers available are
+%> - source iteration
+%> - %Livolant acceleration
+%> - GMRES iteration
+%> 
+%> Preconditioners such as diffusion synthetic acceleration (DSA), coarse
+%> mesh finite difference (CMFD) acceleration, and coarse mesh rebalance
+%> (CMR) are possible future additions applicable to all inner iteration
+%> solvers.
 %>
+%> For eigenvalue problems, currently only an unaccelerated power method 
+%> is employed.  Future additions will be use of the Arnoldi method via
+%> MATLAB's own "eigs" function, CMFD acceleration, and possible other
+%> "low order" schemes.
 %> 
 %> @section other Structure and Documentation
 %> 

@@ -6,35 +6,48 @@
 
 clear
 
-% Get the default input.
+
+% ==============================================================================
+% INPUT
+% ==============================================================================
 input = Input();
-
-% Material etc.
 put(input, 'number_groups',         2);
-
-% Inner iteration parameters.
 put(input, 'inner_solver',          'Livolant');
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  3);
 
-% One material, one group, c = 0.9
-mat         = test_materials(2);
 
-% Simple two region reactor.
-mesh        = test_mesh(2);
+% ==============================================================================
+% MATERIALS (Test two group data)
+% ==============================================================================
+mat = test_materials(2);
 
+
+% ==============================================================================
+% MESH 
+% ==============================================================================
+xcm    = [ 0.0  45.0  50.0];
+xfm    = [    45     5    ];
+ycm    = [ 0.0  45.0  50.0];
+yfm    = [    45     5    ];
+mat_map = [ 1  1     % ^
+            2  1 ];  % | y   x -->
+mesh = Mesh2D(xfm, yfm, xcm, ycm, mat_map);
+
+
+% ==============================================================================
+% SETUP 
+% ==============================================================================
 state       = State(input, mesh);
 quadrature  = LevelSymmetric(2);
 boundary    = Boundary(input, mesh, quadrature);
-
-% Uniform source.  (NOT USED).
-q_e         = Source(mesh, 2);
-
-% Fission source.
-q_f = FissionSource(state, mesh, mat);
+q_e         = Source(mesh, 2);          % Not initialized = not used.
+q_f = FissionSource(state, mesh, mat);  % Inititalized = used.
 initialize(q_f);
 
-% Make the inner iteration.
+% ==============================================================================
+% SOLVE 
+% ==============================================================================
 solver = Eigensolver(input,         ...
                      state,         ...
                      boundary,      ...
@@ -44,18 +57,17 @@ solver = Eigensolver(input,         ...
                      q_e,           ...
                      q_f);
  
-% Solve the problem
 tic
 out = solve(solver); 
 toc
 
-% Get the flux
+% ==============================================================================
+% POSTPROCESS 
+% ==============================================================================
+
+subplot(2, 1, 1)
 f = flux(state, 1);
-% and plot it
-subplot(2,1,1)
 plot_flux(mesh, f)
-% Get the flux
+subplot(2, 1, 2)
 f = flux(state, 2);
-% and plot it
-subplot(2,1,2)
 plot_flux(mesh, f)
