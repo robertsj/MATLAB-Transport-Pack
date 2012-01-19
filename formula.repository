@@ -40,3 +40,13 @@
 \form#39:$ v = (4\pi k)^{-1} f @param scale Scaling factor (typically 1/keff) public: function setup_outer(in obj,in scale); @brief Return the fission source in a group. The group fission source is just that component of the density released in a particular group. Mathematically, this is just \f[ q_{f,g} = \frac{\chi_g}{4\pi k} \sum_g \nu\Sigma_{f,g} \phi_g \, . \f] Note, the scaling factor is actually arbitrary. For 2-D and 3-D, it is $
 \form#40:$, possibly with the eigenvalue $
 \form#41:$ v = (4\pi k)^{-1} $
+\form#42:\[ \mathbf{L}\psi = \mathbf{MS}\phi + Q \]
+\form#43:$ \mathbf{L} $
+\form#44:$\mathbf{L}^{-1}$
+\form#45:\[ (\mathbf{I} - \mathbf{D}\mathbf{L}^{-1}\mathbf{MS})\phi = \mathbf{D} \mathbf{L}^{-1} Q \, . \]
+\form#46:$\mathbf{D}$
+\form#47:$ \phi = \mathbf{D}\psi $
+\form#48:$ \mathbf{A}x = b $
+\form#49:\[ \mathbf{A} = (\mathbf{I} - \mathbf{D}\mathbf{L}^{-1}\mathbf{MS}) \]
+\form#50:\[ b = \mathbf{D} \mathbf{L}^{-1} Q \, . \]
+\form#51:$ b$

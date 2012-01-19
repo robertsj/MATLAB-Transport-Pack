@@ -7,10 +7,10 @@
 <area shape="rect" id="node27" href="$class_input.html" title="Stores and processes user input from a driver script." alt="" coords="792,238,923,701"/>
 <area shape="rect" id="node29" href="$class_materials.html" title="{Materials\n|&#45; d_number_groups\l&#45; d_number_materials\l&#45; d_downscatter\l&#45; d_sigma_t\l&#45; d_nu_sigma_f\l&#45; d_chi\l&#45; d_sigma_s\l&#45; d_scatter_bounds\l&#45; d_upscatter_cutoff\l|+ Materials()\l+ set_sigma_t()\l+ set_nu_sigma_f()\l+ set_chi()\l+ set_sigma_s()\l+ sigma_t()\l+ nu_sigma_f()\l+ chi()\l+ sigma_s()\l+ number_groups()\l+ lower()\l+ upper()\l+ downscatter()\l+ upscatter_cutoff()\l+ finalize()\l&#45; check()\l}" alt="" coords="947,210,1093,729"/>
 <area shape="rect" id="node31" href="$class_mesh.html" title="Base Cartesian mesh." alt="" coords="1117,145,1256,794"/>
-<area shape="rect" id="node37" href="$class_source.html" title="{Source\n|+ d_mesh\l+ d_sources\l+ d_source_map\l+ d_number_groups\l+ d_source_vec\l+ d_initialized\l|+ Source()\l+ set_sources()\l+ cell_source()\l+ source()\l+ initialized()\l}" alt="" coords="1280,341,1416,598"/>
-<area shape="rect" id="node39" href="$class_state.html" title="Represents the state of the problem." alt="" coords="1440,350,1587,589"/>
-<area shape="rect" id="node41" href="$class_sweep1_d.html" title="Sweep over a 1D mesh." alt="" coords="1611,313,1739,626"/>
-<area shape="rect" id="node43" href="$class_sweep2_d.html" title="Sweep over a 2D mesh." alt="" coords="1763,313,1891,626"/>
+<area shape="rect" id="node41" href="$class_source.html" title="{Source\n|+ d_mesh\l+ d_sources\l+ d_source_map\l+ d_number_groups\l+ d_source_vec\l+ d_initialized\l|+ Source()\l+ set_sources()\l+ cell_source()\l+ source()\l+ initialized()\l}" alt="" coords="1280,341,1416,598"/>
+<area shape="rect" id="node43" href="$class_state.html" title="Represents the state of the problem." alt="" coords="1440,350,1587,589"/>
+<area shape="rect" id="node45" href="$class_sweep1_d.html" title="Sweep over a 1D mesh." alt="" coords="1611,313,1739,626"/>
+<area shape="rect" id="node47" href="$class_sweep2_d.html" title="Sweep over a 2D mesh." alt="" coords="1763,313,1891,626"/>
 <area shape="rect" id="node7" href="$class_reflective.html" title="Reflective boundary condition." alt="" coords="63,955,161,1063"/>
 <area shape="rect" id="node9" href="$class_vacuum.html" title="Vacuum boundary condition." alt="" coords="185,955,273,1063"/>
 <area shape="rect" id="node13" href="$class_d_d1_d.html" title="Diamond difference approximation in one dimension." alt="" coords="297,918,415,1101"/>
@@ -20,4 +20,6 @@
 <area shape="rect" id="node25" href="$class_source_iteration.html" title="Source iteration for inner iterations." alt="" coords="929,946,1060,1073"/>
 <area shape="rect" id="node33" href="$class_mesh1_d.html" title="1&#45;D Cartesian mesh." alt="" coords="1101,843,1235,1175"/>
 <area shape="rect" id="node35" href="$class_mesh2_d.html" title="2&#45;D Cartesian mesh." alt="" coords="1259,927,1392,1091"/>
+<area shape="rect" id="node37" href="$class_assembly.html" title="Represents reactor assembly of PinCell objects." alt="" coords="1165,1281,1315,1594"/>
+<area shape="rect" id="node39" href="$class_pin_cell.html" title="Represents reactor assembly pin in two dimensions." alt="" coords="1339,1225,1483,1650"/>
 </map>

@@ -52,7 +52,7 @@ Inheritance diagram for InnerIteration:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_inner_iteration__inherit__graph.png" border="0" usemap="#_inner_iteration_inherit__map" alt="Inheritance graph"/></div>
 <map name="_inner_iteration_inherit__map" id="_inner_iteration_inherit__map">
-<area shape="rect" id="node5" href="class_livolant.html" title="Livolant acceleration for inner iterations." alt="" coords="5,638,171,933"/><area shape="rect" id="node7" href="class_source_iteration.html" title="Source iteration for inner iterations." alt="" coords="195,722,325,849"/><area shape="rect" id="node2" href="classhandle.html" title="{handle\n||}" alt="" coords="144,6,203,95"/></map>
+<area shape="rect" id="node5" href="class_g_m_r_e_s_iteration.html" title="Source iteration for inner iterations." alt="" coords="5,769,141,914"/><area shape="rect" id="node7" href="class_livolant.html" title="Livolant acceleration for inner iterations." alt="" coords="165,694,331,989"/><area shape="rect" id="node9" href="class_source_iteration.html" title="Source iteration for inner iterations." alt="" coords="355,778,485,905"/><area shape="rect" id="node2" href="classhandle.html" title="{handle\n||}" alt="" coords="219,6,277,95"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for InnerIteration:</div>
@@ -108,30 +108,32 @@ Protected Attributes</h2></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Solve the within-group transport equation. </p>
-<p>The within-group transport equation is </p>
+<p>The within-group transport equation in operator form is </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ \mathbf{T}\psi = \frac{\Sigma_{sg\to g}}{4\pi} \sum_n w_n \psi_n(\vec{r},\hat{\Omega},g) + Q_{ng} \, , \]" src="form_8.png"/>
+<img class="formulaDsp" alt="\[ \mathbf{L}\psi = \mathbf{MS}\phi + Q \]" src="form_42.png"/>
 </p>
-<p> where <img class="formulaInl" alt="$ \mathbf{T} $" src="form_9.png"/> is the streaming and collision operator and <img class="formulaInl" alt="$ Q $" src="form_10.png"/> is a discrete representation of all source contributions except for within-group scattering, which is shown as isotropic for convenience.</p>
-<p>What we are really after is the scalar flux and possibly its higher order moments. Consequently, we are able to solve a somewhat different problem then the within group transport equation above. First, let's simplify the notation somewhat, yielding </p>
+<p> where <img class="formulaInl" alt="$ \mathbf{L} $" src="form_43.png"/> is the streaming and collision operator, {M} is the moment-to-discrete operator, {S} is the scattering operator, and Q represents any source considered fixed, which includes in-scatter, fission, and external sources.</p>
+<p>What we are really after is the scalar flux and possibly its higher order moments. Consequently, we are able to solve a somewhat different problem then the within group transport equation above. Let us operate on both sides by <img class="formulaInl" alt="$\mathbf{L}^{-1}$" src="form_44.png"/> followed by <img class="formulaInl" alt="$ \mathbf{D}$" src="form_12.png"/> to get </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ (\mathbf{T} - \frac{1}{4\pi}\mathbf{SD})\psi = Q \, , \]" src="form_11.png"/>
+<img class="formulaDsp" alt="\[ (\mathbf{I} - \mathbf{D}\mathbf{L}^{-1}\mathbf{MS})\phi = \mathbf{D} \mathbf{L}^{-1} Q \, . \]" src="form_45.png"/>
 </p>
-<p> where <img class="formulaInl" alt="$ \mathbf{D}$" src="form_12.png"/> is the discrete-to-moment operator, which is simply acts to integrate the discrete angular flux over angle. Now, let us operate on both sides by <img class="formulaInl" alt="$\mathbf{T}^{-1}$" src="form_13.png"/>, the sweep operation, yielding </p>
+<p> Here, <img class="formulaInl" alt="$\mathbf{D}$" src="form_46.png"/> is the discrete-to-moment operator, defined such that <img class="formulaInl" alt="$ \phi = \mathbf{D}\psi $" src="form_47.png"/>.</p>
+<p>Notice this is nothing but a linear system of the form <img class="formulaInl" alt="$ \mathbf{A}x = b $" src="form_48.png"/> where </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ (\mathbf{I} - \frac{1}{4\pi}\mathbf{T}^{-1}\mathbf{SD}) \psi = \mathbf{T}^{-1} Q \, . \]" src="form_14.png"/>
+<img class="formulaDsp" alt="\[ \mathbf{A} = (\mathbf{I} - \mathbf{D}\mathbf{L}^{-1}\mathbf{MS}) \]" src="form_49.png"/>
 </p>
-<p> Going one step further, we operator on both sides by <img class="formulaInl" alt="$ \mathbf{D}$" src="form_12.png"/> get </p>
+<p> and </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ (\mathbf{I} - \frac{1}{4\pi}\mathbf{D}\mathbf{T}^{-1}\mathbf{S})\phi = \mathbf{D} \mathbf{T}^{-1} Q \, . \]" src="form_15.png"/>
+<img class="formulaDsp" alt="\[ b = \mathbf{D} \mathbf{L}^{-1} Q \, . \]" src="form_50.png"/>
 </p>
-<p> Notice something great: this is just a typical <img class="formulaInl" alt="$\mathbf{A}x =b$" src="form_16.png"/> problem!</p>
+<p> Moreover, <img class="formulaInl" alt="$ b$" src="form_51.png"/> is just the uncollided flux.</p>
+<p>A nice overview of approaches for this inner iteration is given by Larsen and Morel in <em> Nuclear Computational Science </em>. We have implement the standard source iteration method, <a class="el" href="class_livolant.html" title="Livolant acceleration for inner iterations.">Livolant</a> acceleration (an extrapolation technique), and solvers that use MATLAB's own GMRES (and other Krylov solvers).</p>
 <p><a class="el" href="class_input.html" title="Stores and processes user input from a driver script.">Input</a> parameters specific to <a class="el" href="class_inner_iteration.html" title="Solve the within-group transport equation.">InnerIteration</a> and derived classes:</p>
 <ul>
 <li>inner_max_iters (default: 100)</li>
 <li>inner_tolerance (default: 1e-5)</li>
 </ul>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="class_source_iteration.html" title="Source iteration for inner iterations.">SourceIteration</a>, <a class="el" href="class_livolant.html" title="Livolant acceleration for inner iterations.">Livolant</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="class_source_iteration.html" title="Source iteration for inner iterations.">SourceIteration</a>, <a class="el" href="class_livolant.html" title="Livolant acceleration for inner iterations.">Livolant</a>, <a class="el" href="class_g_m_r_e_s_iteration.html" title="Source iteration for inner iterations.">GMRESIteration</a> </dd></dl>
 </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a9665f88f4f8b1457d6c091bebc7722eb"></a><!-- doxytag: member="InnerIteration::InnerIteration" ref="a9665f88f4f8b1457d6c091bebc7722eb" args="()" -->
 <div class="memitem">
@@ -628,7 +630,7 @@ Protected Attributes</h2></td></tr>
 <li>/home/robertsj/Research/matlab_transport_pack/source/<a class="el" href="_inner_iteration_8m.html">InnerIteration.m</a></li>
 </ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Wed Jan 18 2012 17:37:40 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Thu Jan 19 2012 17:24:45 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>
