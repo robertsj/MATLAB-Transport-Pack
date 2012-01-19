@@ -18,7 +18,7 @@ if n == 1
     mat = set_nu_sigma_f(mat, 1, 1, 0.0); 
     mat = set_chi(mat, 1, 1, 0.0);     
     % Scattering
-    mat = set_sigma_s(mat, 1, 1, 1, 0.999); % (object, material, g, g', value);
+    mat = set_sigma_s(mat, 1, 1, 1, 0.99); % (object, material, g, g', value);
 
     % Total
     mat = set_sigma_t(mat, 2, 1, 1.0); % (object, material, group, value)

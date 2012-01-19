@@ -28,6 +28,11 @@
 % ==============================================================================
 classdef GMRESIteration < InnerIteration
     
+    properties
+        %> Krylov solver type.
+        d_krylov 
+    end
+    
     methods
        
         % ======================================================================
@@ -71,6 +76,14 @@ classdef GMRESIteration < InnerIteration
                         quadrature,       ...
                         external_source,  ...
                         fission_source);
+                    
+            % Set user parameters or use defaults
+            if contains(input, 'krylov_solver')
+                obj.d_krylov = get(input, 'krylov_solver');
+            else
+                obj.d_krylov = 'gmres';
+            end
+
             
             % Nothing else here for now.
         end
@@ -97,16 +110,30 @@ classdef GMRESIteration < InnerIteration
             % This is the right hand side.
             B = sweep(obj.d_sweeper, obj.d_fixed_source, g); 
             
-
-            % Set the initial flux
-            %phi = flux(obj.d_state, g);
+            % Call the Krylov solver
+            if strcmp(obj.d_krylov, 'gmres')
+                [phi, flag, flux_error, iter] = ...
+                    gmres(@(x)apply(x, obj), B, 30, obj.d_tolerance, ...
+                    40, [], [], B);
+                fprintf('           GMRES Outers: %5i,  Inners: %5i\n', ...
+                    iter(1), iter(2));
+                iteration = iter(1) * iter(2);
+            elseif strcmp(obj.d_krylov, 'bicgstab')
+                [phi, flag, flux_error, iter] = ...
+                    bicgstab(@(x)apply(x, obj), B, obj.d_tolerance, ...
+                    40, [], [], B);
+                fprintf('         BiCGStab Iters: %5i \n', iter);
+                iteration = iter;
+            elseif strcmp(obj.d_krylov, 'bicgstabl')
+                [phi, flag, flux_error, iter] = ...
+                    bicgstabl(@(x)apply(x, obj), B, obj.d_tolerance, ...
+                    40, [], [], B);
+                fprintf('      BiCGStab(l) Iters: %5i \n', iter);
+                iteration = iter;
+            else
+                error('Invalid Krylov solver selected for inners.')
+            end
             
-            % Call GMRES
-            [phi, flag, flux_error, iter] = ...
-                gmres(@(x)apply(x, obj), B, 30, obj.d_tolerance, ...
-                40, [], [], B);
-            fprintf('           GMRES Outers: %5i,  Inners: %5i\n', ...
-                iter(1), iter(2));
             switch flag
                 case 0
                     % Okay.
@@ -122,9 +149,7 @@ classdef GMRESIteration < InnerIteration
                 otherwise
                     error('GMRES returned unknown flag.')
             end
-            
-            iteration = iter(1) * iter(2);
-            
+
             % Did we converge?
             check_convergence(obj, iteration, flux_error);
             

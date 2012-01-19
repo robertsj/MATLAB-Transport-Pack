@@ -100,10 +100,10 @@ classdef SourceIteration < InnerIteration
             build_fixed_source(obj, g);
             
             % Compute the uncollided flux, i.e. phi_uc = D*inv(T)*Q_fixed.
-            phi_uc = sweep(obj.d_sweeper, obj.d_fixed_source, g); 
+           % phi_uc = sweep(obj.d_sweeper, obj.d_fixed_source, g); 
             
             % Set the initial flux
-            phi      = flux(obj.d_state, g) + phi_uc;
+            phi      = flux(obj.d_state, g);% + phi_uc;
             phi_old  = phi;
             
             while flux_error > obj.d_tolerance ...
@@ -117,23 +117,28 @@ classdef SourceIteration < InnerIteration
                 % values.  Note, in a more general implementation, the
                 % sweep source would be generated for each angle.  Here,
                 % since it's isotropic, we do it once before everything.
-                sweep_source = obj.d_scatter_source; 
+                sweep_source = obj.d_scatter_source + obj.d_fixed_source; 
                 
                 % Set incident boundary fluxes.
                 set(obj.d_boundary);
                 
                 % Sweep over all angles and meshes.            
-                phi = sweep(obj.d_sweeper, sweep_source, g) + phi_uc;            
+                phi = sweep(obj.d_sweeper, sweep_source, g);            
 
                 % Convergence criteria and diagnostics
                 flux_error_2 = flux_error_1;
                 flux_error_1 = flux_error;
-                flux_error   = max( abs( (phi-phi_old)./phi ) );  
+                
+                % flux_error   = max( abs( (phi-phi_old)./phi ) ); 
+                flux_error   = norm(phi-phi_old);  
+                
                 phi_old      = phi;
                 iteration    = iteration + 1;   
                 
-                print_iteration(obj, iteration, flux_error, ...
-                    flux_error_1, flux_error_2)
+                if (mod(iteration, 10)==0)
+                    print_iteration(obj, iteration, flux_error, ...
+                        flux_error_1, flux_error_2)
+                end
                 
             end
             

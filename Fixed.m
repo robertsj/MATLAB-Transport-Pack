@@ -55,7 +55,7 @@ classdef Fixed
            
            % Setup the within-group solver.
            inner = get(input, 'inner_solver');
-           if strcmp(inner, 'SourceIteration')
+           if strcmp(inner, 'SI')
                obj.d_inner_solver = SourceIteration();
            elseif strcmp(inner, 'Livolant')
                obj.d_inner_solver = Livolant(); 

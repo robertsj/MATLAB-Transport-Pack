@@ -218,12 +218,14 @@ classdef Livolant < InnerIteration
             
                 % Perform a sequence of source ("free") iterations.
                 [err, mu] = source_iterations(obj, g);
+                
                 %fprintf('       SI Error: %12.8f,  mu: %12.8f\n', err, mu);
                 iteration = iteration + obj.d_free_iters;
                 
                 % Perform a sequence of accelerated iterations, but only if the 
                 % relaxation parameter is positive (otherwise divergence lurks)
-                if mu > 0
+                % and we aren't already converged.
+                if mu > 0 && err > obj.d_tolerance
                     err = accelerated_iterations(obj, g, mu);
                     %fprintf(' Livolant Error: %12.8f \n', err);
                     iteration = iteration + obj.d_accel_iters;
@@ -298,7 +300,9 @@ classdef Livolant < InnerIteration
                 
                 % Compute the second residual
                 e1 = obj.d_phi(:, obj.d_2) - obj.d_phi(:, obj.d_1);
-                err = max( abs(e1)./obj.d_phi(:, obj.d_2) );
+                
+                % err = max( abs(e1)./obj.d_phi(:, obj.d_2) );
+                err = norm(e1);
                 
                 % Update the relaxation factor.
                 mu = relaxation_factor(obj, e0, e1);
@@ -342,7 +346,8 @@ classdef Livolant < InnerIteration
                     e0 = obj.d_phi(:, obj.d_2) - obj.d_phi(:, obj.d_1);
                 elseif iteration == obj.d_free_iters 
                     e1 = obj.d_phi(:, obj.d_2) - obj.d_phi(:, obj.d_1);
-                    err = max( abs(e1)./obj.d_phi(:, obj.d_2) );
+                    % err = max( abs(e1)./obj.d_phi(:, obj.d_2) );
+                    err = norm(e1);
                 end
                       
             end

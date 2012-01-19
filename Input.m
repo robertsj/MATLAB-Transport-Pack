@@ -82,7 +82,9 @@ classdef Input < handle
             put(obj, 'problem_type',        'Fixed');  
             
             % Inner solver
-            put(obj, 'inner_solver',        'SourceIteration');            
+            put(obj, 'inner_solver',        'SI'); 
+            put(obj, 'inner_tolerance',     1e-6); 
+            put(obj, 'inner_max_iters',     1000); 
         end
         
         % ======================================================================

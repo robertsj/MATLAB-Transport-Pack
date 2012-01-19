@@ -3,46 +3,51 @@
 % ==============================================================================
 %> @brief Solve the within-group transport equation.
 %
-%> The within-group transport equation is 
+%> The within-group transport equation in operator form is 
 %> \f[
-%>      \mathbf{T}\psi = 
-%>      \frac{\Sigma_{sg\to g}}{4\pi} \sum_n w_n 
-%>      \psi_n(\vec{r},\hat{\Omega},g) + Q_{ng} \, ,
+%>      \mathbf{L}\psi = 
+%>      \mathbf{MS}\phi + Q
 %> \f]
-%> where \f$ \mathbf{T} \f$ is the streaming and collision operator and 
-%> \f$ Q \f$ is a discrete representation of all source contributions
-%> except for within-group scattering, which is shown as isotropic for
-%> convenience.
+%> where \f$ \mathbf{L} \f$ is the streaming and collision operator,
+%> \mathbf{M} is the moment-to-discrete operator, 
+%> \mathbf{S} is the scattering operator, and  Q represents any 
+%> source considered fixed, which includes in-scatter, fission, and
+%> external sources.
 %>
 %> What we are really after is the scalar flux and possibly its higher
 %> order moments.  Consequently, we are able to solve a somewhat different
-%> problem then the within group transport equation above.  First, let's
-%> simplify  the notation somewhat, yielding
+%> problem then the within group transport equation above.  Let us operate 
+%> on both sides by \f$\mathbf{L}^{-1}\f$ followed
+%> by \f$ \mathbf{D}\f$ to get
 %> \f[
-%>      (\mathbf{T} - \frac{1}{4\pi}\mathbf{SD})\psi = Q \, ,
+%>      (\mathbf{I} - \mathbf{D}\mathbf{L}^{-1}\mathbf{MS})\phi
+%>      = \mathbf{D} \mathbf{L}^{-1} Q \, .
 %> \f] 
-%> where \f$ \mathbf{D}\f$ is the discrete-to-moment operator, which is simply 
-%> acts to integrate the discrete angular flux over angle. Now, let us operate 
-%> on both sides by \f$\mathbf{T}^{-1}\f$, the sweep 
-%> operation, yielding
-%> \f[
-%>      (\mathbf{I} - \frac{1}{4\pi}\mathbf{T}^{-1}\mathbf{SD}) \psi
-%>      = \mathbf{T}^{-1} Q \, .
-%> \f] 
-%> Going one step further, we operator on both sides by \f$ \mathbf{D}\f$
-%> get
-%> \f[
-%>      (\mathbf{I} - \frac{1}{4\pi}\mathbf{D}\mathbf{T}^{-1}\mathbf{S})\phi
-%>      = \mathbf{D} \mathbf{T}^{-1} Q \, .
-%> \f] 
-%> Notice something great: this is just a typical \f$\mathbf{A}x =b\f$ 
-%> problem!
+%> Here, \f$\mathbf{D}\f$ is the discrete-to-moment operator, defined
+%> such that \f$ \phi = \mathbf{D}\psi \f$.
 %>
+%> Notice this is nothing but a linear system of the form 
+%> \f$ \mathbf{A}x = b \f$ where
+%> \f[
+%>      \mathbf{A} = (\mathbf{I} - \mathbf{D}\mathbf{L}^{-1}\mathbf{MS})
+%> \f] 
+%> and
+%> \f[
+%>      b = \mathbf{D} \mathbf{L}^{-1} Q \, .
+%> \f] 
+%> Moreover, \f$ b\f$ is just the uncollided flux.
+%>
+%> A nice overview of approaches for this inner iteration is 
+%> given by Larsen and Morel in <em> Nuclear Computational Science </em>.
+%> We have implement the standard source iteration method, Livolant 
+%> acceleration (an extrapolation technique), and solvers that use
+%> MATLAB's own GMRES (and other Krylov solvers).
+%> 
 %> Input parameters specific to InnerIteration and derived classes:
 %> - inner_max_iters (default: 100)
 %> - inner_tolerance (default: 1e-5)
 %>
-%> \sa SourceIteration, Livolant
+%> \sa SourceIteration, Livolant, GMRESIteration
 % ==============================================================================
 classdef InnerIteration < handle
     
@@ -144,10 +149,9 @@ classdef InnerIteration < handle
             obj.d_mesh       = mesh;
             obj.d_quadrature = quadrature;
             
-            % Check input; otherwise, set defaults.
-            
-            obj.d_tolerance = input.inner_tolerance;
-            obj.d_max_iters = input.inner_max_iters;
+            % Check input; otherwise, set defaults for optional parameters.
+            obj.d_tolerance = get(input, 'inner_tolerance');
+            obj.d_max_iters = get(input, 'inner_max_iters');
             
             % Add external source
             obj.d_external_source = external_source;

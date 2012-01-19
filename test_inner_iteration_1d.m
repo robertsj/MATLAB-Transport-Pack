@@ -1,9 +1,9 @@
 %> @file  test_inners_1d.m
 %> @brief Tests the fixed source iteration in 1D
 %
-%       SI: 684
-% Livolant:  66
-%    GMRES:
+%       SI:  0.00000099, 1636  142.521566
+% Livolant:  0.00000089,  132,  11.693956
+%    GMRES:  0.00000092,   15,   6.346117
 % ==============================================================================
 
 clear
@@ -13,7 +13,8 @@ clear
 % ==============================================================================
 input = Input();
 put(input, 'number_groups',         1);
-put(input, 'inner_solver',          'Livolant');
+put(input, 'inner_solver',          'GMRES');
+put(input, 'inner_max_iters',       3000);
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  3);
 
