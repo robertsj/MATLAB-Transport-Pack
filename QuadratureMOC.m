@@ -30,8 +30,14 @@ classdef QuadratureMOC < handle
         d_number_x
         %> Number vertical intercepts
         d_number_y
+        %>
+        d_number_tracks
         %> Number of tracks
         d_number_space
+        %>
+        d_enter
+        d_exit
+        d_space
     end
     
     
@@ -60,8 +66,44 @@ classdef QuadratureMOC < handle
             p = obj.d_phi(i) + (o-1)*pi/2;
         end
         
+        function w = weight_phi(obj, i)
+            w = obj.d_weight_phi(i); 
+        end
+        
         function m = mu(obj, i)
             m = obj.d_mu(i); 
+        end
+        
+        function w = weight_mu(obj, i)
+            w = obj.d_weight_mu(i); 
+        end
+        
+        function n = number_azimuth(obj)
+           n = obj.d_number_azimuth;
+        end
+        
+        function n = number_polar(obj)
+           n = obj.d_number_polar;
+        end
+        
+        function n = number_x(obj, m)
+           n = obj.d_number_x(m);
+        end
+        
+        function n = number_y(obj, m)
+           n = obj.d_number_y(m);
+        end     
+        
+        function n = number_tracks(obj, m)
+           n = obj.d_number_tracks(m);
+        end     
+        
+        function p = uniform(obj, a, b, m, f)
+            pp = linspace(a, b, m+1);
+            p = pp(1:end-1)+pp(2)/2;
+            if f == 1
+                p = p(end:-1:1);
+            end
         end
         
     end

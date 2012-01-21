@@ -1,8 +1,17 @@
 %> @file  test_assembly.m
 %> @brief Tests the eigenvalue solver on a 2D assembly problem.
+% 
+% =========================================================================
+%     Iter:     6, Error:   0.00027425, keff:   0.492221, Sweeps:   174
+%                       Rate:   0.21176737
+% =========================================================================
+% Elapsed time is 21876.538294 seconds.
+% =========================================================================
 %
-%> Finish me.
-% ==============================================================================
+%
+% That's about 2 minutes per sweep, wish seems reasonable enough.  However,
+% if we could limit that to maybe 10 sweeps via CMFD, we're in 
+% business.  Note, the GMRES
 
 clear
 
@@ -32,7 +41,7 @@ pitch   = 1.26;
 radii   = 0.54;
 number  = 14;
 % Pin 1
-matid  = [4 2]; 
+matid  = [1 2]; 
 pin1   = PinCell(pitch, radii, matid);
 meshify(pin1, number);
 figure(1)
@@ -43,28 +52,34 @@ pin2   = PinCell(pitch, radii, matid);
 meshify(pin2, number);
 figure(2)
 plot_pin(pin2);
+% Pin 3
+matid  = [1]; 
+pin3   = PinCell(pitch, [], matid);
+meshify(pin3, number);
+figure(3)
+plot_pin(pin3);
 
 % Make the assembly.
-pin_map = [ 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1   
-            2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 
-            1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1   
-            2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 
-            1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1   
-            2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 
-            1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1   
-            2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 
-            1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1   
-            2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 
-            1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1   
-            2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 
-            1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1   
-            2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 
-            1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1   
-            2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 
-            1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 ];
-mesh = Assembly({pin1, pin2}, pin_map);
+pin_map = [ 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3     
+            3 3 3 1 2 1 2 1 2 1 2 1 2 1 3 3 3 
+            3 3 1 2 1 2 1 2 1 2 1 2 1 2 1 3 3   
+            3 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 3 
+            3 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 3   
+            3 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 3 
+            3 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 3   
+            3 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 3 
+            3 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 3   
+            3 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 3 
+            3 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 3   
+            3 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 3 
+            3 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 3   
+            3 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 3 
+            3 3 1 2 1 2 1 2 1 2 1 2 1 2 1 3 3   
+            3 3 3 1 2 1 2 1 2 1 2 1 2 1 3 3 3 
+            3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 ];
+mesh = Assembly({pin1, pin2, pin3}, pin_map);
 meshify(mesh);
-figure(3)
+figure(4)
 plot_mesh_map(mesh, 'MATERIAL')
 
 

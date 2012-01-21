@@ -119,7 +119,6 @@ classdef Fixed
                     iteration  = iteration + 1;
                     flux_error = max(flux_g_error);
                     
-
                 end
             end
             output.flux_error   = flux_error;

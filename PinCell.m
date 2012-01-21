@@ -29,22 +29,32 @@ classdef PinCell < Mesh2D
         %
         %> @}
         
-        % Remember we get the following mesh data:
-        %   d_xcm = 1;
-        %   d_ycm = 1;
-        %   d_zcm = 1;
-        %   d_xfm = 1;
-        %   d_yfm = 1;
-        %   d_zfm = 1;
-        %   d_dx = 1;
-        %   d_dy = 1;
-        %   d_dz = 1;
-        %   d_number_cells   = 1;
-        %   d_number_cells_x = 1;
-        %   d_number_cells_y = 1;
-        %   d_number_cells_z = 1;
-        %   d_mesh_map       
+        %> @name Mesh Data
+        %> @{
         
+        %> Am I meshed?
+        d_meshed = 0;
+        
+        %> @}
+        
+        %> @name Track Data
+        %> @{
+        %
+        %> Quadrature
+        d_quadrature
+        %> Entrance points for each angle
+        d_enter
+        %> Exit points for each angle
+        d_exit
+        %
+        d_space
+        %
+        d_segment_length
+        d_segment_region
+        d_segment_coef
+        d_num_seg
+        %> @}
+          
     end
     
     methods (Access = public)
@@ -150,40 +160,222 @@ classdef PinCell < Mesh2D
                 fprintf(' Reg: %2i, Vol. Rel. Err.: %12.8f\n', ...
                     i, error_volume(i));
             end
-            
+            obj.d_meshed = 1;
         end
         
-        function plot_pin(obj)
+        % ======================================================================
+        %> @brief Perform tracking over the pin cell.
+        %
+        %> This is a crude approach that given a number of meshes, a
+        %> regular grid is defined.  Mesh materials are defined as the
+        %> material in the mid point of a fine mesh. An alternative would
+        %> be to define new materials via volume homogenization.
+        %>
+        %> @param  q  MOC quadrature
+        % ======================================================================
+        function track(obj, q, mat)
             
+            pitch = obj.d_pitch;
+            obj.d_quadrature = q;
+            obj.d_enter = cell(number_azimuth(q), 1);
+            obj.d_exit  = cell(number_azimuth(q), 1);
+            
+            for m = 1:number_azimuth(q)  
+                obj.d_enter{m} = q.d_enter{m}*pitch;
+                obj.d_exit{m}  = q.d_exit{m}*pitch;
+                obj.d_space(m) = q.d_space(m);
+            end
+            
+            % Tracking.  We make two passes.  The first pass counts the
+            % the total number of tracks total.  With this, we size the
+            % track length vector and region id vector.
+            
+            s = 1; % segment index
+            for z = 1:number_azimuth(q) 
+                cos_phi = cos(phi(q, 1, z));
+                tan_phi = tan(phi(q, 1, z));
+                for t = 1:number_tracks(q, z)
+                    % All points are translated by a half pitch to put
+                    %  the cell center at the origin.
+                    x_i = obj.d_enter{z}(t, 1)-pitch/2; % incident
+                    y_i = obj.d_enter{z}(t, 2)-pitch/2; %   x and y
+                    x_o = obj.d_exit{z}(t, 1)-pitch/2;  % outgoing
+                    y_o = obj.d_exit{z}(t, 2)-pitch/2;  %   x and y
+                    % total length
+                    l   = sqrt( (x_o-x_i)^2 + (y_o-y_i)^2 ); 
+                    % y intercept
+                    b = y_i - (x_i * tan_phi);
+                    % the closest approach to origin is
+                    d_o = abs(cos_phi * b);
+                    % how many cylinder regions to we intercept?
+                    num_cyl = sum(obj.d_radii > d_o);
+                    % number of segments 
+                    num_seg = 2*num_cyl + 1;
+                    obj.d_num_seg(z, t)=num_seg;
+                    ss = 1;
+                    x = x_i;
+                    y = y_i;
+                    reg    = zeros(num_seg, 1);
+                    reg(1) = obj.d_number_regions;
+                    reg(end) = obj.d_number_regions;
+                    if (num_seg > 1)
+                        for i = 1:floor(num_seg/2)
+                            idx = obj.d_number_radii - num_cyl + i;
+                            reg(i+floor(num_seg/2))  = idx;
+                            reg(ceil(num_seg/2)-i+1) = idx;
+                        end
+                        xx = zeros(2*num_cyl, 1); yy = xx;
+                        for i = 1:num_cyl
+                            % get outermost radius
+                            r = obj.d_radii(end-i+1);
+                            A = -tan_phi * b;
+                            B = sqrt( tan_phi^2 * r^2 + r^2 - b^2);
+                            C = tan_phi^2 + 1;
+                            xx(i) = (A-B)/C;
+                            yy(i) = tan_phi*xx(i) + b;
+                            xx(2*num_cyl-i+1) = (A+B)/C;
+                            yy(2*num_cyl-i+1) = tan_phi*xx(2*num_cyl-i+1)  + b;
+                        end
+                        x(ss+1:2*num_cyl+ss) = xx(:);
+                        y(ss+1:2*num_cyl+ss) = yy(:);
+                        
+                    end
+                    ss = ss+2*num_cyl+1;
+                    x(ss) = x_o;
+                    y(ss) = y_o;
+                    segl=zeros(num_seg, 1);
+                    for i = 1:num_seg
+                        segl(i) = sqrt((x(i+1)-x(i))^2 + (y(i+1)-y(i))^2);
+                        obj.d_segment_length(s) = segl(i);
+                        obj.d_segment_region(s) = reg(i);
+%                         for j = 1:number_polar(q)
+%                         	obj.d_segment_coef(s,j) = ...
+%                                 exp(
+%                         end
+                        s = s + 1;
+                    end
+                    if ( abs(sum(segl)-l) > 1e-14 )
+                        fprintf('%3i %3i %12.8f, %12.8f\n', z, t, sum(segl), l);
+                        error(' error in track length ')
+                    end
+                end
+            end
+        
+        end
+        
+        % ======================================================================
+        %> @brief Plot true geometry outline.
+        % ======================================================================
+        function plot_pin(obj)
             P = obj.d_pitch;
-
             % bounding box
             Xa = [ 0.0;   P;   P; 0.0; 0.0 ];
             Ya = [ 0.0; 0.0;   P;   P; 0.0 ];
-            plot (Xa ,Ya ,'k','LineWidth',4);
-            hold on;
-            
-            % plot the region map if it exists
-            if ~isempty(obj.d_dx)
-                plot_mesh_map(obj, 'REGION')
-            end
-            
-            % Set the real geometry to to be a transparent background
-            alpha(0.4)
-            
-            % plotting pins
+            plot (Xa ,Ya ,'k','LineWidth',3);
+            hold on
             for i = obj.d_number_radii:-1:1
-                t = 0:(2*pi/1000):(2*pi);
+                t = 0:(2*pi/5000):(2*pi);
                 R = obj.d_radii(i);
-                plot (P/2+R*cos(t), P/2+R*sin(t), 'k', 'LineWidth', 3);      
+                plot (P/2+R*cos(t), P/2+R*sin(t), 'k', 'LineWidth', 2);      
             end
             axis([0 P 0 P])
             axis square
+            hold off   
+        end
+        
+        % ======================================================================
+        %> @brief Plot the mesh.
+        % ======================================================================
+        function plot_mesh(obj)
+            % plot the region map if it exists
+            plot_mesh_map(obj, 'REGION')
+            hold on
+            % Set the mesh map to be semitransparent
+            alpha(0.4)
+            % Plot true geometry
+            plot_pin(obj)
             hold off
         end
         
+        % ======================================================================
+        %> @brief Plot the tracks (180 degrees).
+        % ======================================================================
+        function plot_tracks(obj, full)
+            if nargin == 1
+                full = 0;
+            end
+                
+            % Plot true geometry
+            plot_pin(obj)
+            hold on  
+            q = obj.d_quadrature;
+            % Plot the tracks
+            for m = 1:number_azimuth(q)
+                hold on
+                I = obj.d_enter{m};
+                F = obj.d_exit{m};
+                col = [rand rand rand];
+                for k = 1:number_tracks(q, m)
+                    plot ([I(k ,1) ; F(k ,1) ],...
+                          [I(k ,2) ; F(k ,2) ],'LineWidth',2,'Color',col);
+                end
+                if full
+                I(:, 1) = pitch(obj)-I(:, 1);
+                F(:, 1) = pitch(obj)-F(:, 1);
+                col = [rand rand rand];
+                for k = 1:number_tracks(q, m)
+                    plot ([I(k ,1) ; F(k ,1) ],...
+                          [I(k ,2) ; F(k ,2) ],'LineWidth',2,'Color',col);
+                end
+                end
+                axis ([0 pitch(obj) 0 pitch(obj)])
+                axis square ;
+                grid on;
+                hold off;
+            end
+        end
+        
+        % ======================================================================
+        %> @brief Verify the tracks.
+        % ======================================================================
+        function verify_tracks(obj)
+            % Plot true geometry
+            %plot_tracks(obj)
+            alpha(0.4)
+            hold on  
+            q = obj.d_quadrature;
+            s = 1;
+            for m = 1:number_azimuth(q)
+                cos_phi = cos(phi(q, 1, m));
+                sin_phi = sin(phi(q, 1, m));
+                for t = 1:number_tracks(q, m)
+                    x_i = obj.d_enter{m}(t, 1); % incident
+                    y_i = obj.d_enter{m}(t, 2); %   x and y
+                    for i = 1:obj.d_num_seg(m, t)
+                        x_o = x_i + cos_phi * obj.d_segment_length(s);
+                        y_o = y_i + sin_phi * obj.d_segment_length(s);
+                        reg = obj.d_segment_region(s);
+                        s = s + 1;
+                        plot([x_i x_o],[y_i y_o],'--','LineWidth', ...
+                            2 ,'Color',col(obj, reg));
+                        x_i = x_o; 
+                        y_i = y_o;
+                    end
+                end
+            end
+            axis ([0 pitch(obj) 0 pitch(obj)])
+            axis square ;
+            grid on;
+            hold off;
+        end
+        
+        
         function p = pitch(obj)
             p = obj.d_pitch;
+        end
+        
+        function r = radii(obj)
+            r = obj.d_radii; 
         end
         
     end
@@ -211,7 +403,7 @@ classdef PinCell < Mesh2D
             end     
         end
         
-        function color = col(g)
+        function color = col(obj, g)
             % this function is a hard-coded color map for the different
             % flux groups.  I've accounted for up to 8 groups.
             % set(ur,'Color',[1 0.7 0.2],'LineWidth',2);
