@@ -35,12 +35,12 @@ classdef Quadrature
         %> Octant cosign signs.  
         octant = [  1  1  1 
                    -1  1  1  
-                    1 -1  1
                    -1 -1  1
+                    1 -1  1
                     1  1 -1
                    -1  1 -1
-                    1 -1 -1
-                   -1 -1 -1  ];
+                   -1 -1 -1
+                    1 -1 -1  ];
     end
     
     properties (Access = protected)

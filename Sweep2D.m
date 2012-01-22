@@ -86,7 +86,9 @@ classdef Sweep2D < handle
         % ======================================================================
         function phi = sweep(obj, source, g)
             
+            % Temporary flux
             phi = zeros(size(source));
+            
             
             % Sweep over all octants.
             for o = 1:4
@@ -100,9 +102,14 @@ classdef Sweep2D < handle
                 for a = 1:number_angles_octant(obj.d_quadrature)
                     
 
-                    % Get incident boundary fluxes.  These will be written.
-                    psi_v = get_psi_v(obj.d_boundary, o, a);
-                    psi_h = get_psi_h(obj.d_boundary, o, a);
+                    % Get incident boundary fluxes.  V is the left or right
+                    % condition, while H is the top or bottom condition.
+                    psi_v = get_psi_v(obj.d_boundary, o, a, Boundary.IN);
+                    psi_h = get_psi_h(obj.d_boundary, o, a, Boundary.IN);
+                    
+                    if psi_v(1) > 0
+                        aaa = 1;
+                    end
                     
                     % Get cosines.
                     [mu, eta] = angle(obj.d_quadrature, o, a);
@@ -134,9 +141,12 @@ classdef Sweep2D < handle
                             [psi_out, psi_center] = ...
                                 solve(obj.d_equation, ...
                                     g, psi_in, source(k), i, j);
+                            
+                            % Add contribution to scalar flux.
                             phi(k) = phi(k) + w*psi_center;
+                            
                             % Save the outgoing angular flux.
-                            psi_h(i) = psi_out(1);
+                            psi_h(i)   = psi_out(1);
                             psi_v_temp = psi_out(2);
                         
                             % *** Here is where coarse mesh boundary
@@ -147,14 +157,12 @@ classdef Sweep2D < handle
                         % Save outgoing vertical
                         psi_v(j) = psi_v_temp;
                         
-                        
-                    
                     end
                     % Save outgoing flux vectors.  Note that psi_h has been
                     % computed for the last row of the mesh and so is the
                     % outgoing boundary flux.
-                    set_psi_v(obj.d_boundary, o, a, psi_v);
-                    set_psi_h(obj.d_boundary, o, a, psi_h);
+                    set_psi_v(obj.d_boundary, o, a, psi_v, Boundary.OUT);
+                    set_psi_h(obj.d_boundary, o, a, psi_h, Boundary.OUT);
   
                 end
                 

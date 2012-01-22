@@ -19,6 +19,8 @@ classdef Fixed
         d_state                 % State variables.
         d_inner_solver 
         d_boundary
+        d_tolerance
+        d_max_iters
     end
     
     methods
@@ -52,6 +54,10 @@ classdef Fixed
            obj.d_mat        = mat;
            obj.d_quadrature = quadrature;
            obj.d_boundary   = boundary;
+           
+           % Check input; otherwise, set defaults for optional parameters.
+           obj.d_tolerance = get(input, 'outer_tolerance');
+           obj.d_max_iters = get(input, 'outer_max_iters');
            
            % Setup the within-group solver.
            inner = get(input, 'inner_solver');
@@ -102,8 +108,8 @@ classdef Fixed
             % Outer group iterations for upscatter, if not a
             % downscatter-only problem.
             if (~downscatter(obj.d_mat))
-                while (flux_error > obj.d_input.tol_outer && ...
-                        iteration < obj.d_input.max_outer )
+                while (flux_error > obj.d_tolerance && ...
+                        iteration < obj.d_max_iters )
                     
                     % Iterate only on those groups for which upscattering
                     % occurs.
@@ -131,6 +137,10 @@ classdef Fixed
             fprintf('       Iter: %5i, Error: %12.8f, Inners: %5i\n',...
                 iteration, flux_error, total_inners);
             fprintf('-------------------------------------------------------\n')
+        end
+        
+        function reset_convergence(obj, max_iters, tolerance)
+            reset_convergence(obj.d_inner_solver, max_iters, tolerance);
         end
         
     end

@@ -4,6 +4,16 @@
 %       SI:  0.00000099, 1636  142.521566
 % Livolant:  0.00000089,  132,  11.693956
 %    GMRES:  0.00000092,   15,   6.346117
+%    1.0568e+01
+%    1.3411e+01
+%    1.6054e+01
+%    1.8535e+01
+%    2.0884e+01
+%    2.3122e+01
+%    2.5264e+01
+%    2.7323e+01
+%    2.9308e+01
+%    3.1227e+01
 % ==============================================================================
 
 clear
@@ -13,10 +23,13 @@ clear
 % ==============================================================================
 input = Input();
 put(input, 'number_groups',         1);
-put(input, 'inner_solver',          'GMRES');
+put(input, 'inner_solver',          'Livolant');
 put(input, 'inner_max_iters',       3000);
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  3);
+put(input, 'bc_left',               'reflect');
+put(input, 'bc_right',              'reflect');
+
 
 % ==============================================================================
 % MATERIALS (Test one group data)

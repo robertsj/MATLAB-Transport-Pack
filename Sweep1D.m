@@ -19,21 +19,26 @@
 classdef Sweep1D < handle
 
     properties
-        d_input                 % User input.
-        d_mesh                  % Cartesian mesh.
-        d_mat                   % Materials.
-        d_quadrature            % Angular mesh.
+        
+        %> User input.
+        d_input      
+        %> 1-D Cartesian mesh.
+        d_mesh                  
+        %> Materials.
+        d_mat                   
+        %> Angular mesh.
+        d_quadrature            
+        %> Spatial discretization
+        d_equation              
+        %> Weighted diamond-difference parameters.
+        d_alpha                 
         %
-        d_equation              % Spatial discretization
-        %
-        d_alpha                 % Weighted diamond-difference parameters.
-        %
-        d_psi_horizontal        % place holder horizontal flux [num_x]
-        %
+        %d_psi_horizontal        % place holder horizontal flux [num_x]
+        %> Boundary fluxes
         d_boundary
         %
         d_nx
-        d_ny
+        %d_ny
         
     end
     
@@ -98,7 +103,7 @@ classdef Sweep1D < handle
                     
 
                     % Get incident boundary fluxes.  These will be written.
-                    psi_v = get_psi_v(obj.d_boundary, o, a);
+                    psi_v = get_psi_v(obj.d_boundary, o, a, Boundary.IN);
                     
                     % Get cosines.
                     mu = angle(obj.d_quadrature, o, a);
@@ -134,7 +139,7 @@ classdef Sweep1D < handle
                     % Save outgoing flux vectors.  Note that psi_h has been
                     % computed for the last row of the mesh and so is the
                     % outgoing boundary flux.
-                    set_psi_v(obj.d_boundary, o, a, psi_v);
+                    set_psi_v(obj.d_boundary, o, a, psi_v, Boundary.OUT);
 
                 end
                 

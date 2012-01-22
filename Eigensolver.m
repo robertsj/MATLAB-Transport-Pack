@@ -64,8 +64,9 @@ classdef Eigensolver
            obj.d_boundary   = boundary;
            obj.d_fission_source = fission_source;
            
-           obj.d_max_iters = input.max_fission;
-           obj.d_tolerance = input.tol_fission;
+           % Check input; otherwise, set defaults for optional parameters.
+           obj.d_tolerance = get(input, 'eigen_tolerance');
+           obj.d_max_iters = get(input, 'eigen_max_iters');
            
            % Setup the multigroup solver.
            obj.d_solver = ...
@@ -131,6 +132,8 @@ classdef Eigensolver
                 flux_error_2 = flux_error_1;
                 flux_error_1 = flux_error;
                 flux_error   = max( abs(fd-fd_old)./fd );
+                
+                reset_convergence(obj.d_solver, 100, flux_error/10);
                 
                 % Save and update keff
                 k_eff_1 = k_eff;

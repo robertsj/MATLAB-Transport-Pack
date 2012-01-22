@@ -11,9 +11,9 @@ if n == 1
     
     % Simple uniform box.
     xcm = [ 0.0  5.0 ];
-    xfm = [   10     ];
+    xfm = [   5     ];
     ycm = [ 0.0  5.0 ];
-    yfm = [   10     ];    
+    yfm = [   5     ];    
     % Material map
     mat_map = [1];
     % Make the mesh.
@@ -24,7 +24,7 @@ elseif n == 2
     xcm    = [ 0.0  10.0  25.0];
     xfm    = [    10    20    ];
     ycm    = [ 0.0  15.0  30.0];
-    yfm    = [    20    40    ];
+    yfm    = [    20    40    ]/2;
 
     mat_map = [ 1  3     % ^
                 2  2 ];  % | y   x -->
@@ -43,13 +43,13 @@ elseif n == 2
     
 elseif n == 3
     
-    xcm    = [ 0.0  45.0  50.0];
-    xfm    = [    45     5    ];
-    ycm    = [ 0.0  45.0  50.0];
-    yfm    = [    45     5    ];
+    xcm    = [ 0.0  20     40]/10;
+    xfm    = [    20 20  ];
+    ycm    = [ 0.0  20    40]/10;
+    yfm    = [    20 20  ];
 
-    mat_map = [ 1  1     % ^
-                2  1 ];  % | y   x -->
+    mat_map = [ 1 1
+                1 1];  % | y   x -->
 
     mesh = Mesh2D(xfm, yfm, xcm, ycm, mat_map);
 

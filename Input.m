@@ -3,7 +3,13 @@
 % ==============================================================================
 %> @brief Stores and processes user input from a driver script.
 %
-%> Finish me.
+%> The basic idea of this class is to store arbitrary user input for all 
+%> of the features in the code.  To hard code a set user input is silly,
+%> since new parameters are added for new algorithms or implementations.
+%> Hence, all parameters are added to a map database (simple structures
+%> could also work).  New algorithms and implementations are then required
+%> to set defaults in the event these are not set. Several standard items
+%> are given defaults upon construction.
 % ==============================================================================
 classdef Input < handle
     
@@ -78,13 +84,20 @@ classdef Input < handle
             put(obj, 'quadrature_type',     'LevelSymmetric');
             put(obj, 'quadrature_order',    8);
             
-            % Solver 
+            % Eigensolver
+            put(obj, 'eigen_tolerance',     1e-6); 
+            put(obj, 'eigen_max_iters',     100); 
+            
+            % Outer Solver 
             put(obj, 'problem_type',        'Fixed');  
+            put(obj, 'outer_tolerance',     1e-6); 
+            put(obj, 'outer_max_iters',     1000); 
             
             % Inner solver
             put(obj, 'inner_solver',        'SI'); 
             put(obj, 'inner_tolerance',     1e-6); 
             put(obj, 'inner_max_iters',     1000); 
+            
         end
         
         % ======================================================================

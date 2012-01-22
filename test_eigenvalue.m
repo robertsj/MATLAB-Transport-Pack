@@ -1,10 +1,11 @@
 %> @file  test_eigenvalue.m
-%> @brief Tests the eigenvalue solver.
+%> @brief Tests the eigenvalue solver in 2-D.
 %
-%> Finish me.
+%> The tests are the same as the 1-D tests, using reflective conditions
+%> to simulate 1-D.
 % ==============================================================================
 
-clear
+clear classes
 
 
 % ==============================================================================
@@ -12,10 +13,15 @@ clear
 % ==============================================================================
 input = Input();
 put(input, 'number_groups',         2);
-put(input, 'inner_solver',          'Livolant');
+put(input, 'number_groups',         2);
+put(input, 'eigen_tolerance',       1e-5);
+put(input, 'eigen_max_iters',       100);
+put(input, 'inner_tolerance',       0.4);
+put(input, 'inner_solver',          'SI');
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  3);
-
+put(input, 'bc_top',                'reflect');
+put(input, 'bc_bottom',             'reflect');
 
 % ==============================================================================
 % MATERIALS (Test two group data)
@@ -26,23 +32,38 @@ mat = test_materials(2);
 % ==============================================================================
 % MESH 
 % ==============================================================================
-xcm    = [ 0.0  45.0  50.0];
-xfm    = [    45     5    ];
-ycm    = [ 0.0  45.0  50.0];
-yfm    = [    45     5    ];
-mat_map = [ 1  1     % ^
-            2  1 ];  % | y   x -->
-mesh = Mesh2D(xfm, yfm, xcm, ycm, mat_map);
+% Assembly coarse mesh edges
+base   = [ 1.1580 4.4790 7.8000 11.1210 14.4420 15.6000 ]; 
+% and fine mesh counts.
+basef  = [ 1 2 2 2 2 1 ]*2; 
+% Several such assemblies to make the total coarse mesh definition
+xcm    = [ 0.0  base  base+15.6  base+15.6*2 base+15.6*3 ...
+           base+15.6*4 base+15.6*5 base+15.6*6 ];
+xfm    = [ basef basef basef basef basef basef basef ];
+
+% Assembly types
+assem_A    = [ 1 2 3 3 2 1 ];
+assem_B    = [ 1 2 2 2 2 1 ];
+assem_C    = [ 1 2 4 4 2 1 ];
+assem_D    = [ 1 4 4 4 4 1 ];
+
+% Cores 1, 2 and 3
+core_1 = [ assem_A assem_B assem_A assem_B assem_A assem_B assem_A ];
+core_2 = [ assem_A assem_C assem_A assem_C assem_A assem_C assem_A ];
+core_3 = [ assem_A assem_D assem_A assem_D assem_A assem_D assem_A ];
+ycm = [0 1];
+yfm =  1;
+mesh = Mesh2D(xfm, yfm, xcm, ycm, core_1);
 
 
 % ==============================================================================
 % SETUP 
 % ==============================================================================
 state       = State(input, mesh);
-quadrature  = LevelSymmetric(2);
+quadrature  = LevelSymmetric(16);
 boundary    = Boundary(input, mesh, quadrature);
-q_e         = Source(mesh, 2);          % Not initialized = not used.
-q_f = FissionSource(state, mesh, mat);  % Inititalized = used.
+q_e         = Source(mesh, 2);                  % Not initialized = not used.
+q_f         = FissionSource(state, mesh, mat);  % Inititalized = used.
 initialize(q_f);
 
 % ==============================================================================

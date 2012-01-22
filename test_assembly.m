@@ -13,16 +13,24 @@
 % if we could limit that to maybe 10 sweeps via CMFD, we're in 
 % business.  Note, the GMRES
 
-clear
+%clear
 
 % ==============================================================================
 % INPUT
 % ==============================================================================
 input = Input();
 put(input, 'number_groups',         2);
-put(input, 'inner_solver',          'GMRES');
+put(input, 'number_groups',         2);
+put(input, 'eigen_tolerance',       1e-4);
+put(input, 'eigen_max_iters',       100);
+put(input, 'inner_tolerance',       0.1);
+put(input, 'inner_solver',          'SI');
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  3);
+put(input, 'bc_left',               'reflect');
+put(input, 'bc_right',              'reflect');
+put(input, 'bc_top',                'reflect');
+put(input, 'bc_bottom',             'reflect');
 input.number_groups = 2;
 
 
@@ -39,55 +47,41 @@ mat = test_materials(2);
 % Shared pin properties
 pitch   = 1.26;                 
 radii   = 0.54;
-number  = 14;
+number  = 20;
 % Pin 1
-matid  = [1 2]; 
+matid  = [2 1]; % IN to OUT
 pin1   = PinCell(pitch, radii, matid);
 meshify(pin1, number);
 figure(1)
-plot_pin(pin1);
+plot_mesh(pin1);
 % Pin 2
-matid  = [1 3]; 
+matid  = [4 1]; 
 pin2   = PinCell(pitch, radii, matid);
 meshify(pin2, number);
 figure(2)
-plot_pin(pin2);
+plot_mesh(pin2);
 % Pin 3
 matid  = [1]; 
 pin3   = PinCell(pitch, [], matid);
 meshify(pin3, number);
 figure(3)
-plot_pin(pin3);
+plot_mesh(pin3);
 
 % Make the assembly.
-pin_map = [ 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3     
-            3 3 3 1 2 1 2 1 2 1 2 1 2 1 3 3 3 
-            3 3 1 2 1 2 1 2 1 2 1 2 1 2 1 3 3   
-            3 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 3 
-            3 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 3   
-            3 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 3 
-            3 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 3   
-            3 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 3 
-            3 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 3   
-            3 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 3 
-            3 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 3   
-            3 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 3 
-            3 2 1 2 1 2 1 2 1 2 1 2 1 2 1 2 3   
-            3 1 2 1 2 1 2 1 2 1 2 1 2 1 2 1 3 
-            3 3 1 2 1 2 1 2 1 2 1 2 1 2 1 3 3   
-            3 3 3 1 2 1 2 1 2 1 2 1 2 1 3 3 3 
-            3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 ];
+pin_map = [ 1 1 1
+            1 2 1
+            1 1 1];
 mesh = Assembly({pin1, pin2, pin3}, pin_map);
 meshify(mesh);
 figure(4)
 plot_mesh_map(mesh, 'MATERIAL')
-
+return
 
 % ==============================================================================
 % SETUP 
 % ==============================================================================
 state       = State(input, mesh);
-quadrature  = LevelSymmetric(8);
+quadrature  = LevelSymmetric(6);
 boundary    = Boundary(input, mesh, quadrature);
 q_e         = Source(mesh, 2);                  % Not initialized = not used.
 q_f         = FissionSource(state, mesh, mat);  % Inititalized = used.
@@ -113,7 +107,7 @@ toc
 % POSTPROCESS 
 % ==============================================================================
 
-figure(4)
+figure(5)
 subplot(2, 1, 1)
 f1 = flux(state, 1);
 plot_flux(mesh, f1)

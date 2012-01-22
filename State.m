@@ -37,7 +37,8 @@ classdef State < handle
             obj.d_mesh = mesh;
             % MATLAB uses column-major ordering, so in many cases, it might be
             % best to order space as fastest changing index
-            obj.d_phi = zeros(number_cells(mesh), input.number_groups);              
+            obj.d_phi = zeros(number_cells(mesh), ...
+                get(input, 'number_groups'));              
         end
         
         function f = flux(obj, g)

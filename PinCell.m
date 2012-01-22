@@ -3,7 +3,16 @@
 % ==============================================================================
 %> @brief  Represents reactor assembly pin in two dimensions.
 %
-%> More here.
+%> This class represents a pin cell, including its geometry and associated
+%> materials definition.  Currently, only a single square coolant region
+%> is allowed with a possible central pin with one or more concentric regions.
+%> 
+%> The PinCell class can be used as a mesh for discrete ordinates calculations
+%> via the \ref meshify routine, as PinCell inherits from Mesh2D.
+%> Additionally, PinCell has a built in tracking routine for solution by
+%> the method of characteristics.  The tracking is limited to four way
+%> rotation symmetry.
+%>
 % ==============================================================================
 classdef PinCell < Mesh2D
     
@@ -31,7 +40,7 @@ classdef PinCell < Mesh2D
         
         %> @name Mesh Data
         %> @{
-        
+        %
         %> Am I meshed?
         d_meshed = 0;
         

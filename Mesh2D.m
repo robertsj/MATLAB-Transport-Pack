@@ -151,8 +151,10 @@ classdef Mesh2D < Mesh
             [x, y] = mesh_axes(obj);
             [X, Y] = meshgrid(x, y);
             m = mesh_map(obj, mapkey);
-            M = zeros(length(x), length(y));
+            m = m';
+            M = zeros(length(y), length(x));
             M(1:end-1, 1:end-1) = m;
+            %M = flipud(M);
             pcolor(X, Y, M)
             xlabel('x [cm]')
             ylabel('y [cm]')
@@ -167,7 +169,8 @@ classdef Mesh2D < Mesh
             [x, y] = mesh_axes(obj);
             [X, Y] = meshgrid(x, y);
             m = reshape(f, obj.d_number_cells_x, obj.d_number_cells_y);
-            M = zeros(length(x), length(y));
+            m = m';
+            M = zeros(length(y), length(x));
             M(1:end-1, 1:end-1) = m;
             pcolor(X, Y, M)
             xlabel('x [cm]')

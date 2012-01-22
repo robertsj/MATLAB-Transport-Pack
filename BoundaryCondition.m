@@ -12,6 +12,10 @@ classdef BoundaryCondition < handle
     properties (Access = protected) 
         %> Boundary flux object.
         d_boundary
+        %> Mesh 
+        d_mesh
+        %> Quadrature
+        d_quadrature
         % Surface identifier.
         d_side = 0 
     end
@@ -28,8 +32,10 @@ classdef BoundaryCondition < handle
         %>
         %> @return Instance of the Boundary class.
         % ======================================================================
-        function obj = BoundaryCondition(boundary, side)
+        function obj = BoundaryCondition(boundary, mesh, quadrature, side)
             obj.d_boundary = boundary;
+            obj.d_mesh = mesh;
+            obj.d_quadrature = quadrature;
             obj.d_side = side;
         end
 

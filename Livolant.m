@@ -97,6 +97,10 @@
 %> - livolant_free_iters  (default: 3)
 %> - livolant_accel_iters (default: 3)
 %>
+%> \todo Livolant, like GMRES, seems to work poorly for reflected conditions.
+%>       There probably is a proper "consistent" way to include these
+%>       conditions, but I don't know it yet.
+%>
 %> For other relevant parameters, see InnerIteration.
 %>
 %> Reference:
@@ -213,8 +217,14 @@ classdef Livolant < InnerIteration
             % Build M*Q, the source that is "fixed" for this solve.
             build_fixed_source(obj, g);
                  
+            % Set the boundary fluxes for this sweep.
+            %set(obj.d_boundary);
+            
             while flux_error > obj.d_tolerance ...
                 && iteration < obj.d_max_iters
+            
+                % Update boundary
+                set(obj.d_boundary);
             
                 % Perform a sequence of source ("free") iterations.
                 [err, mu] = source_iterations(obj, g);
@@ -293,7 +303,7 @@ classdef Livolant < InnerIteration
                 sweep_source = (obj.d_fixed_source + obj.d_scatter_source); 
                 
                 % Set incident boundary fluxes.
-                set(obj.d_boundary);
+                %set(obj.d_boundary);
                 
                 % Sweep over all angles and meshes.            
                 obj.d_phi(:, obj.d_2) = sweep(obj.d_sweeper, sweep_source, g);      
@@ -332,7 +342,7 @@ classdef Livolant < InnerIteration
                 sweep_source = (obj.d_fixed_source + obj.d_scatter_source); 
                 
                 % Set incident boundary fluxes.
-                set(obj.d_boundary);
+                % set(obj.d_boundary);
                 
                 % Shuffle indices so new flux is put in right storage.
                 shuffle_index(obj);

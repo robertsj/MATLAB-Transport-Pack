@@ -108,8 +108,22 @@ classdef InnerIteration < handle
         %> @return Flux residual (L-inf norm) and iteration count.
         % ======================================================================
         [flux_error, iteration] = solve(obj, g);
-
         
+        % ======================================================================
+        %> @brief Reset convergence criteria.
+        %
+        %> It can be useful to use a dynamically changing convergence criteria,
+        %> especially for eigenproblems.  For regular power iteration, it is
+        %> wasteful to use tight tolerances on the inners when the source is
+        %> not as tightly known.
+        %>
+        %> @param max_iters     Maximum number of iterations.
+        %> @param tolerance     Maximum point-wise error in flux
+        % ======================================================================
+        function reset_convergence(obj, max_iters, tolerance)
+            obj.d_max_iters = max_iters;
+            obj.d_tolerance = tolerance;
+        end
     end
     
     methods (Access = protected)
@@ -326,6 +340,7 @@ classdef InnerIteration < handle
                     (e0 - e1) / (e1 - e2));
             end
         end
+       
         
     end
         

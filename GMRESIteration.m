@@ -25,6 +25,9 @@
 %> diffusion synthetic acceleration (DSA), coarse mesh finite difference (CMFD)
 %> acceleration, and coarse mesh rebalance (CMR).  Each of these will be
 %> implemented in time.
+%>
+%> @todo Currently, GMRES doesn't like reflecting boundaries.  I'm sure
+%>       I'm just missing something...
 % ==============================================================================
 classdef GMRESIteration < InnerIteration
     
