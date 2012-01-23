@@ -52,14 +52,21 @@
 classdef InnerIteration < handle
     
     properties (Access = protected)
-        %>
+        %> User input.
         d_input
+        %> State vectors.
         d_state
+        %> Boundary fluxes.
         d_boundary
+        %> Problem mesh (either Cartesian mesh or MOC tracking)
         d_mesh
+        %> Materials definitions.
         d_mat
+        %> Angular mesh.
         d_quadrature
+        %> Spatial discretization.
         d_equation
+        %> Sweeper over the space-angle domain.
         d_sweeper
         %> User-defined external source
         d_external_source
@@ -194,7 +201,7 @@ classdef InnerIteration < handle
                 obj.d_sweeper = Sweep1D(input, mesh, mat, quadrature, ...
                     obj.d_boundary, obj.d_equation); 
                 
-            elseif mesh.DIM == 2
+            elseif mesh.DIM == 2 && meshed(mesh)
                 
                 % Equation.
                 obj.d_equation = DD2D(mesh, mat);
@@ -205,8 +212,10 @@ classdef InnerIteration < handle
                 
             elseif mesh.DIM == 3
                 
-            elseif mesh.MOC 
+            elseif mesh.DIM == 2 && tracked(mesh)
                  % Example of how MOC can be plugges right in.
+                 disp('MOC inner!')
+                 
             else
                 error('Invalid mesh dimension.')
             end
@@ -228,9 +237,15 @@ classdef InnerIteration < handle
                                          number_groups(obj.d_mat));
             end
             
-            mat = reshape(mesh_map(obj.d_mesh, 'MATERIAL'), ...
-                number_cells(obj.d_mesh), 1);
+            % Get the fine mesh material map or the region material map.
+            if meshed(obj.d_mesh)
+                mat = reshape(mesh_map(obj.d_mesh, 'MATERIAL'), ...
+                    number_cells(obj.d_mesh), 1);
+            else                
+                mat = region_mat_map(obj.d_mesh);
+            end
             
+            % Build the local scattering matrix.
             for i = 1:number_cells(obj.d_mesh)
                 for g = 1:number_groups(obj.d_mat)
                     for gp = lower(obj.d_mat, g):upper(obj.d_mat, g)
@@ -239,6 +254,7 @@ classdef InnerIteration < handle
                     end
                 end
             end
+
   
         end % end function initialize_scatter
         

@@ -42,13 +42,15 @@ classdef PinCell < Mesh2D
         %> @{
         %
         %> Am I meshed?
-        d_meshed = 0;
-        
+        %d_meshed = 0;
+        %
         %> @}
         
         %> @name Track Data
         %> @{
         %
+        %> Am I tracked>
+        d_tracked
         %> Quadrature
         d_quadrature
         %> Entrance points for each angle
@@ -57,11 +59,17 @@ classdef PinCell < Mesh2D
         d_exit
         %
         d_space
-        %
+        %> Track widths.
+        d_track_width
+        %> Segment lengths, in order of tracking (and sweep)
         d_segment_length
+        %> Segment region index.
         d_segment_region
+        %> Segment exponential coefficients. (Not used yet).
         d_segment_coef
-        d_num_seg
+        %> Number of segments by (angle, track).  For debugging.
+        d_number_segments
+        %
         %> @}
           
     end
@@ -119,6 +127,8 @@ classdef PinCell < Mesh2D
             v2 = pitch^2;
             DBC.Ensure('v1 == v2');
             obj.d_region_mat_map = mat_map;  
+            % I'm not meshed yet.
+            obj.d_meshed = 0;
         end
         
         % ======================================================================
@@ -184,15 +194,21 @@ classdef PinCell < Mesh2D
         % ======================================================================
         function track(obj, q, mat)
             
+            if obj.d_meshed
+                error('Not doing meshing and tracking yet')
+            else
+                obj.d_tracked = 1;
+            end
+            
             pitch = obj.d_pitch;
             obj.d_quadrature = q;
             obj.d_enter = cell(number_azimuth(q), 1);
             obj.d_exit  = cell(number_azimuth(q), 1);
             
-            for m = 1:number_azimuth(q)  
+            for m = 1:number_azimuth_octant(q)  
                 obj.d_enter{m} = q.d_enter{m}*pitch;
                 obj.d_exit{m}  = q.d_exit{m}*pitch;
-                obj.d_space(m) = q.d_space(m);
+                obj.d_space(m) = q.d_space(m)*pitch;
             end
             
             % Tracking.  We make two passes.  The first pass counts the
@@ -200,10 +216,11 @@ classdef PinCell < Mesh2D
             % track length vector and region id vector.
             
             s = 1; % segment index
-            for z = 1:number_azimuth(q) 
+            for z = 1:number_azimuth_octant(q) 
                 cos_phi = cos(phi(q, 1, z));
                 tan_phi = tan(phi(q, 1, z));
                 for t = 1:number_tracks(q, z)
+
                     % All points are translated by a half pitch to put
                     %  the cell center at the origin.
                     x_i = obj.d_enter{z}(t, 1)-pitch/2; % incident
@@ -220,7 +237,12 @@ classdef PinCell < Mesh2D
                     num_cyl = sum(obj.d_radii > d_o);
                     % number of segments 
                     num_seg = 2*num_cyl + 1;
-                    obj.d_num_seg(z, t)=num_seg;
+                    
+                    % Set segment region things.
+                    obj.d_number_segments(z, t)=num_seg;
+                    obj.d_segment_length{z}{t}=zeros(num_seg,1);
+                    obj.d_segment_region{z}{t}=zeros(num_seg,1);
+                    
                     ss = 1;
                     x = x_i;
                     y = y_i;
@@ -252,11 +274,13 @@ classdef PinCell < Mesh2D
                     ss = ss+2*num_cyl+1;
                     x(ss) = x_o;
                     y(ss) = y_o;
+                    
                     segl=zeros(num_seg, 1);
+                    
                     for i = 1:num_seg
                         segl(i) = sqrt((x(i+1)-x(i))^2 + (y(i+1)-y(i))^2);
-                        obj.d_segment_length(s) = segl(i);
-                        obj.d_segment_region(s) = reg(i);
+                        obj.d_segment_length{z}{t}(i) = segl(i);
+                        obj.d_segment_region{z}{t}(i)  = reg(i);
 %                         for j = 1:number_polar(q)
 %                         	obj.d_segment_coef(s,j) = ...
 %                                 exp(
@@ -319,7 +343,7 @@ classdef PinCell < Mesh2D
             hold on  
             q = obj.d_quadrature;
             % Plot the tracks
-            for m = 1:number_azimuth(q)
+            for m = 1:number_azimuth_octant(q)
                 hold on
                 I = obj.d_enter{m};
                 F = obj.d_exit{m};
@@ -353,18 +377,16 @@ classdef PinCell < Mesh2D
             alpha(0.4)
             hold on  
             q = obj.d_quadrature;
-            s = 1;
-            for m = 1:number_azimuth(q)
+            for m = 1:number_azimuth_octant(q)
                 cos_phi = cos(phi(q, 1, m));
                 sin_phi = sin(phi(q, 1, m));
                 for t = 1:number_tracks(q, m)
                     x_i = obj.d_enter{m}(t, 1); % incident
                     y_i = obj.d_enter{m}(t, 2); %   x and y
-                    for i = 1:obj.d_num_seg(m, t)
-                        x_o = x_i + cos_phi * obj.d_segment_length(s);
-                        y_o = y_i + sin_phi * obj.d_segment_length(s);
-                        reg = obj.d_segment_region(s);
-                        s = s + 1;
+                    for i = 1:obj.d_number_segments(m, t)
+                        x_o = x_i + cos_phi * obj.d_segment_length{m}{t}(i);
+                        y_o = y_i + sin_phi * obj.d_segment_length{m}{t}(i);
+                        reg = obj.d_segment_region{m}{t}(i);
                         plot([x_i x_o],[y_i y_o],'--','LineWidth', ...
                             2 ,'Color',col(obj, reg));
                         x_i = x_o; 
@@ -386,6 +408,30 @@ classdef PinCell < Mesh2D
         function r = radii(obj)
             r = obj.d_radii; 
         end
+        
+        function bool = meshed(obj)
+            bool = obj.d_meshed; 
+        end
+        
+        function bool = tracked(obj)
+            bool = obj.d_tracked;
+        end
+        
+        function m = region_mat_map(obj)
+            m = obj.d_region_mat_map;
+        end
+        
+        function n = number_segments(obj, m, t)
+            n = obj.d_number_segments(m, t);
+        end
+        
+        function l = segment_length(obj, m, t, i)
+            l = obj.d_segment_length{m}{t}(i);
+        end        
+        
+        function r = segment_region(obj, m, t, i)
+            r = obj.d_segment_region{m}{t}(i);
+        end    
         
     end
     

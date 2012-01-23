@@ -16,8 +16,10 @@ classdef State < handle
        d_eigenvalue = 1.0;
        %> Mesh
        d_mesh
-       %> Outgoing boundary fluxes.  This is an array of cells, one per surface.
-       d_boundary_flux
+       %> Boundary fluxes.
+       d_boundary
+       %> Number of groups.
+       d_number_groups
    end
    
    methods
@@ -33,35 +35,69 @@ classdef State < handle
         %>
         %> @return Instance of the State class.
         % ======================================================================
-        function obj = State(input, mesh, quadrature)
-            obj.d_mesh = mesh;
-            % MATLAB uses column-major ordering, so in many cases, it might be
-            % best to order space as fastest changing index
-            obj.d_phi = zeros(number_cells(mesh), ...
-                get(input, 'number_groups'));              
+        function this = State(input, mesh, quadrature)
+            this.d_number_groups = get(input, 'number_groups');
+            this.d_mesh = mesh;
+            % Here, the number of cells is either the fine mesh count for
+            % discrete ordinates or the flat source regions in MOC.
+            this.d_phi = zeros(number_cells(mesh), this.d_number_groups);              
         end
         
-        function f = flux(obj, g)
-            % Returns a group flux for all cells.
-            f = obj.d_phi(:, g);
+        % ======================================================================
+        %> @brief Get a group flux vector.
+        %
+        %> @param  g    Energy group.
+        %> @return      Flux vector for all cells.
+        % ======================================================================
+        function f = flux(this, g)
+            f = this.d_phi(:, g);
         end
         
-        function k = eigenvalue(obj)
-            % Returns the current eigenvalue.
-            k = obj.d_eigenvalue;
+        % ======================================================================
+        %> @brief Get the last computed eigenvalue.
+        %
+        %> @return  Eigenvalue (i.e. keff)
+        % ======================================================================
+        function k = eigenvalue(this)
+            k = this.d_eigenvalue;
         end
         
-        function obj = set_eigenvalue(obj, eigenvalue)
-            obj.d_eigenvalue = eigenvalue;
+        % ======================================================================
+        %> @brief Get the boundary fluxes.
+        %
+        %> @return  Eigenvalue (i.e. keff)
+        % ======================================================================
+        function b = boundary(this)
+            b = this.d_boundary; 
         end
         
-        function obj = set_phi(obj, phi, g)
-            obj.d_phi(:, g) = phi(:);
+        % ======================================================================
+        %> @brief Set a group flux vector.
+        %
+        %> @param  phi  Flux vector.
+        %> @param  g    Energy group.
+        % ======================================================================
+        function this = set_phi(this, phi, g)
+            this.d_phi(:, g) = phi(:);
         end
         
-        function obj = set_boundary_flux(obj, dim, psi, a, g)
-            obj.d_boundary_flux{dim}(:, a, g) = psi;
+        % ======================================================================
+        %> @brief Set the eigenvalue.
+        %
+        %> @param  eigenvalue  Eigenvalue estimate.
+        % ======================================================================
+        function this = set_eigenvalue(this, eigenvalue)
+            this.d_eigenvalue = eigenvalue;
         end
+        
+        % ======================================================================
+        %> @brief Set the boundary fluxes.
+        %
+        %> @param  boundary  Boundary flux object.
+        % ======================================================================
+        function this = set_boundary(this, boundary)
+            this.d_boundary = boundary;
+        end        
         
    end
     

@@ -47,7 +47,9 @@ classdef Mesh < handle
         %> mesh map defining the property in each cell.  These properties 
         %> include materials, coarse mesh regions (pins, assembly, fuel,
         %> moderator, etc.), and anything else the user wants to edit.
-        d_mesh_map       
+        d_mesh_map 
+        %> Flag indicating I'm meshed.
+        d_meshed = 1; 
     end
     
     methods

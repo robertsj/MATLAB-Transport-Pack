@@ -40,11 +40,28 @@ classdef QuadratureMOC < handle
         d_space
     end
     
+    properties (Constant)
+        %> Octant cosign signs.  
+        octant = [  1  1  1 
+                   -1  1  1  
+                   -1 -1  1
+                    1 -1  1
+                    1  1 -1
+                   -1  1 -1
+                   -1 -1 -1
+                    1 -1 -1  ];
+    end
     
     methods
         
+        % ======================================================================
+        %> @brief Class constructor
+        %
+        %> @param number_polar  Number of polar angles used.
+        %> @return              Instance of the QuadratureMOC class.
+        % ======================================================================
         function obj = QuadratureMOC(number_polar)
-            
+            % Tabuchi-Yamamoto polar quadrature.
             if number_polar == 1
                 obj.d_mu = 0.798184;
                 obj.d_weight_mu = 1.0;
@@ -79,24 +96,40 @@ classdef QuadratureMOC < handle
         end
         
         function n = number_azimuth(obj)
-           n = obj.d_number_azimuth;
+            n = obj.d_number_azimuth * 4;
+        end
+        
+        function n = number_azimuth_octant(obj)
+        	n = obj.d_number_azimuth;
+        end
+        
+        function n = number_angles(obj)
+            n = obj.d_number_azimuth;
         end
         
         function n = number_polar(obj)
-           n = obj.d_number_polar;
+            n = obj.d_number_polar;
         end
         
         function n = number_x(obj, m)
-           n = obj.d_number_x(m);
+            n = obj.d_number_x(m);
         end
         
         function n = number_y(obj, m)
-           n = obj.d_number_y(m);
-        end     
+            n = obj.d_number_y(m);
+        end
         
         function n = number_tracks(obj, m)
            n = obj.d_number_tracks(m);
         end     
+        
+        % ======================================================================
+        %> @brief Computes cardinal angle index.
+        %> @return  Index.
+        % ======================================================================
+        function y = index(obj, o, a)
+            y = a + (o - 1) * number_angles_octant(obj);
+        end
         
         function p = uniform(obj, a, b, m, f)
             pp = linspace(a, b, m+1);

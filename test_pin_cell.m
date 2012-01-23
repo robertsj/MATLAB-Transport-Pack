@@ -4,7 +4,7 @@
 %> Finish me.
 % ==============================================================================
 
-clear% classes
+clear classes
 warning('OFF', 'user:input')
 % ==============================================================================
 % INPUT
@@ -43,28 +43,49 @@ matid       = [2 1];
 % Build the pin.
 pin = PinCell(p, r, matid);
 % Mesh the pin.
-meshify(pin, 34);
+%meshify(pin, 34);
 % plot
 %plot_mesh(pin);
 
 %q = UniformMOC(5, 1, 21);
-% q = CollocatedMOC(27, 1, 1);
-% track(pin, q);
+quadrature = UniformMOC(5, 1, 30);
+track(pin, quadrature);
 % clf
 % Plotting tracks
-%plot_tracks(pin, 0);
-%verify_tracks(pin)
+%plot_tracks(pin, 1);
+verify_tracks(pin)
+
 % 
 % ==============================================================================
 % SETUP 
 % ==============================================================================
 state       = State(input, pin);
-quadrature  = LevelSymmetric(4);
-boundary    = Boundary(input, pin, quadrature);
+%quadrature  = LevelSymmetric(4);
+boundary    = BoundaryTrack(input, pin, quadrature);
 q_e         = Source(pin, 2);                  % Not initialized = not used.
+spectra     = [ 1.0 2
+                0.0 1];      
+placement   = [ 1 2; 2 2];    
+set_sources(q_e, spectra, placement);
+lala = source(q_e, 1)
 q_f         = FissionSource(state, pin, mat);  % Inititalized = used.
-initialize(q_f);
+%initialize(q_f);
 
+inner = SourceIteration();
+setup(  inner,  ...
+        input,   	...
+        state,    	...
+        boundary,   ...
+        pin,     	...
+        mat,       	...
+        quadrature, ...
+        q_e,     	...
+        q_f);
+    
+
+
+
+return
 % ==============================================================================
 % SOLVE 
 % ==============================================================================
