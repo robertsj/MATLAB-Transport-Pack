@@ -44,7 +44,9 @@ classdef Equation < handle
         function obj = Equation(mesh, mat)
             obj.d_mesh = mesh;
             obj.d_mat  = mat;
-            obj.d_mat_map = mesh_map(mesh, 'MATERIAL');
+            if meshed(mesh)
+                obj.d_mat_map = mesh_map(mesh, 'MATERIAL');
+            end
         end
         
         % ======================================================================

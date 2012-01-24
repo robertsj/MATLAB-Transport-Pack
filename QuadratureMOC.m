@@ -99,7 +99,7 @@ classdef QuadratureMOC < handle
             n = obj.d_number_azimuth * 4;
         end
         
-        function n = number_azimuth_octant(obj)
+        function n = number_angles_octant(obj)
         	n = obj.d_number_azimuth;
         end
         

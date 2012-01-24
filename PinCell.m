@@ -205,7 +205,7 @@ classdef PinCell < Mesh2D
             obj.d_enter = cell(number_azimuth(q), 1);
             obj.d_exit  = cell(number_azimuth(q), 1);
             
-            for m = 1:number_azimuth_octant(q)  
+            for m = 1:number_angles_octant(q)  
                 obj.d_enter{m} = q.d_enter{m}*pitch;
                 obj.d_exit{m}  = q.d_exit{m}*pitch;
                 obj.d_space(m) = q.d_space(m)*pitch;
@@ -216,7 +216,7 @@ classdef PinCell < Mesh2D
             % track length vector and region id vector.
             
             s = 1; % segment index
-            for z = 1:number_azimuth_octant(q) 
+            for z = 1:number_angles_octant(q) 
                 cos_phi = cos(phi(q, 1, z));
                 tan_phi = tan(phi(q, 1, z));
                 for t = 1:number_tracks(q, z)
@@ -343,7 +343,7 @@ classdef PinCell < Mesh2D
             hold on  
             q = obj.d_quadrature;
             % Plot the tracks
-            for m = 1:number_azimuth_octant(q)
+            for m = 1:number_angles_octant(q)
                 hold on
                 I = obj.d_enter{m};
                 F = obj.d_exit{m};
@@ -377,7 +377,7 @@ classdef PinCell < Mesh2D
             alpha(0.4)
             hold on  
             q = obj.d_quadrature;
-            for m = 1:number_azimuth_octant(q)
+            for m = 1:number_angles_octant(q)
                 cos_phi = cos(phi(q, 1, m));
                 sin_phi = sin(phi(q, 1, m));
                 for t = 1:number_tracks(q, m)
@@ -430,8 +430,12 @@ classdef PinCell < Mesh2D
         end        
         
         function r = segment_region(obj, m, t, i)
-            r = obj.d_segment_region{m}{t}(i);
+            r = obj.d_segment_region{m}{t}(i); 
         end    
+        
+        function s = space(obj, m)
+            s = obj.d_space(m);
+        end
         
     end
     
