@@ -105,7 +105,7 @@ classdef SCMOC < Equation
         function [psi_out, psi_avg] = solve(obj, psi_in, s, sig, t)   
             % Many of these values (A,B,C,etc) should be
             % able to be precomputed.
-            A    = exp(-sig*t);                 % A, B, and C
+            A    = exp(-sig*t);               % A, B, and C
             B    = (1.0-A)/sig;                 % from Hebert's book
             C    = t/sig * (1 - (1-A)/(t*sig));
             psi_out = A*psi_in + B*s;           % Segment exiting flux.

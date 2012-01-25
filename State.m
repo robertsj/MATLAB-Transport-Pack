@@ -40,7 +40,13 @@ classdef State < handle
             this.d_mesh = mesh;
             % Here, the number of cells is either the fine mesh count for
             % discrete ordinates or the flat source regions in MOC.
-            this.d_phi = zeros(number_cells(mesh), this.d_number_groups);              
+            if meshed(mesh)
+                n = number_cells(mesh);
+            else
+                n = number_regions(mesh);
+            end
+            this.d_phi = zeros(n, this.d_number_groups);
+            
         end
         
         % ======================================================================

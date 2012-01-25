@@ -94,6 +94,25 @@ classdef Source < handle
             
         end
         
+        % ======================================================================
+        %> @brief Set external sources on a fine mesh.
+        %
+        %> @param sources       Unique sources.
+        %> @param source_map 	Fine mesh map of sources.  
+        % ======================================================================
+        function obj = set_sources_mesh(obj, sources, source_map)
+            obj.d_sources = sources * Quadrature.angular_norm(obj.d_mesh.DIM);
+            obj.d_source_map = source_map;
+            obj.d_source_vec = zeros(number_cells(obj.d_mesh),...
+                                     obj.d_number_groups);
+            for cell = 1:number_cells(obj.d_mesh)
+                for group = 1:obj.d_number_groups
+                    obj.d_source_vec(cell, group) = ...
+                        obj.d_sources(group, source_map(cell));
+                end
+            end
+            obj.d_initialized = 1;
+        end
         
         
         % Getters.

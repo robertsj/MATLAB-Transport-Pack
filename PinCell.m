@@ -409,10 +409,6 @@ classdef PinCell < Mesh2D
             r = obj.d_radii; 
         end
         
-        function bool = meshed(obj)
-            bool = obj.d_meshed; 
-        end
-        
         function bool = tracked(obj)
             bool = obj.d_tracked;
         end
@@ -420,7 +416,15 @@ classdef PinCell < Mesh2D
         function m = region_mat_map(obj)
             m = obj.d_region_mat_map;
         end
+
+        function v = region_volume(obj)
+            v = obj.d_region_volume;
+        end   
         
+        function n = number_regions(obj)
+            n = obj.d_number_regions; 
+        end
+
         function n = number_segments(obj, m, t)
             n = obj.d_number_segments(m, t);
         end
@@ -440,6 +444,7 @@ classdef PinCell < Mesh2D
     end
     
     methods (Access = private)
+        
         % ======================================================================
         %> @brief Determine in what region a mesh center resides.
         %

@@ -64,15 +64,15 @@ classdef QuadratureMOC < handle
             % Tabuchi-Yamamoto polar quadrature.
             if number_polar == 1
                 obj.d_mu = 0.798184;
-                obj.d_weight_mu = 1.0;
+                obj.d_weight_mu = 2.0;
                 
             elseif number_polar == 2
                 obj.d_mu = [0.363900; 0.899900];
-                obj.d_weight_mu = [0.212854; 0.787146];
+                obj.d_weight_mu = 2*[0.212854; 0.787146];
                 
             elseif number_polar == 3
                 obj.d_mu = [0.166648; 0.537707; 0.932954];
-                obj.d_weight_mu = [0.046233; 0.283619; 0.670148];
+                obj.d_weight_mu = 2*[0.046233; 0.283619; 0.670148];
             else
                 error('Invalid polar order');
             end
@@ -120,8 +120,12 @@ classdef QuadratureMOC < handle
         end
         
         function n = number_tracks(obj, m)
-           n = obj.d_number_tracks(m);
+            n = obj.d_number_tracks(m);
         end     
+        
+        function n = total_number_track(obj)
+            n = sum(obj.d_number_tracks(:));
+        end
         
         % ======================================================================
         %> @brief Computes cardinal angle index.

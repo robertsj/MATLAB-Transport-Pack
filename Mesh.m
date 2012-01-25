@@ -180,6 +180,10 @@ classdef Mesh < handle
             m = obj.d_mesh_map(map_key);
         end
         
+        function bool = meshed(obj)
+            bool = obj.d_meshed; 
+        end
+        
         
         
         % **********************************************************************

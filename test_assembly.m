@@ -13,7 +13,7 @@
 % if we could limit that to maybe 10 sweeps via CMFD, we're in 
 % business.  Note, the GMRES
 
-%clear
+clear class
 
 % ==============================================================================
 % INPUT
@@ -23,7 +23,7 @@ put(input, 'number_groups',         2);
 put(input, 'number_groups',         2);
 put(input, 'eigen_tolerance',       1e-4);
 put(input, 'eigen_max_iters',       100);
-put(input, 'inner_tolerance',       0.1);
+put(input, 'inner_tolerance',       0.0001);
 put(input, 'inner_solver',          'SI');
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  3);
@@ -47,7 +47,7 @@ mat = test_materials(2);
 % Shared pin properties
 pitch   = 1.26;                 
 radii   = 0.54;
-number  = 40;
+number  = 18;
 % Pin 1
 matid  = [2 1]; % IN to OUT
 pin1   = PinCell(pitch, radii, matid);
@@ -68,21 +68,19 @@ meshify(pin3, number);
 %plot_mesh(pin3);
 
 % Make the assembly.
-pin_map = [ 1 1 1
-            1 2 1
-            1 1 1];
+pin_map = [ 1 ];
 mesh = Assembly({pin1, pin2, pin3}, pin_map);
 meshify(mesh);
-%figure(4)
-%plot_mesh_map(mesh, 'MATERIAL')
-%return
+figure(4)
+plot_mesh_map(mesh, 'MATERIAL')
+
 
 % ==============================================================================
 % SETUP 
 % ==============================================================================
 state       = State(input, mesh);
-quadrature  = QuadrupleRange(18);
-boundary    = Boundary(input, mesh, quadrature);
+quadrature  = QuadrupleRange(8);
+boundary    = BoundaryMesh(input, mesh, quadrature);
 q_e         = Source(mesh, 2);                  % Not initialized = not used.
 q_f         = FissionSource(state, mesh, mat);  % Inititalized = used.
 initialize(q_f);
@@ -106,7 +104,9 @@ toc
 % ==============================================================================
 % POSTPROCESS 
 % ==============================================================================
-VTK.savevtk(state, 2, mesh, 'nine_pin.vtk')
+VTK.savevtk(state, 2, mesh, 'one_pin.vtk')
+
+save('one_pin.mat')
 %figure(5)
 %subplot(2, 1, 1)
 %f1 = flux(state, 1);

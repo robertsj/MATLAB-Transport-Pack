@@ -59,9 +59,13 @@ classdef FissionSource < handle
             obj.d_fission_source  = zeros(number_cells(obj.d_mesh), 1);
             
             % Grab the material map and reshape it to a vector.
-            mat = reshape(mesh_map(obj.d_mesh, 'MATERIAL'), ...
-                          number_cells(obj.d_mesh), 1);
-            
+            if meshed(obj.d_mesh)
+                mat = reshape(mesh_map(obj.d_mesh, 'MATERIAL'), ...
+                    number_cells(obj.d_mesh), 1);
+            else                
+                mat = region_mat_map(obj.d_mesh);
+            end                      
+                      
             % Initialize the nu_sigma_f and chi vectors
             obj.d_nu_sigma_f = zeros(number_cells(obj.d_mesh), ...
                                      number_groups(obj.d_mat));

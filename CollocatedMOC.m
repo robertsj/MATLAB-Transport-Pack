@@ -104,6 +104,7 @@ classdef CollocatedMOC < QuadratureMOC
                         obj.d_phi(m-1)) / pi;
                 end
             end
+            obj.d_weight_phi = obj.d_weight_phi * pi/2;
 
             % Reference values
             %
@@ -131,7 +132,7 @@ classdef CollocatedMOC < QuadratureMOC
                 dx = 1 / nx;
                 dy = 1 / ny;
                 % Perpendicular distance between tracks
-                obj.d_space(m) = 1 / cos(obj.d_phi(m));
+                obj.d_space(m) = dy * cos(obj.d_phi(m));
                 % First quadrant only (0, pi/2)
                 %   Uniformly spaced entrances
                 enters(1:ny, 1)   = 0.0;

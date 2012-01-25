@@ -87,20 +87,22 @@ classdef SweepMOC < handle
         % ======================================================================
         function phi = sweep(obj, source, g)
             
+            % 
+            IN  = 1;
+            OUT = 2;
+            
+            % Temporary region flux
             phi = zeros(size(source));
-%             
-%             side_i = [track.LEFT    track.BOTTOM
-%                       track.RIGHT   track.BOTTOM
-%                       track.RIGHT   track.TOP
-%                       track.LEFT    track.TOP    ];
-%                   
-%             side_o = [track.RIGHT   track.TOP
-%                       track.LEFT    track.TOP
-%                       track.LEFT    track.BOTTOM
-%                       track.RIGHT   track.BOTTOM ];
+
+            % Material map
             mat_map = region_mat_map(obj.d_track);
+
+            % Inverse of region volumes.
+            inv_volume = 1 ./ region_volume(obj.d_track);
+            vol = 0*inv_volume;
+            % Single track segment incident and exiting flux
             psi_out = zeros(number_polar(obj.d_quadrature), 1);
-            psi_in = zeros(number_polar(obj.d_quadrature), 1);
+            psi_in  = zeros(number_polar(obj.d_quadrature), 1);
             
             % Sweep over all octants.
             for o = 1:4
@@ -116,7 +118,7 @@ classdef SweepMOC < handle
                     
                     % Get incident boundary fluxes for this angle.  These
                     % are in all polar angles
-                    psi = get_psi(obj.d_boundary, o, a, Boundary.IN);
+                    psi = get_psi(obj.d_boundary, o, a, IN);
 
                     % Track spacing
                     spacing = space(obj.d_track, a);
@@ -124,18 +126,21 @@ classdef SweepMOC < handle
                     % Sweep along all tracks
                     for t = 1:number_tracks(obj.d_quadrature, a)
 
+                        % Set the incident flux.
+                        psi_out(:, 1) = psi(:, t);
+
                         % Sweep over all segments on this track
                         for i = 1:number_segments(obj.d_track, a, t)
-i
+
                             % Set incident angular flux.  (polar, track)
-                            psi_in(:, 1) = psi(:, t);
+                            psi_in(:, 1) = psi_out(:, 1);
                             
                             if length(psi_in) > 1
                                 aaa = 1;
                             end
                             
                             % Region
-                            r = segment_region(obj.d_track, a, t, i)
+                            r = segment_region(obj.d_track, a, t, i);
                             
                             % Segment length
                             len = segment_length(obj.d_track, a, t, i);
@@ -149,7 +154,7 @@ i
                                 % Scaled segment length
                                 tau = len / mu(obj.d_quadrature, p);
                                 
-                                % Solve for outgoing and average segment flux
+                                % Solve for outgoing and average segment flux.
                                 [psi_out(p, 1), psi_avg] = ... 
                                     solve(obj.d_equation, ...
                                           psi_in(p, 1), ...
@@ -157,33 +162,37 @@ i
                                           sigma, ...
                                           tau);
 
-                                % Polar weight
+                                % Polar weight.
                                 w_p = weight_mu(obj.d_quadrature, p);
 
-                                % Integration of scalar flux.
-                                phi(r) = phi(r) + ...
-                                    w_a * w_p * psi_avg * spacing * len;
+                                % Integration of scalar flux.  When all
+                                % sweeps are done, this is equivalent to
+                                % e.g. Eq. 3.347 in Hebert.
+                                phi(r) = phi(r) +  w_a * w_p * ...
+                                	psi_avg * spacing * len * inv_volume(r);
                                 
+
+                                % 4*pi*V(r) for debugging.
+                                vol(r) = vol(r) + w_a * w_p * spacing * len;
                                 % Note, this *assumes* the spacing is
                                 % corrected!!
 
                             end % polar
-                            
-                            % Save the outgoing angular flux (in all polar
-                            % angles.
-                            psi(:, t) = psi_out(:)
 
                         end % segment
                         
+                        % Save the outgoing track flux.
+                        psi(:, t) = psi_out(:, 1);
+
                     end % track
-
-                    % Save outgoing flux vectors. 
-                    % set_psi(obj.d_boundary, o, a, length, Boundary.OUT);
-
+                    
+                    % Save outgoing flux vectors for this angle.
+                    set_psi(obj.d_boundary, o, a, psi, OUT);
+                
                 end % azimuth
                 
+     
             end
-            phi = psi;
         end
         
     end

@@ -133,7 +133,7 @@ classdef Eigensolver
                 flux_error_1 = flux_error;
                 flux_error   = max( abs(fd-fd_old)./fd );
                 
-                reset_convergence(obj.d_solver, 100, flux_error/10);
+                %reset_convergence(obj.d_solver, 100, flux_error/10);
                 
                 % Save and update keff
                 k_eff_1 = k_eff;

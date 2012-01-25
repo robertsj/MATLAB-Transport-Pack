@@ -213,8 +213,13 @@ classdef InnerIteration < handle
             elseif mesh.DIM == 3
                 
             elseif mesh.DIM == 2 && tracked(mesh)
-                 % Example of how MOC can be plugges right in.
-                 disp('MOC inner!')
+
+                 % Equation.
+                 obj.d_equation = SCMOC(mesh, mat);
+                 
+                 % Sweeper
+                 obj.d_sweeper = SweepMOC(input, mesh, mat, quadrature, ...
+                     obj.d_boundary, obj.d_equation);
                  
             else
                 error('Invalid mesh dimension.')
