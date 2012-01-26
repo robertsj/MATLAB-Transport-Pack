@@ -115,6 +115,7 @@ classdef SweepMOC < handle
                     
                     % Get azimuthal weight. 
                     w_a = weight_phi(obj.d_quadrature, a);
+%                     w_a = 1;
                     
                     % Get incident boundary fluxes for this angle.  These
                     % are in all polar angles
@@ -134,11 +135,7 @@ classdef SweepMOC < handle
 
                             % Set incident angular flux.  (polar, track)
                             psi_in(:, 1) = psi_out(:, 1);
-                            
-                            if length(psi_in) > 1
-                                aaa = 1;
-                            end
-                            
+
                             % Region
                             r = segment_region(obj.d_track, a, t, i);
                             
@@ -164,7 +161,8 @@ classdef SweepMOC < handle
 
                                 % Polar weight.
                                 w_p = weight_mu(obj.d_quadrature, p);
-
+%                                 w_p = 1;
+                               % psi_out(p, 1) = 1; psi_avg =1;
                                 % Integration of scalar flux.  When all
                                 % sweeps are done, this is equivalent to
                                 % e.g. Eq. 3.347 in Hebert.
@@ -173,7 +171,7 @@ classdef SweepMOC < handle
                                 
 
                                 % 4*pi*V(r) for debugging.
-                                vol(r) = vol(r) + w_a * w_p * spacing * len;
+                                vol(r) = vol(r) +  psi_avg;% w_a * w_p * spacing * len;
                                 % Note, this *assumes* the spacing is
                                 % corrected!!
 
@@ -193,6 +191,9 @@ classdef SweepMOC < handle
                 
      
             end
+            disp('summed psi...')
+            vol
+%             disp('---------')
         end
         
     end

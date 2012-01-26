@@ -11,6 +11,7 @@
 
 clear  
 warning('OFF', 'user:input')
+warning('OFF', 'solver:convergence')
 
 sn = 0;
 
@@ -21,14 +22,15 @@ input = Input();
 put(input, 'number_groups',         2);
 put(input, 'eigen_tolerance',       1e-5);
 put(input, 'eigen_max_iters',       100);
-put(input, 'inner_tolerance',       0.0001);
+put(input, 'inner_tolerance',       0.00001);
+put(input, 'inner_max_iters',       100);
 put(input, 'inner_solver',          'SI');
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  3);
-put(input, 'bc_left',               'vacuum');
-put(input, 'bc_right',              'vacuum');
-put(input, 'bc_top',                'vacuum');
-put(input, 'bc_bottom',             'vacuum');
+put(input, 'bc_left',               'reflect');
+put(input, 'bc_right',              'reflect');
+put(input, 'bc_top',                'reflect');
+put(input, 'bc_bottom',             'reflect');
 
 input.number_groups = 1;
 
@@ -50,7 +52,7 @@ r = [0.54];
 matid       = [1 1]; 
 
 % Build the pin.
-pin = PinCell(p, r, matid);
+pin = PinCell(p, [], matid);
 
 % External source.
 q_e         = Source(pin, 1);                  % Not initialized = not used.
@@ -58,10 +60,10 @@ spectra     = [ 1 1];
 
 if sn == 1
     % Mesh the pin.
-    meshify(pin, 40);
+    meshify(pin, 20);
     placement = ones(number_cells(pin), 1);
     % plot
-    plot_mesh(pin);
+   % plot_mesh(pin);
     map = reshape(mesh_map(pin, 'REGION'), number_cells(pin), 1);
     m1 = map==1;
     m2 = map==2;
@@ -70,14 +72,15 @@ if sn == 1
     set_sources_mesh(q_e, spectra, placement);     
 else
     %quadrature = CollocatedMOC(27, 3, 0);
-    quadrature = UniformMOC(25, 3, 50);
+    quadrature = UniformMOC(4, 1, 8);
     track(pin, quadrature);
     % clf
     % Plotting tracks
-    plot_tracks(pin, 1);
+%     figure(1)
+%     plot_tracks(pin, 1);
     %verify_tracks(pin)
     boundary = BoundaryTrack(input, pin, quadrature);
-    placement = [ 1 1]; 
+    placement = [1 1]; 
     set_sources(q_e, spectra, placement);    
 end
 
@@ -117,16 +120,15 @@ tic
 toc
 
 %phiref = [4.909795825291901e-01];
-phiref = [5.513339209625725e-01     4.086689341553977e-01]; %4.909795825291901e-01
-
-f = flux(state, 1); f=f';
+% phiref = [5.513339209625725e-01     4.086689341553977e-01]; %4.909795825291901e-01
+% 
+ f = flux(state, 1); f=f';
 if sn == 1
-    phi = [ mean(f(m1)) mean(f(m2)) ]
-    %phi = mean(f)
+    %phi = [ mean(f(m1)) mean(f(m2)) ]
+    phi = mean(f)
 else
     phi = f
 end
-phi ./ phiref
 
 
 return

@@ -214,7 +214,7 @@ classdef PinCell < Mesh2D
             % Tracking.  We make two passes.  The first pass counts the
             % the total number of tracks total.  With this, we size the
             % track length vector and region id vector.
-            
+            totlen = 0;
             s = 1; % segment index
             for z = 1:number_angles_octant(q) 
                 cos_phi = cos(phi(q, 1, z));
@@ -285,6 +285,7 @@ classdef PinCell < Mesh2D
 %                         	obj.d_segment_coef(s,j) = ...
 %                                 exp(
 %                         end
+                        totlen=totlen+segl(i);
                         s = s + 1;
                     end
                     if ( abs(sum(segl)-l) > 1e-14 )
@@ -293,7 +294,8 @@ classdef PinCell < Mesh2D
                     end
                 end
             end
-        
+            disp(['total length = ',num2str(totlen)])
+
         end
         
         % ======================================================================
@@ -337,9 +339,14 @@ classdef PinCell < Mesh2D
             if nargin == 1
                 full = 0;
             end
-                
+            P = obj.d_pitch;
+            % bounding box
+            Xa = [ 0.0;   P;   P; 0.0; 0.0 ];
+            Ya = [ 0.0; 0.0;   P;   P; 0.0 ];
+            plot (Xa ,Ya ,'k','LineWidth',3);
+            hold on
             % Plot true geometry
-            plot_pin(obj)
+          %  plot_pin(obj)
             hold on  
             q = obj.d_quadrature;
             % Plot the tracks
