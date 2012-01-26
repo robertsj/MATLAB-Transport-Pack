@@ -83,18 +83,18 @@ classdef UniformMOC < QuadratureMOC
             if number_azimuth == 1
                 obj.d_weight_phi = 1;
             else
-            obj.d_weight_phi(1) = (0.5*pi + obj.d_phi(2) - ...
-                obj.d_phi(number_azimuth) ) / pi;
-            obj.d_weight_phi(number_azimuth) = ...
-                (0.5*pi + obj.d_phi(1) - obj.d_phi(number_azimuth-1)) / pi;
-            % All other m
-            for m = 2:(number_azimuth-1)
-                obj.d_weight_phi(m) = (obj.d_phi(m+1) - obj.d_phi(m-1)) / pi;
-            end
+                obj.d_weight_phi(1) = (0.5*pi + obj.d_phi(2) - ...
+                    obj.d_phi(number_azimuth) ) / pi;
+                obj.d_weight_phi(number_azimuth) = ...
+                    (0.5*pi + obj.d_phi(1) - obj.d_phi(number_azimuth-1)) / pi;
+                % All other m
+                for m = 2:(number_azimuth-1)
+                    obj.d_weight_phi(m) = (obj.d_phi(m+1) - obj.d_phi(m-1)) / pi;
+                end
             end
             obj.d_weight_phi = obj.d_weight_phi * pi/2;
             
-            obj.d_weight_phi = obj.d_weight_phi * 0 + pi/2 /number_azimuth ;
+           % obj.d_weight_phi = obj.d_weight_phi * 0 + 1 /number_azimuth ;
             
             % Calculate intercepts on a square.
             obj.d_enter = cell(number_azimuth, 1);

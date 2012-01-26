@@ -11,7 +11,8 @@ if n == 1
     
     % Create the Materials object.
     mat = Materials(1, ...  % groups
-                    2);     % materials         
+                    2);     % materials      
+                
     % Total
     mat = set_sigma_t(mat, 1, 1, 1.0); % (object, material, group, value)
     % Fission 
@@ -20,13 +21,14 @@ if n == 1
     % Scattering
     mat = set_sigma_s(mat, 1, 1, 1, 0.5); % (object, material, g, g', value);
 
+    
     % Total
     mat = set_sigma_t(mat, 2, 1, 1.0); % (object, material, group, value)
     % Fission 
     mat = set_nu_sigma_f(mat, 2, 1, 0.0); 
     mat = set_chi(mat, 2, 1, 0.0);     
     % Scattering
-    mat = set_sigma_s(mat, 2, 1, 1, 0.0); % (object, material, g, g', value);
+    mat = set_sigma_s(mat, 2, 1, 1, 0.2); % (object, material, g, g', value);
     
     % Final setup
     mat = finalize(mat);

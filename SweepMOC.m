@@ -191,8 +191,8 @@ classdef SweepMOC < handle
                 
      
             end
-            disp('summed psi...')
-            vol
+           % disp('summed psi...')
+           % vol
 %             disp('---------')
         end
         

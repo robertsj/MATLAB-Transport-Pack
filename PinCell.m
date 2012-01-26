@@ -88,12 +88,18 @@ classdef PinCell < Mesh2D
         %> be equal to the number of regions defined by the box and radii.
         %> The are arranged in-to-out. 
         %>
+        %> Finally, the user can subdivide the domain.  This a level
+        %> of 0 does nothing.  A level of 1 divides the domain along the
+        %> the x and y axes (though the origin.  A level of 2 adds
+        %> dividing planes at +/- 45 degrees through the origin.
+        %>
         %> @param  pitch 	Pin cell width
         %> @param  radii 	Fuel pin radii, if any.
         %> @param  mat_map	Material identifiers for each region.
+        %> @param  subdiv   Level of subcell division.
         %> @return Instance of the PinCell class.
         % ======================================================================
-        function obj = PinCell(pitch, radii, mat_map)
+        function obj = PinCell(pitch, radii, mat_map, subdiv)
             % Precondition
             DBC.Require('length(radii) + 1 == length(mat_map)');
             
@@ -102,10 +108,14 @@ classdef PinCell < Mesh2D
             obj.d_radii          = radii;
             obj.d_number_radii   = length(radii);
             obj.d_number_regions = length(radii) + 1;
+%            obj.d_sub_divide     = subdiv;
             
             % Don't allow radii >= to the pitch for simplicity.
             if max(radii) >= pitch/2
                 error('Radii must be smaller than half pitch')
+            end
+            if sum(radii(1:end-1)>radii(2:end)) > 0
+               error('non monotonic increasing radii') 
             end
             
             % Compute the volumes.
@@ -199,7 +209,7 @@ classdef PinCell < Mesh2D
             else
                 obj.d_tracked = 1;
             end
-            
+            obj.d_number_cells = obj.d_number_regions;
             pitch = obj.d_pitch;
             obj.d_quadrature = q;
             obj.d_enter = cell(number_azimuth(q), 1);
@@ -214,8 +224,10 @@ classdef PinCell < Mesh2D
             % Tracking.  We make two passes.  The first pass counts the
             % the total number of tracks total.  With this, we size the
             % track length vector and region id vector.
-            totlen = 0;
+            approximate_volume = zeros(obj.d_number_regions, 1);
             s = 1; % segment index
+            
+            
             for z = 1:number_angles_octant(q) 
                 cos_phi = cos(phi(q, 1, z));
                 tan_phi = tan(phi(q, 1, z));
@@ -281,11 +293,15 @@ classdef PinCell < Mesh2D
                         segl(i) = sqrt((x(i+1)-x(i))^2 + (y(i+1)-y(i))^2);
                         obj.d_segment_length{z}{t}(i) = segl(i);
                         obj.d_segment_region{z}{t}(i)  = reg(i);
+                         
+                        approximate_volume(reg(i)) = ...
+                            approximate_volume(reg(i)) + ...
+                            segl(i) * obj.d_space(z) * weight_phi(obj.d_quadrature, z) ;
+%                        fprintf(' reg: %3i, segl: %12.8f, space: %12.8f , w: %12.8f, dvol  %12.8f \n', reg(i), segl(i) , obj.d_space(m) , weight_phi(obj.d_quadrature, m),  segl(i) * obj.d_space(m) * weight_phi(obj.d_quadrature, m));
 %                         for j = 1:number_polar(q)
 %                         	obj.d_segment_coef(s,j) = ...
 %                                 exp(
 %                         end
-                        totlen=totlen+segl(i);
                         s = s + 1;
                     end
                     if ( abs(sum(segl)-l) > 1e-14 )
@@ -293,8 +309,27 @@ classdef PinCell < Mesh2D
                         error(' error in track length ')
                     end
                 end
+                aaa=1;
             end
-            disp(['total length = ',num2str(totlen)])
+            approximate_volume = approximate_volume * 2/pi;
+            % Fixup track lengths
+            for z = 1:number_angles_octant(q) 
+                for t = 1:number_tracks(q, z)
+                    for i = 1:obj.d_number_segments(z, t)
+                        region = obj.d_segment_region{z}{t}(i);
+                        true_vol = obj.d_region_volume(region);
+                        appx_vol = approximate_volume(region);
+                        obj.d_segment_length{z}{t}(i) = ...
+                            obj.d_segment_length{z}{t}(i) * true_vol/appx_vol;
+                        
+                    end
+                end
+            end
+%             
+%             
+% 
+%             disp(['total vol'])
+%             approximate_volume, obj.d_region_volume, approximate_volume/obj.d_region_volume
 
         end
         
@@ -346,7 +381,7 @@ classdef PinCell < Mesh2D
             plot (Xa ,Ya ,'k','LineWidth',3);
             hold on
             % Plot true geometry
-          %  plot_pin(obj)
+            plot_pin(obj)
             hold on  
             q = obj.d_quadrature;
             % Plot the tracks
