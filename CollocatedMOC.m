@@ -32,7 +32,8 @@
 classdef CollocatedMOC < QuadratureMOC
     
     properties
-
+        d_order_space = 0
+        d_order_angle = 0
     end
     
     
@@ -40,7 +41,7 @@ classdef CollocatedMOC < QuadratureMOC
         
         function obj = CollocatedMOC(number_space, ...
                                      number_polar, ...
-                                     weight_flag)
+                                     weight_flag, os, oa)
             
             % For now, require odd number of phi's
             
@@ -48,6 +49,9 @@ classdef CollocatedMOC < QuadratureMOC
             % Call base class
             obj = obj@QuadratureMOC(number_polar);
             obj.d_number_space   = number_space;
+            
+            obj.d_order_space = os;
+            obj.d_order_angle = oa;
             
             if (number_space == 3)
                 obj.d_number_azimuth = 3;            

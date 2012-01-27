@@ -28,8 +28,8 @@ put(input, 'inner_solver',          'SI');
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  3);
 put(input, 'bc_left',               'reflect');
-%put(input, 'bc_right',              'reflect');
-%put(input, 'bc_top',                'reflect');
+put(input, 'bc_right',              'reflect');
+put(input, 'bc_top',                'reflect');
 put(input, 'bc_bottom',             'reflect');
 
 input.number_groups = 1;
@@ -56,7 +56,7 @@ pin = PinCell(p, r, matid, 0);
 
 % External source.
 q_e         = Source(pin, 1);                  % Not initialized = not used.
-spectra     = [1 1];      
+spectra     = [1 0];      
 
 if sn == 1
     % Mesh the pin.
@@ -73,17 +73,11 @@ if sn == 1
     boundary   = BoundaryMesh(input, pin, quadrature);
     set_sources_mesh(q_e, spectra, placement);     
 else
-    quadrature = CollocatedMOC(9, 1, 0);
-    
+    quadrature = CollocatedMOC(27, 1, 0);
     %quadrature = UniformMOC(50, 1, 200);
     track(pin, quadrature);
-    clf
-    %Plotting tracks
-     figure(2)
-    plot_tracks(pin, 1);
-   %verify_tracks(pin)
     boundary = BoundaryTrack(input, pin, quadrature);
-    placement = [1 1 1]; 
+    placement = [1 1 0]; 
     set_sources(q_e, spectra, placement);    
 end
 
@@ -92,7 +86,7 @@ end
 % SETUP 
 % ==============================================================================
 
-phi = [8.907616871619879e-01     8.579010883562891e-01     8.051670051698306e-01]';
+%phi = [8.907616871619879e-01     8.579010883562891e-01     8.051670051698306e-01]';
 state       = State(input, pin);
 %set_phi(state, phi, 1);
 

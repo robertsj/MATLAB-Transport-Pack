@@ -11,7 +11,7 @@ classdef BoundaryTrack < handle
         INCIDENT = 1;
         EXITING  = 2;
     end
-    properties (Access = protected)
+    properties (Access = public)
         %> Spatial track.
         d_track
         %> Angular track.
@@ -56,33 +56,49 @@ classdef BoundaryTrack < handle
             
             % Boundary conditions
             this.d_bc = cell(2*track.DIM);
+            
             if strcmp(get(input, 'bc_left'), 'vacuum')
                 this.d_bc{track.LEFT}   = ...
                     VacuumTrack(this, track, quadrature, track.LEFT);
             elseif strcmp(get(input, 'bc_left'), 'reflect')
                 this.d_bc{track.LEFT}   = ...
+                    ReflectiveTrack(this, track, quadrature, track.LEFT);
+         	elseif strcmp(get(input, 'bc_left'), 'reflect_r')
+                this.d_bc{track.LEFT}   = ...
                     AppxReflectiveTrack(this, track, quadrature, track.LEFT);
             end
+            
             if strcmp(get(input, 'bc_right'), 'vacuum')
                 this.d_bc{track.RIGHT}   = ...
                     VacuumTrack(this, track, quadrature, track.RIGHT);
             elseif strcmp(get(input, 'bc_right'), 'reflect')
                 this.d_bc{track.RIGHT}   = ...
                     ReflectiveTrack(this, track, quadrature, track.RIGHT);
+            elseif strcmp(get(input, 'bc_right'), 'reflect_r')
+                this.d_bc{track.RIGHT}   = ...
+                    AppxReflectiveTrack(this, track, quadrature, track.RIGHT);
             end
+            
             if strcmp(get(input, 'bc_bottom'), 'vacuum')
                 this.d_bc{track.BOTTOM}   = ...
                     VacuumTrack(this, track, quadrature, track.BOTTOM);
             elseif strcmp(get(input, 'bc_bottom'), 'reflect')
                 this.d_bc{track.BOTTOM}   = ...
                     ReflectiveTrack(this, track, quadrature, track.BOTTOM);
+            elseif strcmp(get(input, 'bc_bottom'), 'reflect_r')
+                this.d_bc{track.BOTTOM}   = ...
+                    AppxReflectiveTrack(this, track, quadrature, track.BOTTOM);
             end
+            
             if strcmp(get(input, 'bc_top'), 'vacuum')
                 this.d_bc{track.TOP}   = ...
                     VacuumTrack(this, track, quadrature, track.TOP);
             elseif strcmp(get(input, 'bc_top'), 'reflect')
                 this.d_bc{track.TOP}   = ...
                     ReflectiveTrack(this, track, quadrature, track.TOP);
+            elseif strcmp(get(input, 'bc_top'), 'reflect_r')
+                this.d_bc{track.TOP}   = ...
+                    AppxReflectiveTrack(this, track, quadrature, track.TOP);
             end
             
             % Number of groups

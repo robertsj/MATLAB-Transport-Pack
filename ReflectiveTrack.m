@@ -42,22 +42,20 @@ classdef ReflectiveTrack < BoundaryConditionMOC
                 for p = 1:number_polar(this.d_quadrature)
                     
                 % Get the feeder flux.
-                psi = get_single_psi(this.d_boundary, this.d_index(i, 1), ...
-                    this.d_index(i, 2), p, this.d_index(i, 3), 2);
+                psi = get_single_psi(this.d_boundary, this.d_index(i, 4), ...
+                    this.d_index(i, 5), p, this.d_index(i, 6), 2);
                 
+                psi_exact(i) = ...
+                        get_single_psi(this.d_boundary, this.d_index(i, 1), ...
+                        this.d_index(i, 2), p, this.d_index(i, 3), 2);
+                    
                 % Set my flux.
-                set_single_psi(this.d_boundary, this.d_index(i, 4), ...
-                    this.d_index(i, 5), p, this.d_index(i, 6), psi, 1);
+                set_single_psi(this.d_boundary, this.d_index(i, 1), ...
+                    this.d_index(i, 2), p, this.d_index(i, 3), psi, 1);
                 
                 end
                 
             end
-            
-            for i = 1:this.d_number_tracks
-                
-                
-            end
-            
 
             
         end
