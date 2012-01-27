@@ -73,7 +73,7 @@ if sn == 1
     boundary   = BoundaryMesh(input, pin, quadrature);
     set_sources_mesh(q_e, spectra, placement);     
 else
-    quadrature = CollocatedMOC(3, 1, 0);
+    quadrature = CollocatedMOC(9, 1, 0);
     
     %quadrature = UniformMOC(50, 1, 200);
     track(pin, quadrature);

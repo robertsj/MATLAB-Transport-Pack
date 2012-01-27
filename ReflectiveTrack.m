@@ -52,6 +52,12 @@ classdef ReflectiveTrack < BoundaryConditionMOC
                 end
                 
             end
+            
+            for i = 1:this.d_number_tracks
+                
+                
+            end
+            
 
             
         end

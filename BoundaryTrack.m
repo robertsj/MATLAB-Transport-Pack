@@ -61,7 +61,7 @@ classdef BoundaryTrack < handle
                     VacuumTrack(this, track, quadrature, track.LEFT);
             elseif strcmp(get(input, 'bc_left'), 'reflect')
                 this.d_bc{track.LEFT}   = ...
-                    ReflectiveTrack(this, track, quadrature, track.LEFT);
+                    AppxReflectiveTrack(this, track, quadrature, track.LEFT);
             end
             if strcmp(get(input, 'bc_right'), 'vacuum')
                 this.d_bc{track.RIGHT}   = ...

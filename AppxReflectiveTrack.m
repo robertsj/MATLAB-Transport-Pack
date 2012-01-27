@@ -12,6 +12,12 @@ classdef AppxReflectiveTrack < BoundaryConditionMOC
     properties 
         d_index
         d_number_tracks
+        %> Index of all tracks as a function of local angle index (increasing x)
+        d_group_a
+        %> Index of all tracks as a function of spatial point (increasing phi)
+        d_group_x
+        d_n_space
+        d_n_angle
     end
     
     methods
@@ -42,7 +48,7 @@ classdef AppxReflectiveTrack < BoundaryConditionMOC
             oct = [1 4; 3 2; 2 1; 4 3];
             % Loop through all the tracks I own, grap the flux of each
             % track's feeder, and update my own track flux.
-            ao = 1;  a = this.d_index(i, 5); tt = 0; aa=1;
+            ao = 1;  a = this.d_index(1, 5); tt = 0; aa=1;
             for i = 1:this.d_number_tracks
                 
                 for p = 1:number_polar(this.d_quadrature)
@@ -155,53 +161,109 @@ classdef AppxReflectiveTrack < BoundaryConditionMOC
             
         end
         
+        function this = build_group(this)
+           
+            if this.d_quadrature.d_number_azimuth == 3
+                
+                % Tracks at a given origin.
+                this.d_group_x = cell(3, 1);
+                this.d_group_x{1} = [2 5 8 11];
+                this.d_group_x{2} = [1 3 6 9 12 14];
+                this.d_group_x{3} = [4 7 10 13];
+                
+                % Tracks in a given direction.
+                this.d_group_a = cell(6, 1);
+                this.d_group_a{1} = [1];
+                this.d_group_a{2} = [2 3 4];
+                this.d_group_a{3} = [5 6 7];
+                this.d_group_a{4} = [8 9 10];
+                this.d_group_a{5} = [11 12 13];
+                this.d_group_a{6} = [14];
+                
+            elseif this.d_quadrature.d_number_azimuth == 5
+                
+                % Tracks at a given origin.
+                this.d_group_x    = cell(9, 1);
+                this.d_group_x{1} = [5 14 23 32 41 50];
+                this.d_group_x{2} = [2 this.d_group_x{1}+1 59];
+                this.d_group_x{3} = [this.d_group_x{1}+2];
+                this.d_group_x{4} = [this.d_group_x{1}+3];
+                this.d_group_x{5} = [1 3 this.d_group_x{1}+4 60 62 ];
+                this.d_group_x{6} = [this.d_group_x{1}+5];
+                this.d_group_x{7} = [this.d_group_x{1}+6];
+                this.d_group_x{8} = [4 this.d_group_x{1}+7 61];
+                this.d_group_x{9} = [this.d_group_x{1}+8];
+                
+                % Tracks in a given direction.
+                this.d_group_a    = cell(10, 1);
+                this.d_group_a{1} = [1];
+                this.d_group_a{2} = [2 3 4];
+                this.d_group_a{3} = [ 4 + 1:9];
+                this.d_group_a{4} = [13 + 1:9];
+                this.d_group_a{5} = [22 + 1:9];
+                this.d_group_a{6} = [31 + 1:9];
+                this.d_group_a{7} = [40 + 1:9];
+                this.d_group_a{8} = [49 + 1:9];
+                this.d_group_a{9} = [59 60 61];
+                this.d_group_a{10}= [62];
+                
+            elseif  this.d_quadrature.d_number_azimuth == 7
+                
+                % Tracks at a given origin.
+                this.d_group_x     = cell(27, 1);
+                this.d_group_x{ 1} = [5 14 23 32 41 50];
+                this.d_group_x{ 2} = [2 this.d_group_x{1}+1 59];
+                this.d_group_x{ 3} = [this.d_group_x{1}+2];
+                this.d_group_x{ 4} = [this.d_group_x{1}+3];
+                this.d_group_x{ 5} = [1 3 this.d_group_x{1}+4 60 62 ];
+                this.d_group_x{ 6} = [this.d_group_x{1}+5];
+                this.d_group_x{ 7} = [this.d_group_x{1}+6];
+                this.d_group_x{ 8} = [4 this.d_group_x{1}+7 61];
+                this.d_group_x{ 9} = [this.d_group_x{1}+8];
+                this.d_group_x{10} = [5 14 23 32 41 50];
+                this.d_group_x{11} = [2 this.d_group_x{1}+1 59];
+                this.d_group_x{12} = [this.d_group_x{1}+2];
+                this.d_group_x{13} = [this.d_group_x{1}+3];
+                this.d_group_x{14} = [this.d_group_x{1}+8];                
+                this.d_group_x{15} = [1 3 this.d_group_x{1}+4 60 62 ];
+                this.d_group_x{16} = [this.d_group_x{1}+5];
+                this.d_group_x{17} = [this.d_group_x{1}+6];
+                this.d_group_x{18} = [4 this.d_group_x{1}+7 61];
+                this.d_group_x{19} = [this.d_group_x{1}+8];
+                this.d_group_x{20} = [5 14 23 32 41 50];
+                this.d_group_x{21} = [this.d_group_x{1}+8];
+                this.d_group_x{22} = [2 this.d_group_x{1}+1 59];
+                this.d_group_x{23} = [this.d_group_x{1}+2];
+                this.d_group_x{24} = [this.d_group_x{1}+3];
+                this.d_group_x{25} = [1 3 this.d_group_x{1}+4 60 62 ];
+                this.d_group_x{26} = [this.d_group_x{1}+5];
+                this.d_group_x{27} = [this.d_group_x{1}+6];
+              
+                % Tracks in a given direction.
+                this.d_group_a    = cell(14, 1);
+                this.d_group_a{1} = [1];
+                this.d_group_a{2} = [2 3 4];
+                this.d_group_a{3} = [ 4 + 1:9];
+                this.d_group_a{4} = [13 + 1:9];
+                this.d_group_a{5} = [22 + 1:9];
+                this.d_group_a{6} = [31 + 1:9];
+                this.d_group_a{7} = [40 + 1:9];
+                this.d_group_a{8} = [49 + 1:9];
+                this.d_group_a{9} = [40 + 1:9];
+                this.d_group_a{10} = [49 + 1:9];
+                this.d_group_a{11} = [40 + 1:9];
+                this.d_group_a{12} = [49 + 1:9];                
+                this.d_group_a{13} = [59 60 61];
+                this.d_group_a{14}= [62];
+                
+            end
+            
+            
+        end
+        
         
         function psi_appx = expand(this, psi_exact)
            
-            psi_exact_2 = cell(this.d_quadrature.d_number_space, 1);
-            for a = 1:length(psi_exact)
-                nx = length(psi_exact{a});
-                if nx == 1
-                    x_basis_index = length(this.d_basis_space);
-                    psi_exact{a}(:, 2) = psi_exact{a}(:, 2)*7 - 1;
-                elseif nx == 3
-                    x_basis_index = length(this.d_basis_space) - 1;
-                    psi_exact{a}(:, 2) = psi_exact{a}(:, 2)*5 - 1;
-                elseif nx == 9
-                    x_basis_index = length(this.d_basis_space) - 2;
-                    psi_exact{a}(:, 2) = psi_exact{a}(:, 2)*3 - 1;
-                else
-                    x_basis_index = length(this.d_basis_space) - 3;
-                end
-
-                % the exact vector for this angle over all space
-                f   = psi_exact{a}(1, :);
-                Px  = this.d_basis_space{x_basis_index};
-                % the legendre moments in SPACE
-                fx  = f' * Px;
-                % the APPROXIMATE vector in SPACE for this angle
-                ff  = f*0;
-                
-                n = min(nx, 2);
-                for i = 1:n
-                    ff = ff + Px(:, i)*fx(i);
-                end
-                for i = 1:nx
-                    l = length(psi_exact_2{psi_exact{a}(i, 2)});
-                    psi_exact_2{psi_exact{a}(i, 2)}(l+1) = ff(i);
-                end                
-            end
-             
-            
-            for t = this.d_quadrature.d_number_space
-                na = length(psi_exact_2{t});
-                a_basis_index = find( this.d_n_angle == na);
-                
-                
-            end
-                
-                
-            end
             
         end
         
