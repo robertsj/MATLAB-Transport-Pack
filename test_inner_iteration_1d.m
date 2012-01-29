@@ -27,8 +27,8 @@ put(input, 'inner_solver',          'Livolant');
 put(input, 'inner_max_iters',       3000);
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  3);
-put(input, 'bc_left',               'reflect');
-put(input, 'bc_right',              'reflect');
+put(input, 'bc_left',               'vacuum');
+put(input, 'bc_right',              'vacuum');
 
 
 % ==============================================================================
@@ -39,9 +39,9 @@ mat = test_materials(1);
 % ==============================================================================
 % MESH (simple slab)
 % ==============================================================================
-
-xcm    = 0:0.625:100;
-xfm    = 4*ones(1,length(xcm)-1);
+n = 50;
+xcm    = [0 1 2 3 4 5];
+xfm    = n*ones(1,length(xcm)-1);
 matid  = 1*ones(1,length(xcm)-1);
 mesh = Mesh1D(xfm, xcm, matid);
 
@@ -58,8 +58,8 @@ set_sources(q_e, spectra, place);
 % SETUP 
 % ==============================================================================
 state       = State(input, mesh);
-quadrature  = GaussLegendre(4);
-boundary    = Boundary(input, mesh, quadrature);
+quadrature  = GaussLegendre(32);
+boundary    = BoundaryMesh(input, mesh, quadrature);
 q_f         = FissionSource(state, mesh, mat);  % Not inititalized = not used.
 
 % ==============================================================================
@@ -85,7 +85,10 @@ toc
 
 % subplot(2, 1, 1)
 f = flux(state, 1);
-f(1:10)
+for i = 1:5
+   ff(i,1) = mean(f(1+(i-1)*n : i*n)) ;
+end
+ff/5
 % plot_flux(mesh, f)
 % subplot(2, 1, 2)
 % f = flux(state, 2);

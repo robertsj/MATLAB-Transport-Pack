@@ -19,10 +19,10 @@ put(input, 'inner_max_iters',       100);
 put(input, 'inner_solver',          'SI');
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  3);
-put(input, 'bc_left',               'reflect_r');
-%put(input, 'bc_right',              'reflect');
-%put(input, 'bc_top',                'reflect_r');
-put(input, 'bc_bottom',             'reflect_r');
+put(input, 'bc_left',               'reflect');
+put(input, 'bc_right',              'reflect');
+put(input, 'bc_top',                'reflect');
+put(input, 'bc_bottom',             'reflect');
 
 input.number_groups = 1;
 
@@ -57,17 +57,17 @@ q_f         = FissionSource(state, pin, mat);  % Inititalized = used.
 % ==============================================================================
 % SOLVE 
 % ==============================================================================
-ff = [ 8.925812322057839e-01
-       8.594503045857023e-01     
-       8.010835160443575e-01];
+ff = [ 1.433381242517740e+00     
+      1.467147540150487e+00    
+       1.544447166145315e+00];
 set_phi(state,  ff, 1);
 
 count = 1;
 phi=zeros(27, 14, 3);
-for so = 0:26
-for ao = 0:13
-quadrature.d_order_space = so;
-quadrature.d_order_angle = ao;
+% for so = 0:26
+% for ao = 0:13
+% quadrature.d_order_space = so;
+% quadrature.d_order_angle = ao;
 boundary = BoundaryTrack(input, pin, quadrature);
 solver = Fixed(input,         ...
                state,         ...
@@ -82,8 +82,8 @@ f = flux(state, 1); f'
 phi(so+1, ao+1, 1) = f(1);
 phi(so+1, ao+1, 2) = f(2);
 phi(so+1, ao+1, 3) = f(3);
-end
-end
+% end
+% end
 
 
 
