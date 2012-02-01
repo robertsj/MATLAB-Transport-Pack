@@ -18,9 +18,13 @@ classdef AppxReflectiveTrack < BoundaryConditionMOC
         d_group_x
         d_n_space
         d_n_angle
+        %> Angular expansion order.  Maximum is number angles - 1.
         d_order_angle = 14
+        %> Spatial expansion order.  Maximum is number of points - 1.
         d_order_space = 27
+        %> Discrete Legendre polynomial spatial basis
         d_basis_space
+        %> Discrete Legendre polynomial angular basis
         d_basis_angle
     end
     
@@ -45,6 +49,8 @@ classdef AppxReflectiveTrack < BoundaryConditionMOC
             build_basis(this);
             build_group(this);
             
+            % Set the expansion orders as set by the user in the collocated
+            % quadrature.
             this.d_order_angle = quadrature.d_order_angle;
             this.d_order_space = quadrature.d_order_space;
             
@@ -72,10 +78,11 @@ classdef AppxReflectiveTrack < BoundaryConditionMOC
                 
                 
             end
-            %psi_exact = linspace(0, 1, this.d_number_tracks); psi_exact=psi_exact';
+
             % Approximate the flux.
             psi_appx = expand(this, psi_exact);
             
+            % Debug plots.
             %             if length(psi_exact)==14
             %             a1 = 2; a2 = 1; a3 = 4;
             %             x1 = 1; x2 = 2; x3 = 3;
@@ -147,8 +154,7 @@ classdef AppxReflectiveTrack < BoundaryConditionMOC
             %             subplot(4,1,4)
             %             plot(1:length(pe_x4),pe_x4,'k',1:length(pe_x4),pa_x4,'g--o','LineWidth', 2), grid on
             %             title('angle 4 as a function of x')
-            
-            % pause()
+
             % Set the flux.
             for i = 1:this.d_number_tracks
                 for p = 1:number_polar(this.d_quadrature)
@@ -192,9 +198,7 @@ classdef AppxReflectiveTrack < BoundaryConditionMOC
                 % Add to the table.
                 this.d_index(i, :) = [o a t o_f a_f t_f];
             
-                
             end
-            
             
         end
         
@@ -215,7 +219,6 @@ classdef AppxReflectiveTrack < BoundaryConditionMOC
             
             % Define how many tracks at each spacial location or 
             % in a given angle we can have.
-            
             if this.d_quadrature.d_number_azimuth == 3
                 this.d_n_space = [1 3];
                 this.d_n_angle = [4 6];
@@ -228,8 +231,7 @@ classdef AppxReflectiveTrack < BoundaryConditionMOC
                 this.d_n_angle = [8 10 12 14];
             end
             
-            % Build the normalized DLP's.
-            
+            % Build the normalized DLP's.   
             this.d_basis_space = cell(length(this.d_n_space), 1);
             for i = 1:length(this.d_n_space)
                 this.d_basis_space{i} = DiscreteLP(this.d_n_space(i)-1);
@@ -253,7 +255,6 @@ classdef AppxReflectiveTrack < BoundaryConditionMOC
         %> The second is a list of all tracks for a given angle, ordered by
         %> increasing (local) spatial location.  Hence, the spatial basis
         %> can be used directly for this set of tracks.
-        %> 
         %> 
         % ======================================================================
         function this = build_group(this)
@@ -367,13 +368,15 @@ classdef AppxReflectiveTrack < BoundaryConditionMOC
         %> This takes the exact reflected flux and replaces it with an
         %> (n,m)th order approximation in space and angle.
         %> 
-        %> A quick study suggests expanding in space first yields best
-        %> results.
+        %> @todo Study the effect of approximating space or angle first.
+        %>       It doesn't matter in a full expansion, but it does for
+        %>       low orders as they are not independent variables.
         %> 
         % ======================================================================
         function psi_appx = expand(this, psi_exact)
            
             psi_appx = 0*psi_exact;
+            
             % Expand in ANGLE at each spatial point.
             for i = 1:length(this.d_group_x)
                 % Psi indices
@@ -396,6 +399,7 @@ classdef AppxReflectiveTrack < BoundaryConditionMOC
                 end
                 psi_appx(idx) = f;
             end
+            
             % Expand in SPACE for each angle.
             for i = 1:length(this.d_group_a)
                 % Psi indices
@@ -414,9 +418,7 @@ classdef AppxReflectiveTrack < BoundaryConditionMOC
                 end
                 psi_appx(idx) = f;
             end
-            
 
-            
         end
 
     end

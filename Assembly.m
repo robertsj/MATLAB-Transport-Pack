@@ -24,22 +24,7 @@ classdef Assembly < Mesh2D
         d_pitch
         %
         %> @}
-        
-        % Remember we get the following mesh data:
-        %   d_xcm = 1;
-        %   d_ycm = 1;
-        %   d_zcm = 1;
-        %   d_xfm = 1;
-        %   d_yfm = 1;
-        %   d_zfm = 1;
-        %   d_dx = 1;
-        %   d_dy = 1;
-        %   d_dz = 1;
-        %   d_number_cells   = 1;
-        %   d_number_cells_x = 1;
-        %   d_number_cells_y = 1;
-        %   d_number_cells_z = 1;
-        %   d_mesh_map    
+          
     end
     
     methods
@@ -47,8 +32,9 @@ classdef Assembly < Mesh2D
         % ======================================================================
         %> @brief Class constructor
         %
-        %>
-        %> @return Instance of the Assembly class.
+        %> @param   pins        Cell array of pin objects.
+        %> @param   pin_map     2-D array of pin locations.
+        %> @return              Instance of the Assembly class.
         % ======================================================================
         function obj = Assembly(pins, pin_map)
             DBC.Require('length(pins) > 0');
@@ -140,9 +126,6 @@ classdef Assembly < Mesh2D
     
     methods (Access = private)
        
-%         function b = verify_pins(obj)
-%             for
-%         end
         
     end
     

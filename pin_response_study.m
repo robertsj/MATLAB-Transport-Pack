@@ -1,5 +1,5 @@
 %> @file  pin_response_study.m
-%> @brief Tests the eigenvalue solver on a 2D pin cell problem.
+%> @brief Summer ANS summary -- Case 1
 % ==============================================================================
 
 %clear  

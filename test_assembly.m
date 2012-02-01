@@ -1,14 +1,6 @@
 %> @file  test_assembly.m
 %> @brief Tests the eigenvalue solver on a 2D assembly problem.
 % 
-% =========================================================================
-%     Iter:     6, Error:   0.00027425, keff:   0.492221, Sweeps:   174
-%                       Rate:   0.21176737
-% =========================================================================
-% Elapsed time is 21876.538294 seconds.
-% =========================================================================
-%
-%
 % That's about 2 minutes per sweep, wish seems reasonable enough.  However,
 % if we could limit that to maybe 10 sweeps via CMFD, we're in 
 % business.  Note, the GMRES
@@ -39,7 +31,6 @@ input.number_groups = 2;
 % ==============================================================================
 mat = test_materials(2);
 
-
 % ==============================================================================
 % MESH (Assembly of pins)
 % ==============================================================================
@@ -47,28 +38,39 @@ mat = test_materials(2);
 % Shared pin properties
 pitch   = 1.26;                 
 radii   = 0.54;
-number  = 18;
+number  = 12;
+
 % Pin 1
 matid  = [2 1]; % IN to OUT
 pin1   = PinCell(pitch, radii, matid);
 meshify(pin1, number);
-%figure(1)
-%plot_mesh(pin1);
+figure(1)
+plot_mesh(pin1);
+
 % Pin 2
 matid  = [4 1]; 
 pin2   = PinCell(pitch, radii, matid);
 meshify(pin2, number);
-%figure(2)
-%plot_mesh(pin2);
+figure(2)
+plot_mesh(pin2);
+
 % Pin 3
 matid  = [1]; 
 pin3   = PinCell(pitch, [], matid);
 meshify(pin3, number);
-%figure(3)
-%plot_mesh(pin3);
+figure(3)
+plot_mesh(pin3);
 
 % Make the assembly.
-pin_map = [ 1 ];
+pin_map = [ 1 1 1 1 1 1 1 1 1
+            1 1 1 2 1 1 1 1 1
+            1 1 1 1 1 1 2 1 1
+            1 2 1 3 3 1 1 1 1
+            1 1 1 3 3 3 1 1 1
+            1 1 1 1 3 3 1 2 1
+            1 1 2 1 1 1 1 1 1
+            1 1 1 1 1 2 1 1 1
+            1 1 1 1 1 1 1 1 1 ];
 mesh = Assembly({pin1, pin2, pin3}, pin_map);
 meshify(mesh);
 figure(4)
@@ -104,9 +106,10 @@ toc
 % ==============================================================================
 % POSTPROCESS 
 % ==============================================================================
-VTK.savevtk(state, 2, mesh, 'one_pin.vtk')
+VTK.savevtk(state, 2, mesh, 'nine_by_nine_pin.vtk')
 
 save('one_pin.mat')
+
 %figure(5)
 %subplot(2, 1, 1)
 %f1 = flux(state, 1);

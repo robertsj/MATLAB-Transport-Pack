@@ -39,7 +39,7 @@ mat = test_materials(1);
 % ==============================================================================
 % MESH (simple slab)
 % ==============================================================================
-n = 50;
+n = 300;
 xcm    = [0 1 2 3 4 5];
 xfm    = n*ones(1,length(xcm)-1);
 matid  = 1*ones(1,length(xcm)-1);
@@ -58,7 +58,7 @@ set_sources(q_e, spectra, place);
 % SETUP 
 % ==============================================================================
 state       = State(input, mesh);
-quadrature  = GaussLegendre(32);
+quadrature  = GaussLegendre(64);
 boundary    = BoundaryMesh(input, mesh, quadrature);
 q_f         = FissionSource(state, mesh, mat);  % Not inititalized = not used.
 

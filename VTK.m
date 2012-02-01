@@ -1,5 +1,7 @@
 %> @file  VTK.m
 %> @brief Utilities to print data in VTK format for viewing in Visit etc.
+%>
+%> @todo Add a more generalized mesh capability.
 classdef VTK
     
     methods (Static)
@@ -82,7 +84,7 @@ classdef VTK
             %  savevtkvector(X,Y,Z,filename) saves a 3-D vector of any size to
             %  filename in VTK format. X, Y and Z should be arrays of the same
             %  size, each storing speeds in the a single Cartesian directions.
-            if ((size(X) ~= size(Y)) | (size(X) ~= size(Z)))
+            if ((size(X) ~= size(Y)) || (size(X) ~= size(Z)))
                 fprint('Error: velocity arrays of unequal size\n'); return;
             end
             [nx, ny, nz] = size(X);

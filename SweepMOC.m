@@ -115,7 +115,6 @@ classdef SweepMOC < handle
                     
                     % Get azimuthal weight. 
                     w_a = weight_phi(obj.d_quadrature, a);
-%                     w_a = 1;
                     
                     % Get incident boundary fluxes for this angle.  These
                     % are in all polar angles
@@ -161,19 +160,12 @@ classdef SweepMOC < handle
 
                                 % Polar weight.
                                 w_p = weight_mu(obj.d_quadrature, p);
-%                                 w_p = 1;
-                               % psi_out(p, 1) = 1; psi_avg =1;
+
                                 % Integration of scalar flux.  When all
                                 % sweeps are done, this is equivalent to
                                 % e.g. Eq. 3.347 in Hebert.
                                 phi(r) = phi(r) +  w_a * w_p * ...
                                 	psi_avg * spacing * len * inv_volume(r);
-                                
-
-                                % 4*pi*V(r) for debugging.
-                                vol(r) = vol(r) +  psi_avg;% w_a * w_p * spacing * len;
-                                % Note, this *assumes* the spacing is
-                                % corrected!!
 
                             end % polar
 
@@ -187,40 +179,12 @@ classdef SweepMOC < handle
                     % Save outgoing flux vectors for this angle.
                     set_psi(obj.d_boundary, o, a, psi, OUT);
                 
-                end % azimuth
-                
+                end % azimuth 
      
             end
-           % disp('summed psi...')
-           % vol
-%             disp('---------')
+
         end
         
     end
-    
-    % Implementation
-    methods (Access = private)
-        
-        function bx = x_bounds(obj, o)
-        % function bx = x_bounds(obj, octant)
-        %   Return starting and ending x indices and the step
-            if obj.d_quadrature.octant(o, 1) == 1 
-                bx = [1 number_x(obj.d_quadrature) 1];
-            else
-                bx = [number_x(obj.d_quadrature) 1  -1];
-            end
-        end
-        
-        function by = y_bounds(obj, o)
-            if obj.d_quadrature.octant(o, 2) == 1 
-                by = [1 number_cells_y(obj.d_mesh) 1];
-            else
-                by = [number_cells_y(obj.d_mesh) 1 -1];
-            end
-        end
-        
-    end
-    
-    
     
 end
