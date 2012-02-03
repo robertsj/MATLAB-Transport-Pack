@@ -137,7 +137,7 @@ classdef Eigensolver
                 
                 % Save and update keff
                 k_eff_1 = k_eff;
-                k_eff   = k_eff_1 * sum(fd) / sum(fd_old);
+                k_eff   = k_eff_1 * max(fd) / max(fd_old);
                 
                 iteration = iteration + 1;
                 print_iteration(obj, iteration, sweeps, ...

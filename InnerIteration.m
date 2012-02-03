@@ -291,7 +291,10 @@ classdef InnerIteration < handle
         %   sweep.  Specifically, a *discrete* source is generated, i.e. the
         %   source appropriate for T*psi = Q.
             obj.d_g = g;
-            fprintf('          Group: %5i\n', g);
+            
+            if (get(obj.d_input, 'print_out'))
+                fprintf('          Group: %5i\n', g);
+            end
             
             obj.d_fixed_source(:) = 0;
             
@@ -355,10 +358,12 @@ classdef InnerIteration < handle
 
     
         function print_iteration(obj, it, e0, e1, e2)
-            fprintf('           Iter: %5i, Error: %12.8f\n', it, e0);
-            if it > 2
-                fprintf('                         Rate: %12.8f\n', ...
-                    (e0 - e1) / (e1 - e2));
+            if (get(obj.d_input, 'print_out'))
+                fprintf('           Iter: %5i, Error: %12.8f\n', it, e0);
+                if it > 2
+                    fprintf('                         Rate: %12.8f\n', ...
+                        (e0 - e1) / (e1 - e2));
+                end
             end
         end
        

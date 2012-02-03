@@ -160,25 +160,18 @@ classdef Mesh1D < Mesh
         end
         
         function plot_flux(obj, f)
-            [x, y] = mesh_axes(obj);
-            [X, Y] = meshgrid(x, y);
-            m = reshape(f, obj.d_number_cells_x, obj.d_number_cells_y);
-            M = zeros(length(x), length(y));
-            M(1:end-1, 1:end-1) = m;
-            pcolor(X, Y, M)
+            x = mesh_axes(obj);
+            plot(x, f, 'LineWidth', 2)
             xlabel('x [cm]')
-            ylabel('y [cm]')
-            colormap('jet'), colorbar
+            grid on
+            axis([0 x(end)+obj.d_dx(end)/2 0 max(f)*1.1])
         end
         
-        function [x, y] = mesh_axes(obj)
-            x = zeros(obj.d_number_cells_x + 1, 1);
-            y = zeros(obj.d_number_cells_y + 1, 1);
-            for i = 1:obj.d_number_cells_x
-                x(i + 1) = x(i) + obj.d_dx(i);
-            end
-            for i = 1:obj.d_number_cells_y
-                y(i + 1) = y(i) + obj.d_dy(i);
+        function x = mesh_axes(obj)
+            x = zeros(obj.d_number_cells_x, 1);
+            x(1) = obj.d_dx(1)/2;
+            for i = 2:obj.d_number_cells_x
+                x(i) = x(i-1) + 0.5*(obj.d_dx(i)+obj.d_dx(i-1));
             end
         end
         

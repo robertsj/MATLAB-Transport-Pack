@@ -119,8 +119,10 @@ classdef Fixed
                             solve(obj.d_inner_solver, g);%, obj.d_source);
                         
                         total_inners = total_inners + inners;
+                        
                         print_iteration(obj, iteration, flux_error, ...
                             total_inners)
+ 
                     end
                     iteration  = iteration + 1;
                     flux_error = max(flux_g_error);
@@ -133,10 +135,14 @@ classdef Fixed
         end
         
         function print_iteration(obj, iteration, flux_error, total_inners)
-            fprintf('-------------------------------------------------------\n')
-            fprintf('       Iter: %5i, Error: %12.8f, Inners: %5i\n',...
-                iteration, flux_error, total_inners);
-            fprintf('-------------------------------------------------------\n')
+            if (get(obj.d_input, 'print_out'))
+                fprintf(...
+                    '-------------------------------------------------------\n')
+                fprintf('       Iter: %5i, Error: %12.8f, Inners: %5i\n',...
+                    iteration, flux_error, total_inners);
+                fprintf(...
+                    '-------------------------------------------------------\n')
+            end
         end
         
         function reset_convergence(obj, max_iters, tolerance)

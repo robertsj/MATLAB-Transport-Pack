@@ -89,6 +89,24 @@ classdef Materials < handle
             obj.d_sigma_s(m, g, gp) = v;
         end
         
+        % Setters (vectorized)
+        
+        function obj = set_sigma_t_v(obj, m, v)
+            obj.d_sigma_t(m, :) = v;
+        end
+        
+        function obj = set_nu_sigma_v(obj, m, v)
+            obj.d_nu_sigma_f(m, :) = v;
+        end
+        
+        function obj = set_chi_v(obj, m, v)
+            obj.d_chi(m, :) = v;
+        end
+        
+        function obj = set_sigma_s_v(obj, m, v)
+            obj.d_sigma_s(m, :, :) = v;
+        end      
+        
         % Getters
         
         function y = sigma_t(obj, m, g)

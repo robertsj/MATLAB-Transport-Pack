@@ -1,5 +1,5 @@
-%> @file  C5G7.m
-%> @brief Two-dimensional, seven group transport benchmark problem.
+%> @file  C5G7_UO2_assembly.m
+%> @brief Solve the UO2 assembly of C5G7.
 
 clear all;
 plots = 0;
@@ -19,22 +19,21 @@ put(input, 'inner_solver',          'SI');
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  3);
 put(input, 'bc_left',               'reflect');
-put(input, 'bc_right',              'vacuum');
+put(input, 'bc_right',              'reflect');
 put(input, 'bc_top',                'reflect');
-put(input, 'bc_bottom',             'vacuum');
-input.number_groups = 2;
+put(input, 'bc_bottom',             'reflect');
 
 % ==============================================================================
 % MATERIALS (Test two group data)
 % ==============================================================================
-mat = C5G7_materials();
+mat = C5G7_materials(0);
 
 % ==============================================================================
 % PINS
 % ==============================================================================
 
 % Shared pin properties
-pitch = 1.26; radii = 0.54; number = 8;
+pitch = 1.26; radii = 0.54; number = 9;
 % Pin 1 - UO2 
 matid = [1 7];  pin1 = PinCell(pitch, radii, matid); meshify(pin1, number);
 % Pin 2 - 4.3% MOX
@@ -76,78 +75,26 @@ pin_map1 = [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
             1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 ];     
 assem1 = Assembly({pin1, pin2, pin3, pin4, pin5, pin6, pin7}, pin_map1); 
 meshify(assem1);
-% Assembly 2 - MOX
-pin_map2 = [2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
-            2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 2
-            2 3 3 3 3 G 3 3 G 3 3 G 3 3 3 3 2
-            2 3 3 G 3 4 4 4 4 4 4 4 3 G 3 3 2
-            2 3 3 3 4 4 4 4 4 4 4 4 4 3 3 3 2
-            2 3 G 4 4 G 4 4 G 4 4 G 4 4 G 3 2
-            2 3 3 4 4 4 4 4 4 4 4 4 4 4 3 3 2
-            2 3 3 4 4 4 4 4 4 4 4 4 4 4 3 3 2
-            2 3 G 4 4 G 4 4 F 4 4 G 4 4 G 3 2
-            2 3 3 4 4 4 4 4 4 4 4 4 4 4 3 3 2
-            2 3 3 4 4 4 4 4 4 4 4 4 4 4 3 3 2
-            2 3 G 4 4 G 4 4 G 4 4 G 4 4 G 3 2
-            2 3 3 3 4 4 4 4 4 4 4 4 4 3 3 3 2
-            2 3 3 G 3 4 4 4 4 4 4 4 3 G 3 3 2
-            2 3 3 3 3 G 3 3 G 3 3 G 3 3 3 3 2
-            2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 2
-            2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2];
 
-assem2 = Assembly({pin1, pin2, pin3, pin4, pin5, pin6, pin7}, pin_map2); 
-meshify(assem2);
-% Assembly 3 - Moderator
-pin_map3 = [7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-            7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-            7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-            7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-            7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-            7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-            7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-            7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-            7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-            7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-            7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-            7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-            7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-            7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-            7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-            7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
-            7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7];
-assem3 = Assembly({pin1, pin2, pin3, pin4, pin5, pin6, pin7}, pin_map3); 
-meshify(assem3);
 if plots
-    figure(4), plot_mesh_map(assem1, 'MATERIAL')
-    figure(5), plot_mesh_map(assem2, 'MATERIAL')
-    figure(6), plot_mesh_map(assem3, 'MATERIAL')
+    figure(1), plot_mesh_map(assem1, 'MATERIAL')
 end
-
-
-
-% ==============================================================================
-% CORE
-% ==============================================================================
-
-assembly_map = [ 1 2 3; 2 1 3; 3 3 3];
-core = Assembly({assem1, assem2, assem3}, assembly_map); meshify(core);
-if plots, figure(7), plot_mesh_map(core, 'MATERIAL'), end
-
+%return
 % ==============================================================================
 % SETUP 
 % ==============================================================================
-state       = State(input, core);
-quadrature  = QuadrupleRange(2);
-boundary    = BoundaryMesh(input, core, quadrature);
-q_e         = Source(core, 2);                  % Not initialized = not used.
-q_f         = FissionSource(state, core, mat);  % Inititalized = used.
+state       = State(input, assem1);
+quadrature  = QuadrupleRange(8);
+boundary    = BoundaryMesh(input, assem1, quadrature);
+q_e         = Source(assem1, 2);                  % Not initialized = not used.
+q_f         = FissionSource(state, assem1, mat);  % Inititalized = used.
 initialize(q_f);
 toc
 % ==============================================================================
 % SOLVE 
 % ==============================================================================
 tic
-solver = Eigensolver(input, state, boundary, core, mat, quadrature, q_e, q_f);
+solver = Eigensolver(input, state, boundary, assem1, mat, quadrature, q_e, q_f);
 toc
 tic
   out = solve(solver); 
@@ -156,5 +103,5 @@ toc
 % ==============================================================================
 % POSTPROCESS 
 % ==============================================================================
-VTK.savevtk(state, 2, mesh, 'c5g7_n8_qr2.vtk')
-save('c5g7_n8_qr2.mat')
+VTK.savevtk(state, 7, mesh, 'c5g7_uo2_n8_qr2.vtk')
+save('c5g7_uo2_n8_qr2.mat')

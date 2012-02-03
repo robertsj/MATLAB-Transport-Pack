@@ -1,7 +1,21 @@
 %> @file  test_eigenvalue_1D.m
 %> @brief Tests the eigenvalue solver on a 1D mesh.
 %
-%> Finish me.
+% Ilas cites the following results (S4):
+%
+%   Assembly     kinf
+%   ========   =========
+%      A       1.330098
+%      B       1.299289
+%      C       0.679513
+%      D       0.191268
+%
+%   Core     keff
+%   =====   =========
+%     1     1.258874
+%     2     1.006969
+%     3     0.804291
+%
 % ==============================================================================
 
 clear
@@ -18,8 +32,8 @@ put(input, 'inner_solver',          'SI');
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  3);
 input.number_groups = 2;
-put(input, 'bc_left',               'reflect');
-put(input, 'bc_right',              'reflect');
+put(input, 'bc_left',               'vacuum');
+put(input, 'bc_right',              'vacuum');
 
 % ==============================================================================
 % MATERIALS (Test two group data)
@@ -34,11 +48,11 @@ mat = test_materials(2);
 % Assembly coarse mesh edges
 base   = [ 1.1580 4.4790 7.8000 11.1210 14.4420 15.6000 ]; 
 % and fine mesh counts.
-basef  = [ 1 2 2 2 2 1 ]*2; 
+basef  = [ 1 2 2 2 2 1 ]*4; 
 % Several such assemblies to make the total coarse mesh definition
-xcm    = [ 0.0  base  base+15.6  base+15.6*2 base+15.6*3 ...
+xcm_c  = [ 0.0  base  base+15.6  base+15.6*2 base+15.6*3 ...
            base+15.6*4 base+15.6*5 base+15.6*6 ];
-xfm    = [ basef basef basef basef basef basef basef ];
+xfm_c  = [ basef basef basef basef basef basef basef ];
 xcm_a  = [ 0 base];
 xfm_a  = basef;
 
@@ -54,7 +68,7 @@ core_2 = [ assem_A assem_C assem_A assem_C assem_A assem_C assem_A ];
 core_3 = [ assem_A assem_D assem_A assem_D assem_A assem_D assem_A ];
 
 
-mesh = Mesh1D(xfm_a, xcm_a, assem_A);
+mesh = Mesh1D(xfm_c, xcm_c, core_1);
 
 
 % ==============================================================================
@@ -62,7 +76,7 @@ mesh = Mesh1D(xfm_a, xcm_a, assem_A);
 % ==============================================================================
 state       = State(input, mesh);
 quadrature  = GaussLegendre(4);
-boundary    = Boundary(input, mesh, quadrature);
+boundary    = BoundaryMesh(input, mesh, quadrature);
 q_e         = Source(mesh, 2);                  % Not initialized = not used.
 q_f         = FissionSource(state, mesh, mat);  % Inititalized = used.
 initialize(q_f);

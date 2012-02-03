@@ -1,8 +1,9 @@
-function mat = C5G7_materials()
+function mat = C5G7_materials(downscatter)
 
 % Create the Materials object.
 mat = Materials(7, ...  % groups
-                7);     % materials
+                7, ...
+                downscatter);     % materials
 
 % -----------------------------------------------------------------------------
 % (a) UO2 fuel-clad
@@ -26,12 +27,12 @@ set_sigma_t(mat, m, 7, 5.64406E-01);
 % set_sigma_a(mat, m, 7, 2.82780E-01);
 % Fission times nu
 set_nu_sigma_f(mat, m, 1, 7.21206E-03*2.78145E+00);
-set_nu_sigma_f(mat, m, 1, 8.19301E-04*2.47443E+00);
-set_nu_sigma_f(mat, m, 1, 6.45320E-03*2.43383E+00);
-set_nu_sigma_f(mat, m, 1, 1.85648E-02*2.43380E+00);
-set_nu_sigma_f(mat, m, 1, 1.78084E-02*2.43380E+00);
-set_nu_sigma_f(mat, m, 1, 8.30348E-02*2.43380E+00);
-set_nu_sigma_f(mat, m, 1, 2.16004E-01*2.43380E+00);
+set_nu_sigma_f(mat, m, 2, 8.19301E-04*2.47443E+00);
+set_nu_sigma_f(mat, m, 3, 6.45320E-03*2.43383E+00);
+set_nu_sigma_f(mat, m, 4, 1.85648E-02*2.43380E+00);
+set_nu_sigma_f(mat, m, 5, 1.78084E-02*2.43380E+00);
+set_nu_sigma_f(mat, m, 6, 8.30348E-02*2.43380E+00);
+set_nu_sigma_f(mat, m, 7, 2.16004E-01*2.43380E+00);
 % Fission spectrum
 set_chi(mat, m, 1, 5.87819E-01);
 set_chi(mat, m, 2, 4.11760E-01);
@@ -91,12 +92,12 @@ set_sigma_t(mat, m, 7, 6.82852E-01);
 % set_sigma_a(mat, m, 7, 4.09350E-01);
 % Fission times nu
 set_nu_sigma_f(mat, m, 1, 7.62704E-03*2.85209E+00);
-set_nu_sigma_f(mat, m, 1, 8.76898E-04*2.89099E+00);
-set_nu_sigma_f(mat, m, 1, 5.69835E-03*2.85486E+00);
-set_nu_sigma_f(mat, m, 1, 2.28872E-02*2.86073E+00);
-set_nu_sigma_f(mat, m, 1, 1.07635E-02*2.85447E+00);
-set_nu_sigma_f(mat, m, 1, 2.32757E-01*2.86415E+00);
-set_nu_sigma_f(mat, m, 1, 2.48968E-01*2.86780E+00);
+set_nu_sigma_f(mat, m, 2, 8.76898E-04*2.89099E+00);
+set_nu_sigma_f(mat, m, 3, 5.69835E-03*2.85486E+00);
+set_nu_sigma_f(mat, m, 4, 2.28872E-02*2.86073E+00);
+set_nu_sigma_f(mat, m, 5, 1.07635E-02*2.85447E+00);
+set_nu_sigma_f(mat, m, 6, 2.32757E-01*2.86415E+00);
+set_nu_sigma_f(mat, m, 7, 2.48968E-01*2.86780E+00);
 % Fission spectrum
 set_chi(mat, m, 1, 5.87819E-01);
 set_chi(mat, m, 2, 4.11760E-01);
@@ -156,12 +157,12 @@ set_sigma_t(mat, m, 7, 8.53603E-01);
 % set_sigma_a(mat, m, 7, 5.85210E-01);
 % Fission times nu
 set_nu_sigma_f(mat, m, 1, 8.25446E-03*2.88498E+00);
-set_nu_sigma_f(mat, m, 1, 1.32565E-03*2.91079E+00);
-set_nu_sigma_f(mat, m, 1, 8.42156E-03*2.86574E+00);
-set_nu_sigma_f(mat, m, 1, 3.28730E-02*2.87063E+00);
-set_nu_sigma_f(mat, m, 1, 1.59636E-02*2.86714E+00);
-set_nu_sigma_f(mat, m, 1, 3.23794E-01*2.86658E+00);
-set_nu_sigma_f(mat, m, 1, 3.62803E-01*2.87539E+00);
+set_nu_sigma_f(mat, m, 2, 1.32565E-03*2.91079E+00);
+set_nu_sigma_f(mat, m, 3, 8.42156E-03*2.86574E+00);
+set_nu_sigma_f(mat, m, 4, 3.28730E-02*2.87063E+00);
+set_nu_sigma_f(mat, m, 5, 1.59636E-02*2.86714E+00);
+set_nu_sigma_f(mat, m, 6, 3.23794E-01*2.86658E+00);
+set_nu_sigma_f(mat, m, 7, 3.62803E-01*2.87539E+00);
 % Fission spectrum
 set_chi(mat, m, 1, 5.87819E-01);
 set_chi(mat, m, 2, 4.11760E-01);
@@ -221,12 +222,12 @@ set_sigma_t(mat, m, 7, 9.55231E-01);
 % set_sigma_a(mat, m, 7, 6.90170E-01);
 % Fission times nu
 set_nu_sigma_f(mat, m, 1, 8.67209E-03*2.90426E+00);
-set_nu_sigma_f(mat, m, 1, 1.62426E-03*2.91795E+00);
-set_nu_sigma_f(mat, m, 1, 1.02716E-02*2.86986E+00);
-set_nu_sigma_f(mat, m, 1, 3.90447E-02*2.87491E+00);
-set_nu_sigma_f(mat, m, 1, 1.92576E-02*2.87175E+00);
-set_nu_sigma_f(mat, m, 1, 3.74888E-01*2.86752E+00);
-set_nu_sigma_f(mat, m, 1, 4.30599E-01*2.87808E+00);
+set_nu_sigma_f(mat, m, 2, 1.62426E-03*2.91795E+00);
+set_nu_sigma_f(mat, m, 3, 1.02716E-02*2.86986E+00);
+set_nu_sigma_f(mat, m, 4, 3.90447E-02*2.87491E+00);
+set_nu_sigma_f(mat, m, 5, 1.92576E-02*2.87175E+00);
+set_nu_sigma_f(mat, m, 6, 3.74888E-01*2.86752E+00);
+set_nu_sigma_f(mat, m, 7, 4.30599E-01*2.87808E+00);
 % Fission spectrum
 set_chi(mat, m, 1, 5.87819E-01);
 set_chi(mat, m, 2, 4.11760E-01);
@@ -286,12 +287,12 @@ set_sigma_t(mat, m, 7, 1.17214E+00);
 % set_sigma_a(mat, m, 7, 2.32440E-02);
 % Fission times nu
 set_nu_sigma_f(mat, m, 1, 4.79002E-09*2.76283E+00);
-set_nu_sigma_f(mat, m, 1, 5.82564E-09*2.46239E+00);
-set_nu_sigma_f(mat, m, 1, 4.63719E-07*2.43380E+00);
-set_nu_sigma_f(mat, m, 1, 5.24406E-06*2.43380E+00);
-set_nu_sigma_f(mat, m, 1, 1.45390E-07*2.43380E+00);
-set_nu_sigma_f(mat, m, 1, 7.14972E-07*2.43380E+00);
-set_nu_sigma_f(mat, m, 1, 2.08041E-06*2.43380E+00);
+set_nu_sigma_f(mat, m, 2, 5.82564E-09*2.46239E+00);
+set_nu_sigma_f(mat, m, 3, 4.63719E-07*2.43380E+00);
+set_nu_sigma_f(mat, m, 4, 5.24406E-06*2.43380E+00);
+set_nu_sigma_f(mat, m, 5, 1.45390E-07*2.43380E+00);
+set_nu_sigma_f(mat, m, 6, 7.14972E-07*2.43380E+00);
+set_nu_sigma_f(mat, m, 7, 2.08041E-06*2.43380E+00);
 % Fission spectrum
 set_chi(mat, m, 1, 5.87819E-01);
 set_chi(mat, m, 2, 4.11760E-01);
