@@ -23,6 +23,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
     </ul>
@@ -43,19 +44,22 @@
 <h1>Source Class Reference</h1>  </div>
 </div>
 <div class="contents">
-<!-- doxytag: class="Source" --><!-- doxytag: inherits="handle" --><div class="dynheader">
+<!-- doxytag: class="Source" --><!-- doxytag: inherits="handle" -->
+<p>External isotropic volume source.  
+<a href="#_details">More...</a></p>
+<div class="dynheader">
 Inheritance diagram for Source:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_source__inherit__graph.png" border="0" usemap="#_source_inherit__map" alt="Inheritance graph"/></div>
 <map name="_source_inherit__map" id="_source_inherit__map">
-<area shape="rect" id="node2" href="classhandle.html" title="{handle\n||}" alt="" coords="44,6,103,95"/></map>
+<area shape="rect" id="node2" href="classhandle.html" title="{handle\n||}" alt="" coords="52,6,111,95"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for Source:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_source__coll__graph.png" border="0" usemap="#_source_coll__map" alt="Collaboration graph"/></div>
 <map name="_source_coll__map" id="_source_coll__map">
-<area shape="rect" id="node2" href="classhandle.html" title="{handle\n||}" alt="" coords="5,6,64,95"/></map>
+<area shape="rect" id="node2" href="classhandle.html" title="{handle\n||}" alt="" coords="8,6,67,95"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="class_source-members.html">List of all members.</a></p>
@@ -63,8 +67,13 @@ Collaboration diagram for Source:</div>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_source.html#aa1d7d41969d8ec46a87f80ba487cb5f0">Source</a> (in mesh, in number_groups)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#aa1d7d41969d8ec46a87f80ba487cb5f0"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_source.html#ac986205a4084d9e1e0b66b7ebec6919d">set_sources</a> (in obj, in sources, in source_map)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set external sources.  <a href="#ac986205a4084d9e1e0b66b7ebec6919d"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_source.html#acae2462f185fd0054542d982b0f88c5a">set_sources_mesh</a> (in obj, in sources, in source_map)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set external sources on a fine mesh.  <a href="#acae2462f185fd0054542d982b0f88c5a"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_source.html#a52540ca88576639aa260886cc592f385">cell_source</a> (in obj, in i, in j, in g)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_source.html#a82f9c8f020f93656259e377ca9fdc022">region_source</a> (in obj, in r, in g)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_source.html#a50611cf6b8bff7c05fd206729e969381">source</a> (in obj, in g)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_source.html#a049f0be4557b6f3e48a0b7dc1431fcef">initialized</a> (in obj)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
@@ -76,7 +85,10 @@ Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_source.html#a3096ef3f10a8b4e84d47656097220e57">d_source_vec</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_source.html#a8410343e7ac75665543e39432d3b21d7">d_initialized</a></td></tr>
 </table>
-<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<hr/><a name="_details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>External isotropic volume source. </p>
+<p>More here... </p>
+</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="aa1d7d41969d8ec46a87f80ba487cb5f0"></a><!-- doxytag: member="Source::Source" ref="aa1d7d41969d8ec46a87f80ba487cb5f0" args="(in mesh, in number_groups)" -->
 <div class="memitem">
 <div class="memproto">
@@ -101,6 +113,17 @@ Public Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Class constructor. </p>
+<p>All boundary flux arrays are sized, and the boundary conditions are constructed for each surface.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mesh</td><td><a class="el" href="class_mesh.html" title="Base Cartesian mesh.">Mesh</a>. </td></tr>
+    <tr><td class="paramname">number_groups</td><td>Number of energy groups. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Instance of the <a class="el" href="class_source.html" title="External isotropic volume source.">Source</a> class. </dd></dl>
 
 </div>
 </div>
@@ -161,6 +184,39 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a82f9c8f020f93656259e377ca9fdc022"></a><!-- doxytag: member="Source::region_source" ref="a82f9c8f020f93656259e377ca9fdc022" args="(in obj, in r, in g)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function region_source </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>g</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ac986205a4084d9e1e0b66b7ebec6919d"></a><!-- doxytag: member="Source::set_sources" ref="ac986205a4084d9e1e0b66b7ebec6919d" args="(in obj, in sources, in source_map)" -->
 <div class="memitem">
 <div class="memproto">
@@ -191,6 +247,58 @@ Public Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Set external sources. </p>
+<p>The sources are defined in columns. Each column must be equal to the number of groups. The map is defined per coarse mesh or region. Note, if a region has no source, a zero strength must be defined. For the case of MOC, the the source map is a single vector arranged in the order of the regions. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sources</td><td>Unique source spectrum * strength </td></tr>
+    <tr><td class="paramname">source_map</td><td>Coarse mesh or region map of sources. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="acae2462f185fd0054542d982b0f88c5a"></a><!-- doxytag: member="Source::set_sources_mesh" ref="acae2462f185fd0054542d982b0f88c5a" args="(in obj, in sources, in source_map)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function set_sources_mesh </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>sources</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>source_map</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Set external sources on a fine mesh. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sources</td><td>Unique sources. </td></tr>
+    <tr><td class="paramname">source_map</td><td>Fine mesh map of sources. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -304,7 +412,7 @@ Public Attributes</h2></td></tr>
 <li>/home/robertsj/Research/matlab_transport_pack/source/<a class="el" href="_source_8m.html">Source.m</a></li>
 </ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Thu Jan 19 2012 17:24:45 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Feb 6 2012 18:00:34 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

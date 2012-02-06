@@ -1,4 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" id="node5" href="$class_d_d2_d.html" title="Diamond difference approximation in two dimensions." alt="" coords="5,433,123,634"/>
-<area shape="rect" id="node2" href="$classhandle.html" title="{handle\n||}" alt="" coords="35,6,93,95"/>
+<area shape="rect" id="node5" href="$class_d_d1_d.html" title="Diamond difference approximation in one dimension." alt="" coords="5,479,123,699"/>
+<area shape="rect" id="node7" href="$class_d_d2_d.html" title="Diamond difference approximation in two dimensions." alt="" coords="147,451,264,727"/>
+<area shape="rect" id="node9" href="$class_d_d_m_o_c.html" title="Diamond difference approximation for MOC." alt="" coords="288,507,405,671"/>
+<area shape="rect" id="node11" href="$class_s_c1_d.html" title="Step characteristic approximation in one dimension." alt="" coords="429,498,547,681"/>
+<area shape="rect" id="node13" href="$class_s_c_m_o_c.html" title="Step characteristic approximation for MOC." alt="" coords="571,507,688,671"/>
+<area shape="rect" id="node15" href="$class_s_d1_d.html" title="Diamond difference approximation in one dimension." alt="" coords="712,470,829,709"/>
+<area shape="rect" id="node2" href="$classhandle.html" title="{handle\n||}" alt="" coords="388,6,447,95"/>
 </map>

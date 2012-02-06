@@ -1,7 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="node5" href="$class_mesh1_d.html" title="1&#45;D Cartesian mesh." alt="" coords="5,843,139,1175"/>
-<area shape="rect" id="node7" href="$class_mesh2_d.html" title="2&#45;D Cartesian mesh." alt="" coords="163,927,296,1091"/>
-<area shape="rect" id="node2" href="$classhandle.html" title="{handle\n||}" alt="" coords="121,6,180,95"/>
-<area shape="rect" id="node9" href="$class_assembly.html" title="Represents reactor assembly of PinCell objects." alt="" coords="69,1281,219,1594"/>
-<area shape="rect" id="node11" href="$class_pin_cell.html" title="Represents reactor assembly pin in two dimensions." alt="" coords="243,1225,387,1650"/>
+<area shape="rect" id="node5" href="$class_mesh1_d.html" title="1&#45;D Cartesian mesh." alt="" coords="49,881,183,1213"/>
+<area shape="rect" id="node7" href="$class_mesh2_d.html" title="2&#45;D Cartesian mesh." alt="" coords="207,965,340,1129"/>
+<area shape="rect" id="node2" href="$classhandle.html" title="{handle\n||}" alt="" coords="165,6,224,95"/>
+<area shape="rect" id="node9" href="$class_assembly.html" title="Represents reactor assembly of PinCell objects." alt="" coords="5,1626,155,1939"/>
+<area shape="rect" id="node11" href="$class_core.html" title="Represents reactor Core." alt="" coords="179,1701,368,1865"/>
+<area shape="rect" id="node13" href="$class_pin_cell.html" title="Represents reactor assembly pin in two dimensions." alt="" coords="392,1262,547,2303"/>
 </map>

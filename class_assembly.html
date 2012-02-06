@@ -23,6 +23,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
     </ul>
@@ -52,14 +53,14 @@ Inheritance diagram for Assembly:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_assembly__inherit__graph.png" border="0" usemap="#_assembly_inherit__map" alt="Inheritance graph"/></div>
 <map name="_assembly_inherit__map" id="_assembly_inherit__map">
-<area shape="rect" id="node2" href="class_mesh2_d.html" title="2&#45;D Cartesian mesh." alt="" coords="13,843,147,1007"/><area shape="rect" id="node4" href="class_mesh.html" title="Base Cartesian mesh." alt="" coords="11,145,149,794"/><area shape="rect" id="node6" href="classhandle.html" title="{handle\n||}" alt="" coords="51,6,109,95"/></map>
+<area shape="rect" id="node2" href="class_mesh2_d.html" title="2&#45;D Cartesian mesh." alt="" coords="13,881,147,1045"/><area shape="rect" id="node4" href="class_mesh.html" title="Base Cartesian mesh." alt="" coords="11,145,149,831"/><area shape="rect" id="node6" href="classhandle.html" title="{handle\n||}" alt="" coords="51,6,109,95"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for Assembly:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_assembly__coll__graph.png" border="0" usemap="#_assembly_coll__map" alt="Collaboration graph"/></div>
 <map name="_assembly_coll__map" id="_assembly_coll__map">
-<area shape="rect" id="node2" href="class_mesh2_d.html" title="2&#45;D Cartesian mesh." alt="" coords="108,1142,241,1306"/><area shape="rect" id="node4" href="class_mesh.html" title="Base Cartesian mesh." alt="" coords="224,350,363,999"/><area shape="rect" id="node6" href="classhandle.html" title="{handle\n||}" alt="" coords="315,6,373,95"/></map>
+<area shape="rect" id="node2" href="class_mesh2_d.html" title="2&#45;D Cartesian mesh." alt="" coords="108,1179,241,1343"/><area shape="rect" id="node4" href="class_mesh.html" title="Base Cartesian mesh." alt="" coords="224,350,363,1037"/><area shape="rect" id="node6" href="classhandle.html" title="{handle\n||}" alt="" coords="315,6,373,95"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="class_assembly-members.html">List of all members.</a></p>
@@ -100,6 +101,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the cardinal index for i, j, and k.  <a href="#a994ba1991d6bdf654ea234e43c7be93e"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a9f08f658434ab144198c1dc4dcf9404a">mesh_map</a> (in obj, in map_key)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a mesh map.  <a href="#a9f08f658434ab144198c1dc4dcf9404a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a4cf2bbe751c8916d8e60111511ef5aad">meshed</a> (in obj)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Constant Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh2_d.html#a6b6a6ab6a827aec2cb2417c3e4cc981f">DIM</a> = 2</td></tr>
@@ -150,6 +152,8 @@ Protected Attributes</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of cells in y direction.  <a href="#afec3856c4a5ece7f32e9c820ca33bd38"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a771cbbf734a49cadfd195780c0f3e6a5">d_mesh_map</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Map container containing a key describing a mesh property and a fine mesh map defining the property in each cell.  <a href="#a771cbbf734a49cadfd195780c0f3e6a5"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#ae7042dccc61a2e067257714ded9ed6da">d_meshed</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating I'm meshed.  <a href="#ae7042dccc61a2e067257714ded9ed6da"></a><br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Represents reactor assembly of <a class="el" href="class_pin_cell.html">PinCell</a> objects. </p>
@@ -181,6 +185,13 @@ Protected Attributes</h2></td></tr>
 <div class="memdoc">
 
 <p>Class constructor. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pins</td><td>Cell array of pin objects. </td></tr>
+    <tr><td class="paramname">pin_map</td><td>2-D array of pin locations. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>Instance of the <a class="el" href="class_assembly.html" title="Represents reactor assembly of PinCell objects.">Assembly</a> class. </dd></dl>
 
 </div>
@@ -432,6 +443,23 @@ Protected Attributes</h2></td></tr>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The map. </dd></dl>
 
 <p>Reimplemented in <a class="el" href="class_mesh1_d.html#a9f08f658434ab144198c1dc4dcf9404a">Mesh1D</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4cf2bbe751c8916d8e60111511ef5aad"></a><!-- doxytag: member="Assembly::meshed" ref="a4cf2bbe751c8916d8e60111511ef5aad" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function meshed </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
 
 </div>
 </div>
@@ -742,6 +770,21 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae7042dccc61a2e067257714ded9ed6da"></a><!-- doxytag: member="Assembly::d_meshed" ref="ae7042dccc61a2e067257714ded9ed6da" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#ae7042dccc61a2e067257714ded9ed6da">d_meshed</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Flag indicating I'm meshed. </p>
+
+</div>
+</div>
 <a class="anchor" id="ae1d9d2e608dd551814e9886eb8a726d6"></a><!-- doxytag: member="Assembly::d_number_cells" ref="ae1d9d2e608dd551814e9886eb8a726d6" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -1049,7 +1092,7 @@ Protected Attributes</h2></td></tr>
 <li>/home/robertsj/Research/matlab_transport_pack/source/<a class="el" href="_assembly_8m.html">Assembly.m</a></li>
 </ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Thu Jan 19 2012 17:24:45 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Feb 6 2012 18:00:34 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

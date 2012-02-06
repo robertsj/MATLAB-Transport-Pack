@@ -23,6 +23,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
     </ul>
@@ -51,7 +52,7 @@ Inheritance diagram for State:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_state__inherit__graph.png" border="0" usemap="#_state_inherit__map" alt="Inheritance graph"/></div>
 <map name="_state_inherit__map" id="_state_inherit__map">
-<area shape="rect" id="node2" href="classhandle.html" title="{handle\n||}" alt="" coords="49,6,108,95"/></map>
+<area shape="rect" id="node2" href="classhandle.html" title="{handle\n||}" alt="" coords="43,6,101,95"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for State:</div>
@@ -67,11 +68,18 @@ Collaboration diagram for State:</div>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_state.html#a2dd3dfe96c6d9f8970b330ee1b275b4e">State</a> (in input, in mesh, in quadrature)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#a2dd3dfe96c6d9f8970b330ee1b275b4e"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_state.html#a8ba29bcc4073d9ff93d73988d7447d1b">flux</a> (in obj, in g)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_state.html#a47aa3bbb85d42a9882fdaed1593ea188">eigenvalue</a> (in obj)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_state.html#a04a146e5d706003020775d6c2004dabc">set_eigenvalue</a> (in obj, in eigenvalue)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_state.html#a3e5291d80168b81a27757fe737c4ebb8">set_phi</a> (in obj, in phi, in g)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_state.html#a7f8c872a641150512416aa757e1a6fbb">set_boundary_flux</a> (in obj, in dim, in psi, in a, in g)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_state.html#a87d4c06b2811fa3823dca95edaef2c0d">flux</a> (in this, in g)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a group flux vector.  <a href="#a87d4c06b2811fa3823dca95edaef2c0d"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_state.html#a583d8b80f101a41bfef201674660f451">eigenvalue</a> (in this)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the last computed eigenvalue.  <a href="#a583d8b80f101a41bfef201674660f451"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_state.html#a4a91c17a4a093555880e27a2561ceabc">boundary</a> (in this)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the boundary fluxes.  <a href="#a4a91c17a4a093555880e27a2561ceabc"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_state.html#a3808531735404dd4b0f4f8b6a577c3f0">set_phi</a> (in this, in phi, in g)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a group flux vector.  <a href="#a3808531735404dd4b0f4f8b6a577c3f0"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_state.html#afd564f6f2f29f9b2222e982fa8902d47">set_eigenvalue</a> (in this, in eigenvalue)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the eigenvalue.  <a href="#afd564f6f2f29f9b2222e982fa8902d47"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_state.html#a015fca3ee1816506a901462c568ce2a7">set_boundary</a> (in this, in boundary)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the boundary fluxes.  <a href="#a015fca3ee1816506a901462c568ce2a7"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_state.html#ad54eaebb82032d4e5889033a3a5600bb">d_phi</a></td></tr>
@@ -80,8 +88,10 @@ Private Attributes</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigenvalue.  <a href="#a3ef81ba2692f3c5afcbbb64a99b88454"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_state.html#a1d60598afe83dd4c518b6f698814686b">d_mesh</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_mesh.html" title="Base Cartesian mesh.">Mesh</a>.  <a href="#a1d60598afe83dd4c518b6f698814686b"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_state.html#a91c4d162ac63ed67b3593de798969c12">d_boundary_flux</a></td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Outgoing boundary fluxes. This is an array of cells, one per surface.  <a href="#a91c4d162ac63ed67b3593de798969c12"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_state.html#a76ed28b4b2c303c4668a3f5557e96149">d_boundary</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_boundary.html" title="Holds the incident and outgoing boundary fluxes.">Boundary</a> fluxes.  <a href="#a76ed28b4b2c303c4668a3f5557e96149"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_state.html#a800b3a7f99cd6c1047a3df374e2c2891">d_number_groups</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of groups.  <a href="#a800b3a7f99cd6c1047a3df374e2c2891"></a><br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Represents the state of the problem. </p>
@@ -133,7 +143,27 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a47aa3bbb85d42a9882fdaed1593ea188"></a><!-- doxytag: member="State::eigenvalue" ref="a47aa3bbb85d42a9882fdaed1593ea188" args="(in obj)" -->
+<a class="anchor" id="a4a91c17a4a093555880e27a2561ceabc"></a><!-- doxytag: member="State::boundary" ref="a4a91c17a4a093555880e27a2561ceabc" args="(in this)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function boundary </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>this</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Get the boundary fluxes. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Eigenvalue (i.e. keff) </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a583d8b80f101a41bfef201674660f451"></a><!-- doxytag: member="State::eigenvalue" ref="a583d8b80f101a41bfef201674660f451" args="(in this)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -141,16 +171,19 @@ Private Attributes</h2></td></tr>
           <td class="memname">function eigenvalue </td>
           <td>(</td>
           <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td class="paramname"><em>this</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
+<p>Get the last computed eigenvalue. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Eigenvalue (i.e. keff) </dd></dl>
+
 </div>
 </div>
-<a class="anchor" id="a8ba29bcc4073d9ff93d73988d7447d1b"></a><!-- doxytag: member="State::flux" ref="a8ba29bcc4073d9ff93d73988d7447d1b" args="(in obj, in g)" -->
+<a class="anchor" id="a87d4c06b2811fa3823dca95edaef2c0d"></a><!-- doxytag: member="State::flux" ref="a87d4c06b2811fa3823dca95edaef2c0d" args="(in this, in g)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -158,7 +191,7 @@ Private Attributes</h2></td></tr>
           <td class="memname">function flux </td>
           <td>(</td>
           <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>obj</em>, </td>
+          <td class="paramname"><em>this</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -175,41 +208,32 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p>Get a group flux vector. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">g</td><td>Energy group. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Flux vector for all cells. </dd></dl>
+
 </div>
 </div>
-<a class="anchor" id="a7f8c872a641150512416aa757e1a6fbb"></a><!-- doxytag: member="State::set_boundary_flux" ref="a7f8c872a641150512416aa757e1a6fbb" args="(in obj, in dim, in psi, in a, in g)" -->
+<a class="anchor" id="a015fca3ee1816506a901462c568ce2a7"></a><!-- doxytag: member="State::set_boundary" ref="a015fca3ee1816506a901462c568ce2a7" args="(in this, in boundary)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">function set_boundary_flux </td>
+          <td class="memname">function set_boundary </td>
           <td>(</td>
           <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>obj</em>, </td>
+          <td class="paramname"><em>this</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>dim</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>psi</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>a</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>g</em>&#160;</td>
+          <td class="paramname"><em>boundary</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -220,9 +244,17 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p>Set the boundary fluxes. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">boundary</td><td><a class="el" href="class_boundary.html" title="Holds the incident and outgoing boundary fluxes.">Boundary</a> flux object. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
-<a class="anchor" id="a04a146e5d706003020775d6c2004dabc"></a><!-- doxytag: member="State::set_eigenvalue" ref="a04a146e5d706003020775d6c2004dabc" args="(in obj, in eigenvalue)" -->
+<a class="anchor" id="afd564f6f2f29f9b2222e982fa8902d47"></a><!-- doxytag: member="State::set_eigenvalue" ref="afd564f6f2f29f9b2222e982fa8902d47" args="(in this, in eigenvalue)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -230,7 +262,7 @@ Private Attributes</h2></td></tr>
           <td class="memname">function set_eigenvalue </td>
           <td>(</td>
           <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>obj</em>, </td>
+          <td class="paramname"><em>this</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -247,9 +279,17 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p>Set the eigenvalue. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">eigenvalue</td><td>Eigenvalue estimate. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
-<a class="anchor" id="a3e5291d80168b81a27757fe737c4ebb8"></a><!-- doxytag: member="State::set_phi" ref="a3e5291d80168b81a27757fe737c4ebb8" args="(in obj, in phi, in g)" -->
+<a class="anchor" id="a3808531735404dd4b0f4f8b6a577c3f0"></a><!-- doxytag: member="State::set_phi" ref="a3808531735404dd4b0f4f8b6a577c3f0" args="(in this, in phi, in g)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -257,7 +297,7 @@ Private Attributes</h2></td></tr>
           <td class="memname">function set_phi </td>
           <td>(</td>
           <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>obj</em>, </td>
+          <td class="paramname"><em>this</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -280,21 +320,30 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p>Set a group flux vector. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">phi</td><td>Flux vector. </td></tr>
+    <tr><td class="paramname">g</td><td>Energy group. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <hr/><h2>Member Data Documentation</h2>
-<a class="anchor" id="a91c4d162ac63ed67b3593de798969c12"></a><!-- doxytag: member="State::d_boundary_flux" ref="a91c4d162ac63ed67b3593de798969c12" args="" -->
+<a class="anchor" id="a76ed28b4b2c303c4668a3f5557e96149"></a><!-- doxytag: member="State::d_boundary" ref="a76ed28b4b2c303c4668a3f5557e96149" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property <a class="el" href="class_state.html#a91c4d162ac63ed67b3593de798969c12">d_boundary_flux</a><code> [private]</code></td>
+          <td class="memname">Property <a class="el" href="class_state.html#a76ed28b4b2c303c4668a3f5557e96149">d_boundary</a><code> [private]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Outgoing boundary fluxes. This is an array of cells, one per surface. </p>
+<p><a class="el" href="class_boundary.html" title="Holds the incident and outgoing boundary fluxes.">Boundary</a> fluxes. </p>
 
 </div>
 </div>
@@ -328,6 +377,21 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a800b3a7f99cd6c1047a3df374e2c2891"></a><!-- doxytag: member="State::d_number_groups" ref="a800b3a7f99cd6c1047a3df374e2c2891" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_state.html#a800b3a7f99cd6c1047a3df374e2c2891">d_number_groups</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Number of groups. </p>
+
+</div>
+</div>
 <a class="anchor" id="ad54eaebb82032d4e5889033a3a5600bb"></a><!-- doxytag: member="State::d_phi" ref="ad54eaebb82032d4e5889033a3a5600bb" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -347,7 +411,7 @@ Private Attributes</h2></td></tr>
 <li>/home/robertsj/Research/matlab_transport_pack/source/<a class="el" href="_state_8m.html">State.m</a></li>
 </ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Thu Jan 19 2012 17:24:45 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Feb 6 2012 18:00:34 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

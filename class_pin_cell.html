@@ -23,6 +23,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
     </ul>
@@ -53,26 +54,44 @@ Inheritance diagram for PinCell:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_pin_cell__inherit__graph.png" border="0" usemap="#_pin_cell_inherit__map" alt="Inheritance graph"/></div>
 <map name="_pin_cell_inherit__map" id="_pin_cell_inherit__map">
-<area shape="rect" id="node2" href="class_mesh2_d.html" title="2&#45;D Cartesian mesh." alt="" coords="11,843,144,1007"/><area shape="rect" id="node4" href="class_mesh.html" title="Base Cartesian mesh." alt="" coords="8,145,147,794"/><area shape="rect" id="node6" href="classhandle.html" title="{handle\n||}" alt="" coords="48,6,107,95"/></map>
+<area shape="rect" id="node2" href="class_mesh2_d.html" title="2&#45;D Cartesian mesh." alt="" coords="16,881,149,1045"/><area shape="rect" id="node4" href="class_mesh.html" title="Base Cartesian mesh." alt="" coords="13,145,152,831"/><area shape="rect" id="node6" href="classhandle.html" title="{handle\n||}" alt="" coords="53,6,112,95"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for PinCell:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_pin_cell__coll__graph.png" border="0" usemap="#_pin_cell_coll__map" alt="Collaboration graph"/></div>
 <map name="_pin_cell_coll__map" id="_pin_cell_coll__map">
-<area shape="rect" id="node2" href="class_mesh2_d.html" title="2&#45;D Cartesian mesh." alt="" coords="101,1179,235,1343"/><area shape="rect" id="node4" href="class_mesh.html" title="Base Cartesian mesh." alt="" coords="217,350,356,999"/><area shape="rect" id="node6" href="classhandle.html" title="{handle\n||}" alt="" coords="308,6,367,95"/></map>
+<area shape="rect" id="node2" href="class_mesh2_d.html" title="2&#45;D Cartesian mesh." alt="" coords="115,1291,248,1455"/><area shape="rect" id="node4" href="class_mesh.html" title="Base Cartesian mesh." alt="" coords="231,350,369,1037"/><area shape="rect" id="node6" href="classhandle.html" title="{handle\n||}" alt="" coords="321,6,380,95"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="class_pin_cell-members.html">List of all members.</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#af055282d3bf373397f999add6853f3be">PinCell</a> (in pitch, in radii, in mat_map)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#af055282d3bf373397f999add6853f3be"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#afba9aab9731c563db3f2af2c562e63bf">PinCell</a> (in pitch, in radii, in mat_map, in subdiv)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#afba9aab9731c563db3f2af2c562e63bf"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#afb258942fc81d1294b068ae03e1d2926">meshify</a> (in obj, in number_meshes)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a mesh in the pin cell.  <a href="#afb258942fc81d1294b068ae03e1d2926"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#a8db2af995827c6e2fa2e67ed836cc1ce">track</a> (in obj, in q, in mat)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform tracking over the pin cell.  <a href="#a8db2af995827c6e2fa2e67ed836cc1ce"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#a1088baf164212147d5d5222bd8cf2fad">plot_pin</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Plot true geometry outline.  <a href="#a1088baf164212147d5d5222bd8cf2fad"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#ac6e44fbbe791b9c5708510132ad5a2c8">plot_mesh</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Plot the mesh.  <a href="#ac6e44fbbe791b9c5708510132ad5a2c8"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#a330a8c5924e39ac0f560646bc5fd05a1">plot_tracks</a> (in obj, in full)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Plot the tracks (180 degrees).  <a href="#a330a8c5924e39ac0f560646bc5fd05a1"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#aaea69d7c4f820bfb8e18184a3314f244">verify_tracks</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Verify the tracks.  <a href="#aaea69d7c4f820bfb8e18184a3314f244"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#a1078db34484fe241fb56b56823ee1e47">pitch</a> (in obj)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#ad50c43533e90237df00b6f98219d8bc3">radii</a> (in obj)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#af450ed552ae231f6836a13387c20de6b">tracked</a> (in obj)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#a923e3b0f007ad6d0c396924120a8f6a2">region_mat_map</a> (in obj)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#a3417c66aed634a5a272016b90f4733b7">region_volume</a> (in obj)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#a8824e84a0b45274f9ae5e550cfe66eb0">number_regions</a> (in obj)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#a3f8b6abb35dc0b676bcce1a2f8b91179">number_segments</a> (in obj, in m, in t)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#a44940d3c6600a5bba4e6a29135f07844">segment_length</a> (in obj, in m, in t, in i)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#ac65d798d3c5927821be5e004695080c1">segment_region</a> (in obj, in m, in t, in i)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#a9593d49e591cd7c9ec3266afe8cb62b0">space</a> (in obj, in m)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh2_d.html#a9bf054a9a8065e21f93ac319ceebed59">add_mesh_map</a> (in obj, in mesh_map, in map_key)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a map to the mesh.  <a href="#a9bf054a9a8065e21f93ac319ceebed59"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh2_d.html#a3b195e78297b940e9b45ebdd32a341b7">plot_mesh_map</a> (in obj, in mapkey)</td></tr>
@@ -101,6 +120,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the cardinal index for i, j, and k.  <a href="#a994ba1991d6bdf654ea234e43c7be93e"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a9f08f658434ab144198c1dc4dcf9404a">mesh_map</a> (in obj, in map_key)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a mesh map.  <a href="#a9f08f658434ab144198c1dc4dcf9404a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a4cf2bbe751c8916d8e60111511ef5aad">meshed</a> (in obj)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Constant Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh2_d.html#a6b6a6ab6a827aec2cb2417c3e4cc981f">DIM</a> = 2</td></tr>
@@ -125,6 +145,28 @@ Public Attributes</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Region material map.  <a href="#a50e84e0546fb126e18c09a39313f3ea3"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#aa7f2f3c2298be4a5e811a20e9da8dd38">d_region_volume</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Region volumes.  <a href="#aa7f2f3c2298be4a5e811a20e9da8dd38"></a><br/></td></tr>
+<tr><td colspan="2"><div class="groupHeader">Track Data</div></td></tr>
+<tr><td colspan="2"><div class="groupText"><p>Am I meshed? </p>
+</div></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#a576492aa09c5f2f835e08c022ca21e96">d_tracked</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Am I tracked&gt;  <a href="#a576492aa09c5f2f835e08c022ca21e96"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#ae403c267d85e827e85d343e1d2636f85">d_quadrature</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_quadrature.html" title="Base quadrature class.">Quadrature</a>.  <a href="#ae403c267d85e827e85d343e1d2636f85"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#a3f2f7b3628bb81323aaa8c5d373446bb">d_enter</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Entrance points for each angle.  <a href="#a3f2f7b3628bb81323aaa8c5d373446bb"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#ae6e3997b9a62374a889021fae0aba059">d_exit</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Exit points for each angle.  <a href="#ae6e3997b9a62374a889021fae0aba059"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#abb9ac500ac3c556a9e4a625f0875a597">d_space</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#ae2a1b0b0a87534fedfafbe617f8e09cb">d_track_width</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Track widths.  <a href="#ae2a1b0b0a87534fedfafbe617f8e09cb"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#a9ba9ee431ee08eab103944a952408722">d_segment_length</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Segment lengths, in order of tracking (and sweep)  <a href="#a9ba9ee431ee08eab103944a952408722"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#a5dd1b0f4371ec5a5caebf6f07da047b1">d_segment_region</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Segment region index.  <a href="#a5dd1b0f4371ec5a5caebf6f07da047b1"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#ac0189188ba11db7a99554551848b552c">d_segment_coef</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Segment exponential coefficients. (Not used yet).  <a href="#ac0189188ba11db7a99554551848b552c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#a6d6ab06f3e8ebfa710b7d72ec362bdae">d_number_segments</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of segments by (angle, track). For debugging.  <a href="#a6d6ab06f3e8ebfa710b7d72ec362bdae"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a80a211deedd49812f5e068c35a2fcdd6">d_xcm</a></td></tr>
@@ -155,17 +197,20 @@ Protected Attributes</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of cells in y direction.  <a href="#afec3856c4a5ece7f32e9c820ca33bd38"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a771cbbf734a49cadfd195780c0f3e6a5">d_mesh_map</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Map container containing a key describing a mesh property and a fine mesh map defining the property in each cell.  <a href="#a771cbbf734a49cadfd195780c0f3e6a5"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#ae7042dccc61a2e067257714ded9ed6da">d_meshed</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating I'm meshed.  <a href="#ae7042dccc61a2e067257714ded9ed6da"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#a3a917492abff7d0020d64c3d73201397">find_region</a> (in obj, in i, in j)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine in what region a mesh center resides.  <a href="#a3a917492abff7d0020d64c3d73201397"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#a3e1e8396aab82cdfc5aedf0d6d7ef6ef">col</a> (in g)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pin_cell.html#a7386118bdf97d249a4cfb986efca1bca">col</a> (in obj, in g)</td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Represents reactor assembly pin in two dimensions. </p>
-<p>More here. </p>
+<p>This class represents a pin cell, including its geometry and associated materials definition. Currently, only a single square coolant region is allowed with a possible central pin with one or more concentric regions.</p>
+<p>The <a class="el" href="class_pin_cell.html" title="Represents reactor assembly pin in two dimensions.">PinCell</a> class can be used as a mesh for discrete ordinates calculations via the <a class="el" href="class_pin_cell.html#afb258942fc81d1294b068ae03e1d2926">meshify</a> routine, as <a class="el" href="class_pin_cell.html" title="Represents reactor assembly pin in two dimensions.">PinCell</a> inherits from <a class="el" href="class_mesh2_d.html" title="2-D Cartesian mesh.">Mesh2D</a>. Additionally, <a class="el" href="class_pin_cell.html" title="Represents reactor assembly pin in two dimensions.">PinCell</a> has a built in tracking routine for solution by the method of characteristics. The tracking is limited to four way rotation symmetry. </p>
 </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="af055282d3bf373397f999add6853f3be"></a><!-- doxytag: member="PinCell::PinCell" ref="af055282d3bf373397f999add6853f3be" args="(in pitch, in radii, in mat_map)" -->
+<a class="anchor" id="afba9aab9731c563db3f2af2c562e63bf"></a><!-- doxytag: member="PinCell::PinCell" ref="afba9aab9731c563db3f2af2c562e63bf" args="(in pitch, in radii, in mat_map, in subdiv)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -185,7 +230,13 @@ Private Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>mat_map</em>&#160;</td>
+          <td class="paramname"><em>mat_map</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>subdiv</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -198,11 +249,13 @@ Private Member Functions</h2></td></tr>
 
 <p>Class constructor. </p>
 <p>The user specifies the box size and the radii of pins. An empty radius vector ("[]") indicates a homogeneous cell. The radii must be given from smallest to largest. A vector of material identifiers must also be given. The size of this must be equal to the number of regions defined by the box and radii. The are arranged in-to-out.</p>
+<p>Finally, the user can subdivide the domain. This a level of 0 does nothing. A level of 1 divides the domain along the the x and y axes (though the origin. A level of 2 adds dividing planes at +/- 45 degrees through the origin.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">pitch</td><td>Pin cell width </td></tr>
     <tr><td class="paramname">radii</td><td>Fuel pin radii, if any. </td></tr>
     <tr><td class="paramname">mat_map</td><td>Material identifiers for each region. </td></tr>
+    <tr><td class="paramname">subdiv</td><td>Level of subcell division. </td></tr>
   </table>
   </dd>
 </dl>
@@ -253,7 +306,7 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3e1e8396aab82cdfc5aedf0d6d7ef6ef"></a><!-- doxytag: member="PinCell::col" ref="a3e1e8396aab82cdfc5aedf0d6d7ef6ef" args="(in g)" -->
+<a class="anchor" id="a7386118bdf97d249a4cfb986efca1bca"></a><!-- doxytag: member="PinCell::col" ref="a7386118bdf97d249a4cfb986efca1bca" args="(in obj, in g)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -261,8 +314,18 @@ Private Member Functions</h2></td></tr>
           <td class="memname">function col </td>
           <td>(</td>
           <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>g</em></td><td>)</td>
-          <td><code> [private]</code></td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>g</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [private]</code></td>
         </tr>
       </table>
 </div>
@@ -520,6 +583,23 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a4cf2bbe751c8916d8e60111511ef5aad"></a><!-- doxytag: member="PinCell::meshed" ref="a4cf2bbe751c8916d8e60111511ef5aad" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function meshed </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="afb258942fc81d1294b068ae03e1d2926"></a><!-- doxytag: member="PinCell::meshify" ref="afb258942fc81d1294b068ae03e1d2926" args="(in obj, in number_meshes)" -->
 <div class="memitem">
 <div class="memproto">
@@ -642,6 +722,56 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a8824e84a0b45274f9ae5e550cfe66eb0"></a><!-- doxytag: member="PinCell::number_regions" ref="a8824e84a0b45274f9ae5e550cfe66eb0" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function number_regions </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3f8b6abb35dc0b676bcce1a2f8b91179"></a><!-- doxytag: member="PinCell::number_segments" ref="a3f8b6abb35dc0b676bcce1a2f8b91179" args="(in obj, in m, in t)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function number_segments </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>t</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a1078db34484fe241fb56b56823ee1e47"></a><!-- doxytag: member="PinCell::pitch" ref="a1078db34484fe241fb56b56823ee1e47" args="(in obj)" -->
 <div class="memitem">
 <div class="memproto">
@@ -694,6 +824,25 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ac6e44fbbe791b9c5708510132ad5a2c8"></a><!-- doxytag: member="PinCell::plot_mesh" ref="ac6e44fbbe791b9c5708510132ad5a2c8" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function plot_mesh </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Plot the mesh. </p>
+
+</div>
+</div>
 <a class="anchor" id="a3b195e78297b940e9b45ebdd32a341b7"></a><!-- doxytag: member="PinCell::plot_mesh_map" ref="a3b195e78297b940e9b45ebdd32a341b7" args="(in obj, in mapkey)" -->
 <div class="memitem">
 <div class="memproto">
@@ -743,6 +892,271 @@ Private Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Plot true geometry outline. </p>
+
+</div>
+</div>
+<a class="anchor" id="a330a8c5924e39ac0f560646bc5fd05a1"></a><!-- doxytag: member="PinCell::plot_tracks" ref="a330a8c5924e39ac0f560646bc5fd05a1" args="(in obj, in full)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function plot_tracks </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>full</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Plot the tracks (180 degrees). </p>
+
+</div>
+</div>
+<a class="anchor" id="ad50c43533e90237df00b6f98219d8bc3"></a><!-- doxytag: member="PinCell::radii" ref="ad50c43533e90237df00b6f98219d8bc3" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function radii </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a923e3b0f007ad6d0c396924120a8f6a2"></a><!-- doxytag: member="PinCell::region_mat_map" ref="a923e3b0f007ad6d0c396924120a8f6a2" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function region_mat_map </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3417c66aed634a5a272016b90f4733b7"></a><!-- doxytag: member="PinCell::region_volume" ref="a3417c66aed634a5a272016b90f4733b7" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function region_volume </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a44940d3c6600a5bba4e6a29135f07844"></a><!-- doxytag: member="PinCell::segment_length" ref="a44940d3c6600a5bba4e6a29135f07844" args="(in obj, in m, in t, in i)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function segment_length </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>i</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac65d798d3c5927821be5e004695080c1"></a><!-- doxytag: member="PinCell::segment_region" ref="ac65d798d3c5927821be5e004695080c1" args="(in obj, in m, in t, in i)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function segment_region </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>i</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9593d49e591cd7c9ec3266afe8cb62b0"></a><!-- doxytag: member="PinCell::space" ref="a9593d49e591cd7c9ec3266afe8cb62b0" args="(in obj, in m)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function space </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>m</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8db2af995827c6e2fa2e67ed836cc1ce"></a><!-- doxytag: member="PinCell::track" ref="a8db2af995827c6e2fa2e67ed836cc1ce" args="(in obj, in q, in mat)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function track </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>q</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>mat</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Perform tracking over the pin cell. </p>
+<p>This is a crude approach that given a number of meshes, a regular grid is defined. <a class="el" href="class_mesh.html" title="Base Cartesian mesh.">Mesh</a> materials are defined as the material in the mid point of a fine mesh. An alternative would be to define new materials via volume homogenization.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">q</td><td>MOC quadrature </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="af450ed552ae231f6836a13387c20de6b"></a><!-- doxytag: member="PinCell::tracked" ref="af450ed552ae231f6836a13387c20de6b" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function tracked </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aaea69d7c4f820bfb8e18184a3314f244"></a><!-- doxytag: member="PinCell::verify_tracks" ref="aaea69d7c4f820bfb8e18184a3314f244" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function verify_tracks </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Verify the tracks. </p>
 
 </div>
 </div>
@@ -842,6 +1256,36 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a3f2f7b3628bb81323aaa8c5d373446bb"></a><!-- doxytag: member="PinCell::d_enter" ref="a3f2f7b3628bb81323aaa8c5d373446bb" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_pin_cell.html#a3f2f7b3628bb81323aaa8c5d373446bb">d_enter</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Entrance points for each angle. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae6e3997b9a62374a889021fae0aba059"></a><!-- doxytag: member="PinCell::d_exit" ref="ae6e3997b9a62374a889021fae0aba059" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_pin_cell.html#ae6e3997b9a62374a889021fae0aba059">d_exit</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Exit points for each angle. </p>
+
+</div>
+</div>
 <a class="anchor" id="a771cbbf734a49cadfd195780c0f3e6a5"></a><!-- doxytag: member="PinCell::d_mesh_map" ref="a771cbbf734a49cadfd195780c0f3e6a5" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -855,6 +1299,21 @@ Private Member Functions</h2></td></tr>
 
 <p>Map container containing a key describing a mesh property and a fine mesh map defining the property in each cell. </p>
 <p>These properties include materials, coarse mesh regions (pins, assembly, fuel, moderator, etc.), and anything else the user wants to edit. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae7042dccc61a2e067257714ded9ed6da"></a><!-- doxytag: member="PinCell::d_meshed" ref="ae7042dccc61a2e067257714ded9ed6da" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#ae7042dccc61a2e067257714ded9ed6da">d_meshed</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Flag indicating I'm meshed. </p>
 
 </div>
 </div>
@@ -948,6 +1407,21 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a6d6ab06f3e8ebfa710b7d72ec362bdae"></a><!-- doxytag: member="PinCell::d_number_segments" ref="a6d6ab06f3e8ebfa710b7d72ec362bdae" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_pin_cell.html#a6d6ab06f3e8ebfa710b7d72ec362bdae">d_number_segments</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Number of segments by (angle, track). For debugging. </p>
+
+</div>
+</div>
 <a class="anchor" id="a0657bbe3bb3ba7cf2f196c10f7e59632"></a><!-- doxytag: member="PinCell::d_pitch" ref="a0657bbe3bb3ba7cf2f196c10f7e59632" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -960,6 +1434,21 @@ Private Member Functions</h2></td></tr>
 <div class="memdoc">
 
 <p>Pin cell pitch (i.e. width) </p>
+
+</div>
+</div>
+<a class="anchor" id="ae403c267d85e827e85d343e1d2636f85"></a><!-- doxytag: member="PinCell::d_quadrature" ref="ae403c267d85e827e85d343e1d2636f85" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_pin_cell.html#ae403c267d85e827e85d343e1d2636f85">d_quadrature</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p><a class="el" href="class_quadrature.html" title="Base quadrature class.">Quadrature</a>. </p>
 
 </div>
 </div>
@@ -1005,6 +1494,94 @@ Private Member Functions</h2></td></tr>
 <div class="memdoc">
 
 <p>Region volumes. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac0189188ba11db7a99554551848b552c"></a><!-- doxytag: member="PinCell::d_segment_coef" ref="ac0189188ba11db7a99554551848b552c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_pin_cell.html#ac0189188ba11db7a99554551848b552c">d_segment_coef</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Segment exponential coefficients. (Not used yet). </p>
+
+</div>
+</div>
+<a class="anchor" id="a9ba9ee431ee08eab103944a952408722"></a><!-- doxytag: member="PinCell::d_segment_length" ref="a9ba9ee431ee08eab103944a952408722" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_pin_cell.html#a9ba9ee431ee08eab103944a952408722">d_segment_length</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Segment lengths, in order of tracking (and sweep) </p>
+
+</div>
+</div>
+<a class="anchor" id="a5dd1b0f4371ec5a5caebf6f07da047b1"></a><!-- doxytag: member="PinCell::d_segment_region" ref="a5dd1b0f4371ec5a5caebf6f07da047b1" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_pin_cell.html#a5dd1b0f4371ec5a5caebf6f07da047b1">d_segment_region</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Segment region index. </p>
+
+</div>
+</div>
+<a class="anchor" id="abb9ac500ac3c556a9e4a625f0875a597"></a><!-- doxytag: member="PinCell::d_space" ref="abb9ac500ac3c556a9e4a625f0875a597" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_pin_cell.html#abb9ac500ac3c556a9e4a625f0875a597">d_space</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae2a1b0b0a87534fedfafbe617f8e09cb"></a><!-- doxytag: member="PinCell::d_track_width" ref="ae2a1b0b0a87534fedfafbe617f8e09cb" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_pin_cell.html#ae2a1b0b0a87534fedfafbe617f8e09cb">d_track_width</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Track widths. </p>
+
+</div>
+</div>
+<a class="anchor" id="a576492aa09c5f2f835e08c022ca21e96"></a><!-- doxytag: member="PinCell::d_tracked" ref="a576492aa09c5f2f835e08c022ca21e96" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_pin_cell.html#a576492aa09c5f2f835e08c022ca21e96">d_tracked</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Am I tracked&gt; </p>
 
 </div>
 </div>
@@ -1180,7 +1757,7 @@ Private Member Functions</h2></td></tr>
 <li>/home/robertsj/Research/matlab_transport_pack/source/<a class="el" href="_pin_cell_8m.html">PinCell.m</a></li>
 </ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Thu Jan 19 2012 17:24:45 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Feb 6 2012 18:00:34 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

@@ -23,6 +23,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
     </ul>
@@ -52,7 +53,7 @@ Inheritance diagram for Equation:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_equation__inherit__graph.png" border="0" usemap="#_equation_inherit__map" alt="Inheritance graph"/></div>
 <map name="_equation_inherit__map" id="_equation_inherit__map">
-<area shape="rect" id="node5" href="class_d_d2_d.html" title="Diamond difference approximation in two dimensions." alt="" coords="5,433,123,634"/><area shape="rect" id="node2" href="classhandle.html" title="{handle\n||}" alt="" coords="35,6,93,95"/></map>
+<area shape="rect" id="node5" href="class_d_d1_d.html" title="Diamond difference approximation in one dimension." alt="" coords="5,479,123,699"/><area shape="rect" id="node7" href="class_d_d2_d.html" title="Diamond difference approximation in two dimensions." alt="" coords="147,451,264,727"/><area shape="rect" id="node9" href="class_d_d_m_o_c.html" title="Diamond difference approximation for MOC." alt="" coords="288,507,405,671"/><area shape="rect" id="node11" href="class_s_c1_d.html" title="Step characteristic approximation in one dimension." alt="" coords="429,498,547,681"/><area shape="rect" id="node13" href="class_s_c_m_o_c.html" title="Step characteristic approximation for MOC." alt="" coords="571,507,688,671"/><area shape="rect" id="node15" href="class_s_d1_d.html" title="Diamond difference approximation in one dimension." alt="" coords="712,470,829,709"/><area shape="rect" id="node2" href="classhandle.html" title="{handle\n||}" alt="" coords="388,6,447,95"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for Equation:</div>
@@ -66,8 +67,8 @@ Collaboration diagram for Equation:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_equation.html#af250afa10c5df1e76c461b11bd9de314">Equation</a> (in mesh, in mat)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#af250afa10c5df1e76c461b11bd9de314"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_equation.html#a4a7225b274096a01f664aa954418f66b">Equation</a> (in mesh, in mat, in quadrature)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#a4a7225b274096a01f664aa954418f66b"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Constant Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_equation.html#a271876d1abda75424c350f97d5a886a2">HORZ</a> = 1</td></tr>
@@ -78,6 +79,8 @@ Protected Attributes</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Problem mesh.  <a href="#a1d60598afe83dd4c518b6f698814686b"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_equation.html#a6713318a4ce4406dea21e7c7b3c82453">d_mat</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Material definitions.  <a href="#a6713318a4ce4406dea21e7c7b3c82453"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_equation.html#ae403c267d85e827e85d343e1d2636f85">d_quadrature</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_quadrature.html" title="Base quadrature class.">Quadrature</a>.  <a href="#ae403c267d85e827e85d343e1d2636f85"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_equation.html#a1b17c063033b5527a6e240dae7bfaf65">d_mu</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Current mu value.  <a href="#a1b17c063033b5527a6e240dae7bfaf65"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_equation.html#a2d238b755fab51c1d050139aba47c605">d_eta</a></td></tr>
@@ -93,7 +96,7 @@ Protected Attributes</h2></td></tr>
 <div class="textblock"><p>Base equation class for spatial discretization. </p>
 <p>More... </p>
 </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="af250afa10c5df1e76c461b11bd9de314"></a><!-- doxytag: member="Equation::Equation" ref="af250afa10c5df1e76c461b11bd9de314" args="(in mesh, in mat)" -->
+<a class="anchor" id="a4a7225b274096a01f664aa954418f66b"></a><!-- doxytag: member="Equation::Equation" ref="a4a7225b274096a01f664aa954418f66b" args="(in mesh, in mat, in quadrature)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -107,7 +110,13 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>mat</em>&#160;</td>
+          <td class="paramname"><em>mat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>quadrature</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -237,6 +246,21 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae403c267d85e827e85d343e1d2636f85"></a><!-- doxytag: member="Equation::d_quadrature" ref="ae403c267d85e827e85d343e1d2636f85" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_equation.html#ae403c267d85e827e85d343e1d2636f85">d_quadrature</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p><a class="el" href="class_quadrature.html" title="Base quadrature class.">Quadrature</a>. </p>
+
+</div>
+</div>
 <a class="anchor" id="a271876d1abda75424c350f97d5a886a2"></a><!-- doxytag: member="Equation::HORZ" ref="a271876d1abda75424c350f97d5a886a2" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -267,7 +291,7 @@ Protected Attributes</h2></td></tr>
 <li>/home/robertsj/Research/matlab_transport_pack/source/<a class="el" href="_equation_8m.html">Equation.m</a></li>
 </ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Thu Jan 19 2012 17:24:45 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Feb 6 2012 18:00:34 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

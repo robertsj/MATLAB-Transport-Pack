@@ -23,6 +23,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
     </ul>
@@ -53,14 +54,14 @@ Inheritance diagram for Mesh2D:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_mesh2_d__inherit__graph.png" border="0" usemap="#_mesh2_d_inherit__map" alt="Inheritance graph"/></div>
 <map name="_mesh2_d_inherit__map" id="_mesh2_d_inherit__map">
-<area shape="rect" id="node7" href="class_assembly.html" title="Represents reactor assembly of PinCell objects." alt="" coords="5,1113,155,1426"/><area shape="rect" id="node9" href="class_pin_cell.html" title="Represents reactor assembly pin in two dimensions." alt="" coords="179,1057,323,1482"/><area shape="rect" id="node2" href="class_mesh.html" title="Base Cartesian mesh." alt="" coords="96,145,235,794"/><area shape="rect" id="node4" href="classhandle.html" title="{handle\n||}" alt="" coords="136,6,195,95"/></map>
+<area shape="rect" id="node7" href="class_assembly.html" title="Represents reactor assembly of PinCell objects." alt="" coords="5,1458,155,1771"/><area shape="rect" id="node9" href="class_core.html" title="Represents reactor Core." alt="" coords="179,1533,368,1697"/><area shape="rect" id="node11" href="class_pin_cell.html" title="Represents reactor assembly pin in two dimensions." alt="" coords="392,1094,547,2135"/><area shape="rect" id="node2" href="class_mesh.html" title="Base Cartesian mesh." alt="" coords="204,145,343,831"/><area shape="rect" id="node4" href="classhandle.html" title="{handle\n||}" alt="" coords="244,6,303,95"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for Mesh2D:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_mesh2_d__coll__graph.png" border="0" usemap="#_mesh2_d_coll__map" alt="Collaboration graph"/></div>
 <map name="_mesh2_d_coll__map" id="_mesh2_d_coll__map">
-<area shape="rect" id="node2" href="class_mesh.html" title="Base Cartesian mesh." alt="" coords="9,350,148,999"/><area shape="rect" id="node4" href="classhandle.html" title="{handle\n||}" alt="" coords="5,6,64,95"/></map>
+<area shape="rect" id="node2" href="class_mesh.html" title="Base Cartesian mesh." alt="" coords="9,350,148,1037"/><area shape="rect" id="node4" href="classhandle.html" title="{handle\n||}" alt="" coords="5,6,64,95"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="class_mesh2_d-members.html">List of all members.</a></p>
@@ -97,6 +98,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the cardinal index for i, j, and k.  <a href="#a994ba1991d6bdf654ea234e43c7be93e"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a9f08f658434ab144198c1dc4dcf9404a">mesh_map</a> (in obj, in map_key)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a mesh map.  <a href="#a9f08f658434ab144198c1dc4dcf9404a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a4cf2bbe751c8916d8e60111511ef5aad">meshed</a> (in obj)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Constant Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh2_d.html#a6b6a6ab6a827aec2cb2417c3e4cc981f">DIM</a> = 2</td></tr>
@@ -136,6 +138,8 @@ Protected Attributes</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of cells in y direction.  <a href="#afec3856c4a5ece7f32e9c820ca33bd38"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a771cbbf734a49cadfd195780c0f3e6a5">d_mesh_map</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Map container containing a key describing a mesh property and a fine mesh map defining the property in each cell.  <a href="#a771cbbf734a49cadfd195780c0f3e6a5"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#ae7042dccc61a2e067257714ded9ed6da">d_meshed</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating I'm meshed.  <a href="#ae7042dccc61a2e067257714ded9ed6da"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh2_d.html#a0c6bf1945a45d80c15d230fbcf0bece5">mesh_axes</a> (in obj)</td></tr>
@@ -474,6 +478,23 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a4cf2bbe751c8916d8e60111511ef5aad"></a><!-- doxytag: member="Mesh2D::meshed" ref="a4cf2bbe751c8916d8e60111511ef5aad" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function meshed </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a9d97c6189b4cee252abff1282aa8be54"></a><!-- doxytag: member="Mesh2D::number_cells" ref="a9d97c6189b4cee252abff1282aa8be54" args="(in obj)" -->
 <div class="memitem">
 <div class="memproto">
@@ -727,6 +748,21 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae7042dccc61a2e067257714ded9ed6da"></a><!-- doxytag: member="Mesh2D::d_meshed" ref="ae7042dccc61a2e067257714ded9ed6da" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#ae7042dccc61a2e067257714ded9ed6da">d_meshed</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Flag indicating I'm meshed. </p>
+
+</div>
+</div>
 <a class="anchor" id="ae1d9d2e608dd551814e9886eb8a726d6"></a><!-- doxytag: member="Mesh2D::d_number_cells" ref="ae1d9d2e608dd551814e9886eb8a726d6" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -959,7 +995,7 @@ Private Member Functions</h2></td></tr>
 <li>/home/robertsj/Research/matlab_transport_pack/source/<a class="el" href="_mesh2_d_8m.html">Mesh2D.m</a></li>
 </ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Thu Jan 19 2012 17:24:45 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Feb 6 2012 18:00:34 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

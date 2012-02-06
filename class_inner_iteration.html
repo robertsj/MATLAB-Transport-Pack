@@ -23,6 +23,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
     </ul>
@@ -52,7 +53,7 @@ Inheritance diagram for InnerIteration:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_inner_iteration__inherit__graph.png" border="0" usemap="#_inner_iteration_inherit__map" alt="Inheritance graph"/></div>
 <map name="_inner_iteration_inherit__map" id="_inner_iteration_inherit__map">
-<area shape="rect" id="node5" href="class_g_m_r_e_s_iteration.html" title="Source iteration for inner iterations." alt="" coords="5,769,141,914"/><area shape="rect" id="node7" href="class_livolant.html" title="Livolant acceleration for inner iterations." alt="" coords="165,694,331,989"/><area shape="rect" id="node9" href="class_source_iteration.html" title="Source iteration for inner iterations." alt="" coords="355,778,485,905"/><area shape="rect" id="node2" href="classhandle.html" title="{handle\n||}" alt="" coords="219,6,277,95"/></map>
+<area shape="rect" id="node5" href="class_g_m_r_e_s_iteration.html" title="Source iteration for inner iterations." alt="" coords="5,787,141,933"/><area shape="rect" id="node7" href="class_livolant.html" title="Livolant acceleration for inner iterations." alt="" coords="165,713,331,1007"/><area shape="rect" id="node9" href="class_source_iteration.html" title="Source iteration for inner iterations." alt="" coords="355,797,485,923"/><area shape="rect" id="node2" href="classhandle.html" title="{handle\n||}" alt="" coords="219,6,277,95"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for InnerIteration:</div>
@@ -68,10 +69,12 @@ Collaboration diagram for InnerIteration:</div>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a9665f88f4f8b1457d6c091bebc7722eb">InnerIteration</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#a9665f88f4f8b1457d6c091bebc7722eb"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#af7b93c14b899518d490715b30a039261">reset_convergence</a> (in obj, in max_iters, in tolerance)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Solve the within-group problem.  <a href="#af7b93c14b899518d490715b30a039261"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a20b1a39e3eb630cb842f75f0f79d729e">setup_base</a> (in obj, in)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Solve the within-group problem.  <a href="#a20b1a39e3eb630cb842f75f0f79d729e"></a><br/></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup the base solver.  <a href="#a20b1a39e3eb630cb842f75f0f79d729e"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a0ad796ae32fde3a06e7d0e44b18a4f96">initialize_scatter</a> (in obj)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Prebuild scattering matrix for each cell.  <a href="#a0ad796ae32fde3a06e7d0e44b18a4f96"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a3fc92e0fed95a5ce566f1f0fef25617a">build_scatter_source</a> (in obj, in g, in phi)</td></tr>
@@ -83,13 +86,21 @@ Protected Member Functions</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#abc4c1c33f348e1785b286dd07ff598e9">d_input</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">User input.  <a href="#abc4c1c33f348e1785b286dd07ff598e9"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a38eee99b593eb74e0865fd7e08aa068c">d_state</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_state.html" title="Represents the state of the problem.">State</a> vectors.  <a href="#a38eee99b593eb74e0865fd7e08aa068c"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a76ed28b4b2c303c4668a3f5557e96149">d_boundary</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_boundary.html" title="Holds the incident and outgoing boundary fluxes.">Boundary</a> fluxes.  <a href="#a76ed28b4b2c303c4668a3f5557e96149"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a1d60598afe83dd4c518b6f698814686b">d_mesh</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Problem mesh (either Cartesian mesh or MOC tracking)  <a href="#a1d60598afe83dd4c518b6f698814686b"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a6713318a4ce4406dea21e7c7b3c82453">d_mat</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_materials.html">Materials</a> definitions.  <a href="#a6713318a4ce4406dea21e7c7b3c82453"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#ae403c267d85e827e85d343e1d2636f85">d_quadrature</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Angular mesh.  <a href="#ae403c267d85e827e85d343e1d2636f85"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a7a2fcc3c6c24a9733333c98d0f63f72c">d_equation</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Spatial discretization.  <a href="#a7a2fcc3c6c24a9733333c98d0f63f72c"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#a6e008b8b78d0143c216d1286a134b295">d_sweeper</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Sweeper over the space-angle domain.  <a href="#a6e008b8b78d0143c216d1286a134b295"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#ae86a46e183bf9e376def5751925ef97e">d_external_source</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">User-defined external source.  <a href="#ae86a46e183bf9e376def5751925ef97e"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_inner_iteration.html#ad6f82336625e3ac7774f2bdca1a637ee">d_fission_source</a></td></tr>
@@ -343,6 +354,55 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="af7b93c14b899518d490715b30a039261"></a><!-- doxytag: member="InnerIteration::reset_convergence" ref="af7b93c14b899518d490715b30a039261" args="(in obj, in max_iters, in tolerance)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function reset_convergence </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>max_iters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>tolerance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Solve the within-group problem. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">g</td><td>Group of the problem to be solved.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Flux residual (L-inf norm) and iteration count. Reset convergence criteria. It can be useful to use a dynamically changing convergence criteria, especially for eigenproblems. For regular power iteration, it is wasteful to use tight tolerances on the inners when the source is not as tightly known.</dd></dl>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">max_iters</td><td>Maximum number of iterations. </td></tr>
+    <tr><td class="paramname">tolerance</td><td>Maximum point-wise error in flux </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a20b1a39e3eb630cb842f75f0f79d729e"></a><!-- doxytag: member="InnerIteration::setup_base" ref="a20b1a39e3eb630cb842f75f0f79d729e" args="(in obj, in)" -->
 <div class="memitem">
 <div class="memproto">
@@ -368,14 +428,8 @@ Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Solve the within-group problem. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">g</td><td>Group of the problem to be solved.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>Flux residual (L-inf norm) and iteration count. Setup the base solver. By keeping everything out of the constructor, we can avoid having to copy the signature for all derived classes, both in their definitions and whereever objects are instantiated. However, derived classes have other setup issues that need to be done, and so this serves as a general setup function that <em>must</em> be called before other setup stuff.</dd></dl>
+<p>Setup the base solver. </p>
+<p>By keeping everything out of the constructor, we can avoid having to copy the signature for all derived classes, both in their definitions and whereever objects are instantiated. However, derived classes have other setup issues that need to be done, and so this serves as a general setup function that <em>must</em> be called before other setup stuff.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">input</td><td><a class="el" href="class_input.html" title="Stores and processes user input from a driver script.">Input</a> database. </td></tr>
@@ -404,6 +458,8 @@ Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p><a class="el" href="class_boundary.html" title="Holds the incident and outgoing boundary fluxes.">Boundary</a> fluxes. </p>
+
 </div>
 </div>
 <a class="anchor" id="a7a2fcc3c6c24a9733333c98d0f63f72c"></a><!-- doxytag: member="InnerIteration::d_equation" ref="a7a2fcc3c6c24a9733333c98d0f63f72c" args="" -->
@@ -416,6 +472,8 @@ Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Spatial discretization. </p>
 
 </div>
 </div>
@@ -488,6 +546,8 @@ Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p>User input. </p>
+
 </div>
 </div>
 <a class="anchor" id="a7425d5935105d1b50919d9ff54305b3b"></a><!-- doxytag: member="InnerIteration::d_M" ref="a7425d5935105d1b50919d9ff54305b3b" args="" -->
@@ -516,6 +576,8 @@ Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p><a class="el" href="class_materials.html">Materials</a> definitions. </p>
+
 </div>
 </div>
 <a class="anchor" id="a159b3efc31946f48d126625403c25d75"></a><!-- doxytag: member="InnerIteration::d_max_iters" ref="a159b3efc31946f48d126625403c25d75" args="" -->
@@ -542,6 +604,8 @@ Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p>Problem mesh (either Cartesian mesh or MOC tracking) </p>
+
 </div>
 </div>
 <a class="anchor" id="ae403c267d85e827e85d343e1d2636f85"></a><!-- doxytag: member="InnerIteration::d_quadrature" ref="ae403c267d85e827e85d343e1d2636f85" args="" -->
@@ -554,6 +618,8 @@ Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Angular mesh. </p>
 
 </div>
 </div>
@@ -598,6 +664,8 @@ Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p><a class="el" href="class_state.html" title="Represents the state of the problem.">State</a> vectors. </p>
+
 </div>
 </div>
 <a class="anchor" id="a6e008b8b78d0143c216d1286a134b295"></a><!-- doxytag: member="InnerIteration::d_sweeper" ref="a6e008b8b78d0143c216d1286a134b295" args="" -->
@@ -610,6 +678,8 @@ Protected Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Sweeper over the space-angle domain. </p>
 
 </div>
 </div>
@@ -630,7 +700,7 @@ Protected Attributes</h2></td></tr>
 <li>/home/robertsj/Research/matlab_transport_pack/source/<a class="el" href="_inner_iteration_8m.html">InnerIteration.m</a></li>
 </ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Thu Jan 19 2012 17:24:45 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Feb 6 2012 18:00:34 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

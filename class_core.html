@@ -23,6 +23,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
     </ul>
@@ -37,42 +38,999 @@
 </div>
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a>  </div>
   <div class="headertitle">
 <h1>Core Class Reference</h1>  </div>
 </div>
 <div class="contents">
-<!-- doxytag: class="Core" -->
+<!-- doxytag: class="Core" --><!-- doxytag: inherits="Mesh2D" -->
 <p>Represents reactor <a class="el" href="class_core.html" title="Represents reactor Core.">Core</a>.  
 <a href="#_details">More...</a></p>
+<div class="dynheader">
+Inheritance diagram for Core:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_core__inherit__graph.png" border="0" usemap="#_core_inherit__map" alt="Inheritance graph"/></div>
+<map name="_core_inherit__map" id="_core_inherit__map">
+<area shape="rect" id="node2" href="class_mesh2_d.html" title="2&#45;D Cartesian mesh." alt="" coords="33,881,167,1045"/><area shape="rect" id="node4" href="class_mesh.html" title="Base Cartesian mesh." alt="" coords="31,145,169,831"/><area shape="rect" id="node6" href="classhandle.html" title="{handle\n||}" alt="" coords="71,6,129,95"/></map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for Core:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_core__coll__graph.png" border="0" usemap="#_core_coll__map" alt="Collaboration graph"/></div>
+<map name="_core_coll__map" id="_core_coll__map">
+<area shape="rect" id="node2" href="class_mesh2_d.html" title="2&#45;D Cartesian mesh." alt="" coords="159,1161,292,1325"/><area shape="rect" id="node4" href="class_mesh.html" title="Base Cartesian mesh." alt="" coords="275,350,413,1037"/><area shape="rect" id="node6" href="classhandle.html" title="{handle\n||}" alt="" coords="365,6,424,95"/></map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="class_core-members.html">List of all members.</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_core.html#a54007c437be4abf021b0d716ebeba771">Core</a> ()</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#a54007c437be4abf021b0d716ebeba771"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_core.html#afb00f1e7a51d7ad04fa0d44aa106f45c">Core</a> (in assemblies, in assembly_map)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#afb00f1e7a51d7ad04fa0d44aa106f45c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_core.html#a29ca74e3a200aa1ff1ae0c52f15b8372">meshify</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a mesh over the core.  <a href="#a29ca74e3a200aa1ff1ae0c52f15b8372"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh2_d.html#a9bf054a9a8065e21f93ac319ceebed59">add_mesh_map</a> (in obj, in mesh_map, in map_key)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a map to the mesh.  <a href="#a9bf054a9a8065e21f93ac319ceebed59"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh2_d.html#a3b195e78297b940e9b45ebdd32a341b7">plot_mesh_map</a> (in obj, in mapkey)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Plot a mesh map on the mesh.  <a href="#a3b195e78297b940e9b45ebdd32a341b7"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh2_d.html#a92b8a659bd7da9e20b3b72ba7a689335">plot_flux</a> (in obj, in f)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Plot a given flux or flux-shaped vector on the mesh.  <a href="#a92b8a659bd7da9e20b3b72ba7a689335"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a742d7d0a568874170ceda75ba0adac12">widths</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get cell array of width vectors.  <a href="#a742d7d0a568874170ceda75ba0adac12"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a141c16b51fda77109bd81e7dd8476bbb">dx</a> (in obj, in i)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Width along x-axis for a cell.  <a href="#a141c16b51fda77109bd81e7dd8476bbb"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#aea0ab5a5d5efe5d35b650ca9ad8e521e">dy</a> (in obj, in i)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Width along y-axis for a cell.  <a href="#aea0ab5a5d5efe5d35b650ca9ad8e521e"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a670287db3c0acebabf067144b731b119">dz</a> (in obj, in i)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Width along z-axis for a cell.  <a href="#a670287db3c0acebabf067144b731b119"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a9d97c6189b4cee252abff1282aa8be54">number_cells</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the total number of cells.  <a href="#a9d97c6189b4cee252abff1282aa8be54"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a363d0e4855d63ee7b5af97811855fdc2">number_cells_x</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of cells along the x axis.  <a href="#a363d0e4855d63ee7b5af97811855fdc2"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a77503ffc4fc12219c55d6c55b2425ecb">number_cells_y</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of cells along the y axis.  <a href="#a77503ffc4fc12219c55d6c55b2425ecb"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a4786e6e6e6d9244b76f66bfc83857003">number_cells_z</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of cells along the z axis.  <a href="#a4786e6e6e6d9244b76f66bfc83857003"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a0a4d6ca4a4949a1e3098a462a0aee57c">dim</a> (in obj, in i)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of cells along the an axis.  <a href="#a0a4d6ca4a4949a1e3098a462a0aee57c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a994ba1991d6bdf654ea234e43c7be93e">index</a> (in obj, in i, in j, in k)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the cardinal index for i, j, and k.  <a href="#a994ba1991d6bdf654ea234e43c7be93e"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a9f08f658434ab144198c1dc4dcf9404a">mesh_map</a> (in obj, in map_key)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a mesh map.  <a href="#a9f08f658434ab144198c1dc4dcf9404a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a4cf2bbe751c8916d8e60111511ef5aad">meshed</a> (in obj)</td></tr>
+<tr><td colspan="2"><h2><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_core.html#a06b68fc4414a75996abd85094ebd611f">d_assembly</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Cell array of assembly objects.  <a href="#a06b68fc4414a75996abd85094ebd611f"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_core.html#ac05f9641c66c93412879e987760ae33b">d_assembly_map</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of assembly locations.  <a href="#ac05f9641c66c93412879e987760ae33b"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_core.html#ae8392f8b56a18253db2af728f3f8a862">d_number_assemblies_row</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of assemblies per row.  <a href="#ae8392f8b56a18253db2af728f3f8a862"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_core.html#afb5948de76991dcffdf34246e96a2b15">d_number_assemblies</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Total number of assemblies.  <a href="#afb5948de76991dcffdf34246e96a2b15"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Constant Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh2_d.html#a6b6a6ab6a827aec2cb2417c3e4cc981f">DIM</a> = 2</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Constant Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#aa7e9caff0fe286a2640463b57039cfcb">LEFT</a> = 1</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Constant Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a59453dc0c0d6adf13e26ed611d5709b6">RIGHT</a> = 2</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Constant Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a1ce0288a4c69628ff423645a5242ba6f">BOTTOM</a> = 3</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Constant Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a2d01c516796d8d6b04d0ea71bad97117">TOP</a> = 4</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Constant Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a2f23633dd3e38a9a3ac771540bb4de3e">SOUTH</a> = 5</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Constant Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#af05f59cee6f575301a58e05826e4a843">NORTH</a> = 6</td></tr>
+<tr><td colspan="2"><h2><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a80a211deedd49812f5e068c35a2fcdd6">d_xcm</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">x coarse mesh boundaries  <a href="#a80a211deedd49812f5e068c35a2fcdd6"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#adb15c5937c5ef1444bfca8d2f43f71e9">d_ycm</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">y coarse mesh boundaries  <a href="#adb15c5937c5ef1444bfca8d2f43f71e9"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a79d714514041a94b5e8f2f6b6cd6eaaa">d_zcm</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">z coarse mesh boundaries  <a href="#a79d714514041a94b5e8f2f6b6cd6eaaa"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a1ec26b0b8b1f0c9c8e3eeb9d919d9709">d_xfm</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">x fine meshes in each x coarse mesh  <a href="#a1ec26b0b8b1f0c9c8e3eeb9d919d9709"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a7d5f5c159ef37436dedbfcf0fdb429dd">d_yfm</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">y fine meshes in each y coarse mesh  <a href="#a7d5f5c159ef37436dedbfcf0fdb429dd"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#aba0d8e14cf856aa6fa987add25e1fc02">d_zfm</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">z fine meshes in each y coarse mesh  <a href="#aba0d8e14cf856aa6fa987add25e1fc02"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a9a994a076c83fe686b912ca908f3fd01">d_dx</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">x widths  <a href="#a9a994a076c83fe686b912ca908f3fd01"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#acccd139b056ae599a5814b0afda32392">d_dy</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">y widths  <a href="#acccd139b056ae599a5814b0afda32392"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a9b5217d1dd1d0e2ccb8787fd3ac480da">d_dz</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">z widths  <a href="#a9b5217d1dd1d0e2ccb8787fd3ac480da"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#ae1d9d2e608dd551814e9886eb8a726d6">d_number_cells</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Total number of cells.  <a href="#ae1d9d2e608dd551814e9886eb8a726d6"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#ae5b1294f875104e41cf73b04d51e50b7">d_number_cells_x</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of cells in x direction.  <a href="#ae5b1294f875104e41cf73b04d51e50b7"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#ae948037f2557b7efed00478f26d623fc">d_number_cells_y</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of cells in y direction.  <a href="#ae948037f2557b7efed00478f26d623fc"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#afec3856c4a5ece7f32e9c820ca33bd38">d_number_cells_z</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of cells in y direction.  <a href="#afec3856c4a5ece7f32e9c820ca33bd38"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#a771cbbf734a49cadfd195780c0f3e6a5">d_mesh_map</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Map container containing a key describing a mesh property and a fine mesh map defining the property in each cell.  <a href="#a771cbbf734a49cadfd195780c0f3e6a5"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mesh.html#ae7042dccc61a2e067257714ded9ed6da">d_meshed</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating I'm meshed.  <a href="#ae7042dccc61a2e067257714ded9ed6da"></a><br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Represents reactor <a class="el" href="class_core.html" title="Represents reactor Core.">Core</a>. </p>
 <p>More here. </p>
 </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a54007c437be4abf021b0d716ebeba771"></a><!-- doxytag: member="Core::Core" ref="a54007c437be4abf021b0d716ebeba771" args="()" -->
+<a class="anchor" id="afb00f1e7a51d7ad04fa0d44aa106f45c"></a><!-- doxytag: member="Core::Core" ref="afb00f1e7a51d7ad04fa0d44aa106f45c" args="(in assemblies, in assembly_map)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">function <a class="el" href="class_core.html">Core</a> </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>assemblies</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>assembly_map</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>Class constructor. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">assemblies</td><td>Cell array of pin objects. </td></tr>
+    <tr><td class="paramname">assembly_map</td><td>2-D array of pin locations. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>Instance of the <a class="el" href="class_core.html" title="Represents reactor Core.">Core</a> class. </dd></dl>
+
+</div>
+</div>
+<hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a9bf054a9a8065e21f93ac319ceebed59"></a><!-- doxytag: member="Core::add_mesh_map" ref="a9bf054a9a8065e21f93ac319ceebed59" args="(in obj, in mesh_map, in map_key)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function add_mesh_map </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>mesh_map</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>map_key</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Add a map to the mesh. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mesh_map</td><td>Map on the coarse mesh. </td></tr>
+    <tr><td class="paramname">map_key</td><td>Key (descriptor) for this map. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a0a4d6ca4a4949a1e3098a462a0aee57c"></a><!-- doxytag: member="Core::dim" ref="a0a4d6ca4a4949a1e3098a462a0aee57c" args="(in obj, in i)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function dim </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>i</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Get the number of cells along the an axis. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Number of cells. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_mesh1_d.html#a0a4d6ca4a4949a1e3098a462a0aee57c">Mesh1D</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a141c16b51fda77109bd81e7dd8476bbb"></a><!-- doxytag: member="Core::dx" ref="a141c16b51fda77109bd81e7dd8476bbb" args="(in obj, in i)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function dx </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>i</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Width along x-axis for a cell. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Width. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_mesh1_d.html#a141c16b51fda77109bd81e7dd8476bbb">Mesh1D</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aea0ab5a5d5efe5d35b650ca9ad8e521e"></a><!-- doxytag: member="Core::dy" ref="aea0ab5a5d5efe5d35b650ca9ad8e521e" args="(in obj, in i)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function dy </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>i</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Width along y-axis for a cell. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Width. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_mesh1_d.html#aea0ab5a5d5efe5d35b650ca9ad8e521e">Mesh1D</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a670287db3c0acebabf067144b731b119"></a><!-- doxytag: member="Core::dz" ref="a670287db3c0acebabf067144b731b119" args="(in obj, in i)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function dz </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>i</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Width along z-axis for a cell. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Width. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a994ba1991d6bdf654ea234e43c7be93e"></a><!-- doxytag: member="Core::index" ref="a994ba1991d6bdf654ea234e43c7be93e" args="(in obj, in i, in j, in k)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function index </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>i</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>j</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>k</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns the cardinal index for i, j, and k. </p>
+<p>For efficiency, the client may want to hardcode the indexing into their routine, as this is suboptimal within a loop.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Index. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a9f08f658434ab144198c1dc4dcf9404a"></a><!-- doxytag: member="Core::mesh_map" ref="a9f08f658434ab144198c1dc4dcf9404a" args="(in obj, in map_key)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function mesh_map </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>map_key</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Get a mesh map. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mesh_key</td><td>A mesh map key. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The map. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_mesh1_d.html#a9f08f658434ab144198c1dc4dcf9404a">Mesh1D</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4cf2bbe751c8916d8e60111511ef5aad"></a><!-- doxytag: member="Core::meshed" ref="a4cf2bbe751c8916d8e60111511ef5aad" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function meshed </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a29ca74e3a200aa1ff1ae0c52f15b8372"></a><!-- doxytag: member="Core::meshify" ref="a29ca74e3a200aa1ff1ae0c52f15b8372" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function meshify </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Construct a mesh over the core. </p>
+<p>Using the underlying pin assembly meshes, this constructs a core mesh. The assembly mesh maps are translated to the assembly. More work will be to differentiate pins. </p>
+
+</div>
+</div>
+<a class="anchor" id="a9d97c6189b4cee252abff1282aa8be54"></a><!-- doxytag: member="Core::number_cells" ref="a9d97c6189b4cee252abff1282aa8be54" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function number_cells </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Get the total number of cells. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Number of cells. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_mesh1_d.html#a9d97c6189b4cee252abff1282aa8be54">Mesh1D</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a363d0e4855d63ee7b5af97811855fdc2"></a><!-- doxytag: member="Core::number_cells_x" ref="a363d0e4855d63ee7b5af97811855fdc2" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function number_cells_x </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Get the number of cells along the x axis. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Number of cells. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_mesh1_d.html#a363d0e4855d63ee7b5af97811855fdc2">Mesh1D</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a77503ffc4fc12219c55d6c55b2425ecb"></a><!-- doxytag: member="Core::number_cells_y" ref="a77503ffc4fc12219c55d6c55b2425ecb" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function number_cells_y </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Get the number of cells along the y axis. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Number of cells. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_mesh1_d.html#a77503ffc4fc12219c55d6c55b2425ecb">Mesh1D</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4786e6e6e6d9244b76f66bfc83857003"></a><!-- doxytag: member="Core::number_cells_z" ref="a4786e6e6e6d9244b76f66bfc83857003" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function number_cells_z </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Get the number of cells along the z axis. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Number of cells. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a92b8a659bd7da9e20b3b72ba7a689335"></a><!-- doxytag: member="Core::plot_flux" ref="a92b8a659bd7da9e20b3b72ba7a689335" args="(in obj, in f)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function plot_flux </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>f</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Plot a given flux or flux-shaped vector on the mesh. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">f</td><td>A vector of values that live on the mesh. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a3b195e78297b940e9b45ebdd32a341b7"></a><!-- doxytag: member="Core::plot_mesh_map" ref="a3b195e78297b940e9b45ebdd32a341b7" args="(in obj, in mapkey)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function plot_mesh_map </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>mapkey</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Plot a mesh map on the mesh. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_key</td><td>A mesh map key. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a742d7d0a568874170ceda75ba0adac12"></a><!-- doxytag: member="Core::widths" ref="a742d7d0a568874170ceda75ba0adac12" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function widths </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Get cell array of width vectors. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Cell array of width vectors. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_mesh1_d.html#a742d7d0a568874170ceda75ba0adac12">Mesh1D</a>.</p>
+
+</div>
+</div>
+<hr/><h2>Member Data Documentation</h2>
+<a class="anchor" id="a1ce0288a4c69628ff423645a5242ba6f"></a><!-- doxytag: member="Core::BOTTOM" ref="a1ce0288a4c69628ff423645a5242ba6f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Constant Property <a class="el" href="class_mesh.html#a1ce0288a4c69628ff423645a5242ba6f">BOTTOM</a> = 3<code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a06b68fc4414a75996abd85094ebd611f"></a><!-- doxytag: member="Core::d_assembly" ref="a06b68fc4414a75996abd85094ebd611f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_core.html#a06b68fc4414a75996abd85094ebd611f">d_assembly</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Cell array of assembly objects. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac05f9641c66c93412879e987760ae33b"></a><!-- doxytag: member="Core::d_assembly_map" ref="ac05f9641c66c93412879e987760ae33b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_core.html#ac05f9641c66c93412879e987760ae33b">d_assembly_map</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Array of assembly locations. </p>
+
+</div>
+</div>
+<a class="anchor" id="a9a994a076c83fe686b912ca908f3fd01"></a><!-- doxytag: member="Core::d_dx" ref="a9a994a076c83fe686b912ca908f3fd01" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#a9a994a076c83fe686b912ca908f3fd01">d_dx</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>x widths </p>
+
+</div>
+</div>
+<a class="anchor" id="acccd139b056ae599a5814b0afda32392"></a><!-- doxytag: member="Core::d_dy" ref="acccd139b056ae599a5814b0afda32392" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#acccd139b056ae599a5814b0afda32392">d_dy</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>y widths </p>
+
+</div>
+</div>
+<a class="anchor" id="a9b5217d1dd1d0e2ccb8787fd3ac480da"></a><!-- doxytag: member="Core::d_dz" ref="a9b5217d1dd1d0e2ccb8787fd3ac480da" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#a9b5217d1dd1d0e2ccb8787fd3ac480da">d_dz</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>z widths </p>
+
+</div>
+</div>
+<a class="anchor" id="a771cbbf734a49cadfd195780c0f3e6a5"></a><!-- doxytag: member="Core::d_mesh_map" ref="a771cbbf734a49cadfd195780c0f3e6a5" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#a771cbbf734a49cadfd195780c0f3e6a5">d_mesh_map</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Map container containing a key describing a mesh property and a fine mesh map defining the property in each cell. </p>
+<p>These properties include materials, coarse mesh regions (pins, assembly, fuel, moderator, etc.), and anything else the user wants to edit. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae7042dccc61a2e067257714ded9ed6da"></a><!-- doxytag: member="Core::d_meshed" ref="ae7042dccc61a2e067257714ded9ed6da" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#ae7042dccc61a2e067257714ded9ed6da">d_meshed</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Flag indicating I'm meshed. </p>
+
+</div>
+</div>
+<a class="anchor" id="afb5948de76991dcffdf34246e96a2b15"></a><!-- doxytag: member="Core::d_number_assemblies" ref="afb5948de76991dcffdf34246e96a2b15" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_core.html#afb5948de76991dcffdf34246e96a2b15">d_number_assemblies</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Total number of assemblies. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae8392f8b56a18253db2af728f3f8a862"></a><!-- doxytag: member="Core::d_number_assemblies_row" ref="ae8392f8b56a18253db2af728f3f8a862" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_core.html#ae8392f8b56a18253db2af728f3f8a862">d_number_assemblies_row</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Number of assemblies per row. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae1d9d2e608dd551814e9886eb8a726d6"></a><!-- doxytag: member="Core::d_number_cells" ref="ae1d9d2e608dd551814e9886eb8a726d6" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#ae1d9d2e608dd551814e9886eb8a726d6">d_number_cells</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Total number of cells. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae5b1294f875104e41cf73b04d51e50b7"></a><!-- doxytag: member="Core::d_number_cells_x" ref="ae5b1294f875104e41cf73b04d51e50b7" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#ae5b1294f875104e41cf73b04d51e50b7">d_number_cells_x</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Number of cells in x direction. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae948037f2557b7efed00478f26d623fc"></a><!-- doxytag: member="Core::d_number_cells_y" ref="ae948037f2557b7efed00478f26d623fc" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#ae948037f2557b7efed00478f26d623fc">d_number_cells_y</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Number of cells in y direction. </p>
+
+</div>
+</div>
+<a class="anchor" id="afec3856c4a5ece7f32e9c820ca33bd38"></a><!-- doxytag: member="Core::d_number_cells_z" ref="afec3856c4a5ece7f32e9c820ca33bd38" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#afec3856c4a5ece7f32e9c820ca33bd38">d_number_cells_z</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Number of cells in y direction. </p>
+
+</div>
+</div>
+<a class="anchor" id="a80a211deedd49812f5e068c35a2fcdd6"></a><!-- doxytag: member="Core::d_xcm" ref="a80a211deedd49812f5e068c35a2fcdd6" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#a80a211deedd49812f5e068c35a2fcdd6">d_xcm</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>x coarse mesh boundaries </p>
+
+</div>
+</div>
+<a class="anchor" id="a1ec26b0b8b1f0c9c8e3eeb9d919d9709"></a><!-- doxytag: member="Core::d_xfm" ref="a1ec26b0b8b1f0c9c8e3eeb9d919d9709" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#a1ec26b0b8b1f0c9c8e3eeb9d919d9709">d_xfm</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>x fine meshes in each x coarse mesh </p>
+
+</div>
+</div>
+<a class="anchor" id="adb15c5937c5ef1444bfca8d2f43f71e9"></a><!-- doxytag: member="Core::d_ycm" ref="adb15c5937c5ef1444bfca8d2f43f71e9" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#adb15c5937c5ef1444bfca8d2f43f71e9">d_ycm</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>y coarse mesh boundaries </p>
+
+</div>
+</div>
+<a class="anchor" id="a7d5f5c159ef37436dedbfcf0fdb429dd"></a><!-- doxytag: member="Core::d_yfm" ref="a7d5f5c159ef37436dedbfcf0fdb429dd" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#a7d5f5c159ef37436dedbfcf0fdb429dd">d_yfm</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>y fine meshes in each y coarse mesh </p>
+
+</div>
+</div>
+<a class="anchor" id="a79d714514041a94b5e8f2f6b6cd6eaaa"></a><!-- doxytag: member="Core::d_zcm" ref="a79d714514041a94b5e8f2f6b6cd6eaaa" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#a79d714514041a94b5e8f2f6b6cd6eaaa">d_zcm</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>z coarse mesh boundaries </p>
+
+</div>
+</div>
+<a class="anchor" id="aba0d8e14cf856aa6fa987add25e1fc02"></a><!-- doxytag: member="Core::d_zfm" ref="aba0d8e14cf856aa6fa987add25e1fc02" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_mesh.html#aba0d8e14cf856aa6fa987add25e1fc02">d_zfm</a><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>z fine meshes in each y coarse mesh </p>
+
+</div>
+</div>
+<a class="anchor" id="a6b6a6ab6a827aec2cb2417c3e4cc981f"></a><!-- doxytag: member="Core::DIM" ref="a6b6a6ab6a827aec2cb2417c3e4cc981f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Constant Property <a class="el" href="class_mesh2_d.html#a6b6a6ab6a827aec2cb2417c3e4cc981f">DIM</a> = 2<code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa7e9caff0fe286a2640463b57039cfcb"></a><!-- doxytag: member="Core::LEFT" ref="aa7e9caff0fe286a2640463b57039cfcb" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Constant Property <a class="el" href="class_mesh.html#aa7e9caff0fe286a2640463b57039cfcb">LEFT</a> = 1<code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af05f59cee6f575301a58e05826e4a843"></a><!-- doxytag: member="Core::NORTH" ref="af05f59cee6f575301a58e05826e4a843" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Constant Property <a class="el" href="class_mesh.html#af05f59cee6f575301a58e05826e4a843">NORTH</a> = 6<code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a59453dc0c0d6adf13e26ed611d5709b6"></a><!-- doxytag: member="Core::RIGHT" ref="a59453dc0c0d6adf13e26ed611d5709b6" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Constant Property <a class="el" href="class_mesh.html#a59453dc0c0d6adf13e26ed611d5709b6">RIGHT</a> = 2<code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2f23633dd3e38a9a3ac771540bb4de3e"></a><!-- doxytag: member="Core::SOUTH" ref="a2f23633dd3e38a9a3ac771540bb4de3e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Constant Property <a class="el" href="class_mesh.html#a2f23633dd3e38a9a3ac771540bb4de3e">SOUTH</a> = 5<code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2d01c516796d8d6b04d0ea71bad97117"></a><!-- doxytag: member="Core::TOP" ref="a2d01c516796d8d6b04d0ea71bad97117" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Constant Property <a class="el" href="class_mesh.html#a2d01c516796d8d6b04d0ea71bad97117">TOP</a> = 4<code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
 
 </div>
 </div>
@@ -80,7 +1038,7 @@ Public Member Functions</h2></td></tr>
 <li>/home/robertsj/Research/matlab_transport_pack/source/<a class="el" href="_core_8m.html">Core.m</a></li>
 </ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Thu Jan 19 2012 17:24:45 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Feb 6 2012 18:00:34 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

@@ -23,6 +23,7 @@
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
     </ul>
@@ -52,14 +53,14 @@ Inheritance diagram for LevelSymmetric:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_level_symmetric__inherit__graph.png" border="0" usemap="#_level_symmetric_inherit__map" alt="Inheritance graph"/></div>
 <map name="_level_symmetric_inherit__map" id="_level_symmetric_inherit__map">
-<area shape="rect" id="node2" href="class_quadrature.html" title="Base quadrature class." alt="" coords="5,6,179,394"/></map>
+<area shape="rect" id="node2" href="class_quadrature.html" title="Base quadrature class." alt="" coords="5,6,179,525"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for LevelSymmetric:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_level_symmetric__coll__graph.png" border="0" usemap="#_level_symmetric_coll__map" alt="Collaboration graph"/></div>
 <map name="_level_symmetric_coll__map" id="_level_symmetric_coll__map">
-<area shape="rect" id="node2" href="class_quadrature.html" title="Base quadrature class." alt="" coords="5,294,179,682"/></map>
+<area shape="rect" id="node2" href="class_quadrature.html" title="Base quadrature class." alt="" coords="23,313,196,831"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="class_level_symmetric-members.html">List of all members.</a></p>
@@ -71,8 +72,12 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return weights for all angles.  <a href="#a0f1078cf65ce2daecd0c0f2f74487ff5"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_quadrature.html#af753cc7ee3901ff64b4f815dbca2a82b">weight</a> (in obj, in a)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return weight for an angle (indexed by cardinal index)  <a href="#af753cc7ee3901ff64b4f815dbca2a82b"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_quadrature.html#a8d3c2a4fe0b1ae0e20e750d6126cd78a">weight_octant</a> (in obj)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return weight for first octant.  <a href="#a8d3c2a4fe0b1ae0e20e750d6126cd78a"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_quadrature.html#a87cd8ba769cc8106a44dacaba03e6c0a">angles</a> (in obj)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return all angles.  <a href="#a87cd8ba769cc8106a44dacaba03e6c0a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_quadrature.html#a368a1a7d0d563dc8bab2aa4eee561f4f">angle_octant</a> (in obj, in dim)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return first octant angles.  <a href="#a368a1a7d0d563dc8bab2aa4eee561f4f"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_quadrature.html#a0c01c7e15611d25259f5c3505a9942b0">angle</a> (in obj, in o, in a)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return angles for a given cardinal index.  <a href="#a0c01c7e15611d25259f5c3505a9942b0"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_quadrature.html#ab6b2d768ab736606ad5225a077daf00b">number_angles</a> (in obj)</td></tr>
@@ -171,6 +176,36 @@ Private Member Functions</h2></td></tr>
 
 <p>Return angles for a given cardinal index. </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>Set of angles. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a368a1a7d0d563dc8bab2aa4eee561f4f"></a><!-- doxytag: member="LevelSymmetric::angle_octant" ref="a368a1a7d0d563dc8bab2aa4eee561f4f" args="(in obj, in dim)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function angle_octant </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>dim</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Return first octant angles. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Vector of weights. </dd></dl>
 
 </div>
 </div>
@@ -411,6 +446,26 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a8d3c2a4fe0b1ae0e20e750d6126cd78a"></a><!-- doxytag: member="LevelSymmetric::weight_octant" ref="a8d3c2a4fe0b1ae0e20e750d6126cd78a" args="(in obj)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function weight_octant </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Return weight for first octant. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Vector of weights. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a0f1078cf65ce2daecd0c0f2f74487ff5"></a><!-- doxytag: member="LevelSymmetric::weights" ref="a0f1078cf65ce2daecd0c0f2f74487ff5" args="(in obj)" -->
 <div class="memitem">
 <div class="memproto">
@@ -597,7 +652,7 @@ Private Member Functions</h2></td></tr>
 <li>/home/robertsj/Research/matlab_transport_pack/source/<a class="el" href="_level_symmetric_8m.html">LevelSymmetric.m</a></li>
 </ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Thu Jan 19 2012 17:24:45 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Feb 6 2012 18:00:34 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

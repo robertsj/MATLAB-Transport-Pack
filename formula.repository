@@ -50,3 +50,30 @@
 \form#49:\[ \mathbf{A} = (\mathbf{I} - \mathbf{D}\mathbf{L}^{-1}\mathbf{MS}) \]
 \form#50:\[ b = \mathbf{D} \mathbf{L}^{-1} Q \, . \]
 \form#51:$ b$
+\form#52:$ \pi/4 $
+\form#53:$ \pi/2 $
+\form#54:\[ \tan{\phi_i} = 3^i \, , \,\,\, i = 0, \, \cdots n \, , \]
+\form#55:\[ n = \mathrm{floor}(\log_3(N)+1) \, \]
+\form#56:\[ \psi_{out} = A\psi_{in} B Q \, , \]
+\form#57:\[ \bar{\psi} = \frac{1}{l} \Big ( B \psi_{in} C Q \Big ) \, , \]
+\form#58:\[ A = e^{-\Sigma_t \tau} \, , \]
+\form#59:\[ B = \frac{1}{\Sigma_t} ( 1- A ) \, , \]
+\form#60:\[ C = \frac{l}{\Sigma_t} \Big( 1- \frac{1-A}{\tau} \Big ) \, , \]
+\form#61:$ l $
+\form#62:$ \tau = \Sigma_t l $
+\form#63:\[ \psi_{out} = A\psi_{in} + B Q \, , \]
+\form#64:\[ \bar{\psi} = \frac{1}{l} \Big ( B \psi_{in} + C Q \Big ) \, , \]
+\form#65:\[ A = \frac{2-\tau}{2+\tau} \, , \]
+\form#66:\[ B = \frac{2l}{2+\tau} \, , \]
+\form#67:\[ C = \frac{l^2}{2+\tau} \, , \]
+\form#68:\[ |\mu_n| (\psi_{i,n,out} - \psi_{i,n,in}) + \Delta \Sigma \psi_{i,n} = \Delta Q_{i, n} \, . \]
+\form#69:\[ \psi_{i,n} = \frac{1+\alpha_{i,n}}{2}\psi_{i,n,out} + \frac{1-\alpha_{i,n}}{2}\psi_{i,n,in} \, . \]
+\form#70:\[ \psi_{i,n} = \frac{Q_{i,n} + \psi_{i,n,in} \frac{2\mu}{\Delta(\alpha_{i,n}+1)}} {\frac{2\mu}{\Delta(\alpha_{i,n}+1)} + \Sigma} \, , \]
+\form#71:\[ \psi_{i,n,out} = \frac{2}{\alpha_{i,n}+1}\psi_{i,n} + \frac{\alpha_{i,n}-1}{\alpha_{i,n}+1} \psi_{i,n,in} \, . \]
+\form#72:$\alpha = 0 $
+\form#73:\[ con_{x,i,n} = \frac{2\mu}{\Delta(\alpha_{i,n}+1)} , \]
+\form#74:\[ \beta{1} = \frac{2}{\alpha_{i,n}+1} \, , \]
+\form#75:\[ \beta{2} = \frac{\alpha_{i,n}-1}{\alpha_{i,n}+1} \, . \]
+\form#76:\[ \psi_{i,n,out} = \frac{2}{\Delta(\alpha_{i,n}+1)}\psi_{i,n} + \frac{\alpha_{i,n}-1}{\alpha_{i,n}+1} \psi_{i,n,in} \, . \]
+\form#77:$\alpha = 1 $
+\form#78:\[ con_{x,i,n} = \frac{2\mu}{\Delta(\alpha_{i,n}+1} , \]

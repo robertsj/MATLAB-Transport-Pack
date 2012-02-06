@@ -1,5 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" id="node5" href="$class_reflective.html" title="Reflective boundary condition." alt="" coords="5,302,104,410"/>
-<area shape="rect" id="node7" href="$class_vacuum.html" title="Vacuum boundary condition." alt="" coords="128,302,216,410"/>
-<area shape="rect" id="node2" href="$classhandle.html" title="{handle\n||}" alt="" coords="84,6,143,95"/>
+<area shape="rect" id="node5" href="$class_boundary_condition_m_o_c.html" title="Base MOC boundary condition class." alt="" coords="168,349,349,438"/>
+<area shape="rect" id="node13" href="$class_reflective.html" title="Reflective boundary condition." alt="" coords="373,339,472,447"/>
+<area shape="rect" id="node15" href="$class_vacuum.html" title="Vacuum boundary condition." alt="" coords="496,339,584,447"/>
+<area shape="rect" id="node2" href="$classhandle.html" title="{handle\n||}" alt="" coords="393,6,452,95"/>
+<area shape="rect" id="node7" href="$class_appx_reflective_track.html" title="Approximate reflective MOC boundary condition class." alt="" coords="5,497,168,847"/>
+<area shape="rect" id="node9" href="$class_reflective_track.html" title="Vacuum MOC boundary condition class." alt="" coords="192,599,325,745"/>
+<area shape="rect" id="node11" href="$class_vacuum_track.html" title="Vacuum MOC boundary condition class." alt="" coords="349,618,469,726"/>
 </map>

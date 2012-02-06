@@ -1,6 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" id="node7" href="$class_assembly.html" title="Represents reactor assembly of PinCell objects." alt="" coords="5,1113,155,1426"/>
-<area shape="rect" id="node9" href="$class_pin_cell.html" title="Represents reactor assembly pin in two dimensions." alt="" coords="179,1057,323,1482"/>
-<area shape="rect" id="node2" href="$class_mesh.html" title="Base Cartesian mesh." alt="" coords="96,145,235,794"/>
-<area shape="rect" id="node4" href="$classhandle.html" title="{handle\n||}" alt="" coords="136,6,195,95"/>
+<area shape="rect" id="node7" href="$class_assembly.html" title="Represents reactor assembly of PinCell objects." alt="" coords="5,1458,155,1771"/>
+<area shape="rect" id="node9" href="$class_core.html" title="Represents reactor Core." alt="" coords="179,1533,368,1697"/>
+<area shape="rect" id="node11" href="$class_pin_cell.html" title="Represents reactor assembly pin in two dimensions." alt="" coords="392,1094,547,2135"/>
+<area shape="rect" id="node2" href="$class_mesh.html" title="Base Cartesian mesh." alt="" coords="204,145,343,831"/>
+<area shape="rect" id="node4" href="$classhandle.html" title="{handle\n||}" alt="" coords="244,6,303,95"/>
 </map>
