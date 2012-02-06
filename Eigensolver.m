@@ -82,8 +82,10 @@ classdef Eigensolver
         
         function output = solve(obj)
             
+            disp('*** Beginning eigensolve***')
+            
             % Initialize the fission source.
-            initialize(obj.d_fission_source)
+            initialize(obj.d_fission_source);
             
             % Initialize the flux to unity in all groups.
             phi = ones(number_cells(obj.d_mesh), 1);

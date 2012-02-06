@@ -77,11 +77,11 @@ classdef Input < handle
             put(obj, 'bc_bottom',       'vacuum');
             
             % Discretization
-            put(obj, 'equations',       'DD');
-            put(obj, 'dimension',       2);
+            put(obj, 'equation',        'DD');
+            put(obj, 'dimension',       1);
             
             % Quadrature
-            put(obj, 'quadrature_type',     'LevelSymmetric');
+            put(obj, 'quadrature_type',     'GaussLegendre');
             put(obj, 'quadrature_order',    8);
             
             % Eigensolver

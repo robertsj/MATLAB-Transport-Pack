@@ -118,6 +118,14 @@ classdef Quadrature
         end
         
         % ======================================================================
+        %> @brief Return weight for first octant
+        %> @return  Vector of weights.
+        % ======================================================================
+        function w = weight_octant(obj)
+            w = obj.d_weights(1:obj.d_number_angles/obj.d_number_octants);
+        end        
+        
+        % ======================================================================
         %> @brief Return all angles.
         %> @return  Vector of weights.
         % ======================================================================
@@ -126,6 +134,20 @@ classdef Quadrature
             eta = obj.d_eta;
             xi  = obj.d_xi;
         end
+        
+        % ======================================================================
+        %> @brief Return first octant angles
+        %> @return  Vector of weights.
+        % ======================================================================
+        function cosines = angle_octant(obj, dim)
+            if dim == 1 
+                cosines = obj.d_mu(1:obj.d_number_angles/obj.d_number_octants);
+            elseif dim == 2
+                cosines = obj.d_eta(1:obj.d_number_angles/obj.d_number_octants);
+            elseif dim == 3
+                cosines = obj.d_xi(1:obj.d_number_angles/obj.d_number_octants);
+            end
+        end        
         
         % ======================================================================
         %> @brief Return angles for a given cardinal index.

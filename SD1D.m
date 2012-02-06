@@ -1,5 +1,5 @@
-%> @file  DD1D.m
-%> @brief DD1D class definition.
+%> @file  SD1D.m
+%> @brief SD1D class definition.
 % ==============================================================================
 %> @brief Diamond difference approximation in one dimension.
 %
@@ -26,7 +26,7 @@
 %>      \psi_{i,n,out} = \frac{2}{\Delta(\alpha_{i,n}+1}\psi_{i,n} + 
 %>             \frac{\alpha_{i,n}-1}{\alpha_{i,n}+1} \psi_{i,n,in} \, .
 %> @f]
-%> For the diamond difference approximation, @f$\alpha = 0 @f$ over
+%> For the step difference approximation, @f$\alpha = 1 @f$ over
 %> all indices.  
 %> 
 %> In general, we define
@@ -43,14 +43,15 @@
 %> which applies to other discretizations, thus yielding a consistent
 %> interface.
 %>
-%> @sa SD1D
+%> @sa DD1D
 % ==============================================================================
-classdef DD1D < Equation
+classdef SD1D < Equation
     
     properties
         d_con_x
-        d_sig
         d_beta
+        d_sig
+        d_con_out
     end
     
     properties (Constant)
@@ -68,9 +69,9 @@ classdef DD1D < Equation
         %> @param mesh        	Problem mesh.
         %> @param mat          	Material definitions.
         %>
-        %> @return Instance of the DD1D class.
+        %> @return Instance of the SD1D class.
         % ======================================================================
-        function obj = DD1D(mesh, mat, quadrature)
+        function obj = SD1D(mesh, mat, quadrature)
             % Call the base class.
             obj = obj@Equation(mesh, mat, quadrature); 
             
@@ -86,13 +87,13 @@ classdef DD1D < Equation
             % Get the widths from mesh.
             w = widths(obj.d_mesh);
             
-            % Build the angle-dependent constants.  (For DD only right now)
+            % Build the angle-dependent constants.
             obj.d_con_x = zeros(length(w{1}), length(wt));
             for i = 1:length(mu)
-                obj.d_con_x(:, i) = 2*mu(i)./w{1};
+                obj.d_con_x(:, i) = mu(i)./w{1};
             end
             
-            obj.d_beta = [2; -1]; 
+            obj.d_beta = [1; 0]; 
             
         end
         

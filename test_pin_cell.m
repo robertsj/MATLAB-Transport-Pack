@@ -13,7 +13,7 @@ clear
 warning('OFF', 'user:input')
 warning('OFF', 'solver:convergence')
 
-sn = 0;
+sn = 1;
 
 % ==============================================================================
 % INPUT

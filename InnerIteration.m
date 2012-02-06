@@ -164,6 +164,7 @@ classdef InnerIteration < handle
                                   external_source,  ...
                                   fission_source    )
                             
+            obj.d_input      = input;                  
             obj.d_state      = state;
             obj.d_boundary   = boundary;
             obj.d_mat        = mat;
@@ -192,22 +193,33 @@ classdef InnerIteration < handle
             % Initialize moment to discrete.
             obj.d_M = MomentsToDiscrete(mesh.DIM);
             
+            % Get discretization type.
+            eq = get(input, 'equation');
+            
             if mesh.DIM == 1
                 
                 % Equation.
-                obj.d_equation = DD1D(mesh, mat);
+                if strcmp(eq, 'DD')
+                    obj.d_equation = DD1D(mesh, mat, quadrature);
+                elseif strcmp(eq, 'SD')
+                    obj.d_equation = SD1D(mesh, mat, quadrature);
+                else
+                   error('unsupported 1D discretization') 
+                end
 
                 % Sweeper
-                obj.d_sweeper = Sweep1D(input, mesh, mat, quadrature, ...
-                    obj.d_boundary, obj.d_equation); 
+%                 obj.d_sweeper = Sweep1D(input, mesh, mat, quadrature, ...
+%                     obj.d_boundary, obj.d_equation); 
+                obj.d_sweeper = Sweep1D_mod(input, mesh, mat, quadrature, ...
+                    obj.d_boundary, obj.d_equation);                 
                 
             elseif mesh.DIM == 2 && meshed(mesh)
                 
                 % Equation.
-                obj.d_equation = DD2D(mesh, mat);
+                obj.d_equation = DD2D(mesh, mat, quadrature);
 
                 % Sweeper
-                obj.d_sweeper = Sweep2D(input, mesh, mat, quadrature, ...
+                obj.d_sweeper = Sweep2D_mod(input, mesh, mat, quadrature, ...
                     obj.d_boundary, obj.d_equation); 
                 
             elseif mesh.DIM == 3

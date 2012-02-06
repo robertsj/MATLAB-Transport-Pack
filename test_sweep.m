@@ -1,4 +1,4 @@
-function test_sweep()
+
 
 tic
 
@@ -13,19 +13,18 @@ mat  = test_materials(2);
 quadrature = LevelSymmetric(16);
 
 % Boundary
-boundary = Boundary(input, mesh, quadrature);
+boundary = BoundaryMesh(input, mesh, quadrature);
 initialize(boundary, 1);
 
 % Make DD equation
-equation = DD2D(mesh, mat);
+equation = DD2D(mesh, mat, quadrature);
 setup_group(equation, 1);
 
 % Make sweeper
-sweeper = Sweep2D(input, mesh, mat, quadrature, boundary, equation);
+sweeper = Sweep2D_mod(input, mesh, mat, quadrature, boundary, equation);
 % Make a sweep source
 source  = ones(number_cells(mesh), 1);
 phi     = sweep(sweeper, source, 1);
-plot_map(phi)
+plot_flux(mesh, phi)
 
 toc
-end

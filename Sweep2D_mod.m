@@ -1,7 +1,7 @@
-%> @file  Sweep1D.m
-%> @brief Sweep1D class definition.
+%> @file  Sweep2D_mod.m
+%> @brief Sweep2D_mod class definition.
 % ==============================================================================
-%> @brief Sweep over a 1D mesh.
+%> @brief Sweep over a 2D mesh.
 %
 %> The within-group transport equation is 
 %> \f[
@@ -16,29 +16,24 @@
 %> the angular flux, but rather add its contribution to the scalar flux 
 %> directly since storing the angular flux is too expensive.
 % ==============================================================================
-classdef Sweep1D < handle
+classdef Sweep2D_mod < handle
 
     properties
-        
-        %> User input.
-        d_input      
-        %> 1-D Cartesian mesh.
-        d_mesh                  
-        %> Materials.
-        d_mat                   
-        %> Angular mesh.
-        d_quadrature            
-        %> Spatial discretization
-        d_equation              
-        %> Weighted diamond-difference parameters.
-        d_alpha                 
+        d_input                 % User input.
+        d_mesh                  % Cartesian mesh.
+        d_mat                   % Materials.
+        d_quadrature            % Angular mesh.
         %
-        %d_psi_horizontal        % place holder horizontal flux [num_x]
-        %> Boundary fluxes
+        d_equation              % Spatial discretization
+        %
+        d_alpha                 % Weighted diamond-difference parameters.
+        %
+        d_psi_horizontal        % place holder horizontal flux [num_x]
+        %
         d_boundary
         %
         d_nx
-        %d_ny
+        d_ny
         
     end
     
@@ -46,7 +41,9 @@ classdef Sweep1D < handle
         
         % ======================================================================
         %> @brief Class constructor
-        %
+        %>
+        %> 
+        %>
         %> @param input        	Number of fine mesh per x coarse mesh.
         %> @param mesh         	Number of fine mesh per y coarse mesh.
         %> @param mat           Coarse mesh edges along x axis.
@@ -55,7 +52,7 @@ classdef Sweep1D < handle
         %>
         %> @return Instance of the Mesh class.
         % ======================================================================
-        function obj = Sweep1D(input, mesh, mat, quadrature, boundary, equation)
+        function obj = Sweep2D_mod(input, mesh, mat, quadrature, boundary, equation)
             
             obj.d_input      = input;
             obj.d_mesh       = mesh;
@@ -66,10 +63,11 @@ classdef Sweep1D < handle
             
             % Store some things from the mesh.
             obj.d_nx = number_cells_x(mesh);
+            obj.d_ny = number_cells_y(mesh);
             
             % Initialize place holders.  Currently, we sweep first along x and
             % then y.  Hence, we need to store a row of horizontal edge fluxes.
-            %obj.d_psi_horizontal = zeros(number_cells_x(obj.d_mesh), 1);       
+            obj.d_psi_horizontal = zeros(number_cells_x(obj.d_mesh), 1);       
             
         end
         
@@ -86,65 +84,82 @@ classdef Sweep1D < handle
         %>
         %> @return          Updated group flux.
         % ======================================================================
-        function phi = sweep(obj, source, g)
+        function phi = sweep(obj, s, g)
             
-            phi = zeros(size(source));
+            % Initialize flux update.
+            phi = zeros(size(s));
             
+            % Get the precomputed cell cross section
+            sig = obj.d_equation.d_sig;
+            
+            % Get weight. 
+            wt = weight_octant(obj.d_quadrature);
+ 
             % Sweep over all octants.
-            for o = 1:2
+            for o = 1:4
                 
-                %disp([' OCTANT = ', num2str(o)])
+                % Get incident boundary fluxes.  These will be written.
+                psi_v = get_psi_v_octant(obj.d_boundary, o, Boundary.IN);
+                psi_h = get_psi_h_octant(obj.d_boundary, o, Boundary.IN);
                 
                 % Setup the equations for this octant.
                 setup_octant(obj.d_equation, o);
                 
-                % Sweep over all angles in the octant.
-                for a = 1:number_angles_octant(obj.d_quadrature)
+                % Get the constants.
+                con_x = get_con_x(obj.d_equation, o);   
+                con_y = get_con_y(obj.d_equation, o);   
+                
+                % Get other coefficients.
+                beta = obj.d_equation.d_beta;    
+                
+                % Get mesh bounds.
+                xb = x_bounds(obj, o);
+                yb = y_bounds(obj, o);
+                
+                % Sweep over all cells.
+                for j = yb(1):yb(3):yb(2)
                     
-
-                    % Get incident boundary fluxes.  These will be written.
-                    psi_v = get_psi_v(obj.d_boundary, o, a, Boundary.IN);
+                    psi_v_temp = psi_v(j, :); % psi_v(cells, angles)
                     
-                    % Get cosines.
-                    mu = angle(obj.d_quadrature, o, a);
-                    
-                    % Get weight. 
-                    w = weight(obj.d_quadrature, a);
-                    
-                    % Get mesh bounds.
-                    xb = x_bounds(obj, o);
-                    
-                    % Setup equation for this angle.
-                    setup_angle(obj.d_equation, mu);
-                    
-                    % Sweep over all cells.
                     for i = xb(1):xb(3):xb(2)
                         
                         % Set incident angular flux.
-                        psi_in = psi_v;
+                        %psi_in = [psi_h(i, :); psi_v_temp];
                         
-                        % Solve for this cell.
-                        [psi_out, psi_center] = ...
-                            solve(obj.d_equation, g, psi_in, source(i), i);
-                        phi(i) = phi(i) + w*psi_center;
-
-                        % Save the outgoing angular flux.
-                        psi_v = psi_out;
+                        % Cardinal index.
+                        k = i + (j  -1)*obj.d_nx;
+                        
+                        coef = 1.0 ./ (sig(i, j) + con_x(i, :) + con_y(j, :));
+                        psi_center = coef .* ...
+                            (s(k) + con_x(i, :) .* psi_v_temp + ...
+                                    con_y(j, :) .* psi_h(i, :) );
+                                
+                        % Outgoing fluxes        
+                        psi_h(i, :) = beta(1)*psi_center + beta(2)*psi_h(i, :);
+                        psi_v_temp  = beta(1)*psi_center + beta(2)*psi_v_temp;
+                        
+                        % Inner product of weights with psi.
+                        phi(k) = phi(k) + psi_center * wt;
                         
                         % *** Here is where coarse mesh boundary
                         %     information could be dealt with.
                         
                     end
-
-                    % Save outgoing flux vectors.  Note that psi_h has been
-                    % computed for the last row of the mesh and so is the
-                    % outgoing boundary flux.
-                    set_psi_v(obj.d_boundary, o, a, psi_v, Boundary.OUT);
-
+                    
+                    % Save outgoing vertical
+                    psi_v(j, :) = psi_v_temp;
+                    
                 end
                 
+                % Save outgoing flux vectors.  Note that psi_h has been
+                % computed for the last row of the mesh and so is the
+                % outgoing boundary flux.
+                set_psi_v_octant(obj.d_boundary, o, psi_v, Boundary.OUT);
+                set_psi_h_octant(obj.d_boundary, o, psi_h, Boundary.OUT);
+                
+                
             end
-       
+            
         end
         
     end

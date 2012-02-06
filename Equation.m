@@ -17,6 +17,8 @@ classdef Equation < handle
         d_mesh
         %> Material definitions
         d_mat
+        %> Quadrature
+        d_quadrature
         %> Current mu value
         d_mu
         %> current eta value
@@ -41,9 +43,10 @@ classdef Equation < handle
         %>
         %> @return Instance of the Equation class.
         % ======================================================================
-        function obj = Equation(mesh, mat)
+        function obj = Equation(mesh, mat, quadrature)
             obj.d_mesh = mesh;
             obj.d_mat  = mat;
+            obj.d_quadrature = quadrature;
             if meshed(mesh)
                 obj.d_mat_map = mesh_map(mesh, 'MATERIAL');
             end

@@ -1,7 +1,7 @@
 %> @file  C5G7_UO2_assembly.m
 %> @brief Solve the UO2 assembly of C5G7.
 
-clear all;
+clear classes;
 plots = 0;
 
 tic
@@ -11,7 +11,7 @@ tic
 input = Input();
 put(input, 'number_groups',         7);
 put(input, 'eigen_tolerance',       1e-4);
-put(input, 'eigen_max_iters',       100);
+put(input, 'eigen_max_iters',       2);
 put(input, 'outer_tolerance',       0.002);
 put(input, 'outer_max_iters',       20);
 put(input, 'inner_tolerance',       0.001);
@@ -22,6 +22,8 @@ put(input, 'bc_left',               'reflect');
 put(input, 'bc_right',              'reflect');
 put(input, 'bc_top',                'reflect');
 put(input, 'bc_bottom',             'reflect');
+put(input, 'print_out',             1);
+
 
 % ==============================================================================
 % MATERIALS (Test two group data)
@@ -84,12 +86,13 @@ end
 % SETUP 
 % ==============================================================================
 state       = State(input, assem1);
-quadrature  = QuadrupleRange(8);
+quadrature  = LevelSymmetric(8);
 boundary    = BoundaryMesh(input, assem1, quadrature);
 q_e         = Source(assem1, 2);                  % Not initialized = not used.
 q_f         = FissionSource(state, assem1, mat);  % Inititalized = used.
 initialize(q_f);
 toc
+
 % ==============================================================================
 % SOLVE 
 % ==============================================================================
@@ -103,5 +106,5 @@ toc
 % ==============================================================================
 % POSTPROCESS 
 % ==============================================================================
-VTK.savevtk(state, 7, mesh, 'c5g7_uo2_n8_qr2.vtk')
-save('c5g7_uo2_n8_qr2.mat')
+%VTK.savevtk(state, 7, mesh, 'c5g7_uo2_n8_qr2.vtk')
+%save('c5g7_uo2_n8_qr2.mat')

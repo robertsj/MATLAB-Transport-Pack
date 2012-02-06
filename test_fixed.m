@@ -4,7 +4,7 @@
 %> Finish me.
 % ==============================================================================
 
-clear classes
+%clear classes
 
 % Get the default input.
 input = Input();
@@ -17,10 +17,11 @@ put(input, 'inner_tolerance',       1e-3);
 put(input, 'inner_solver',          'SI');
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  6);
-put(input, 'bc_left',               'reflect');
-put(input, 'bc_right',              'reflect');
-put(input, 'bc_top',                'reflect');
-put(input, 'bc_bottom',             'reflect');
+put(input, 'bc_left',               'vacuum');
+put(input, 'bc_right',              'vacuum');
+put(input, 'bc_top',                'vacuum');
+put(input, 'bc_bottom',             'vacuum');
+put(input, 'print_out',             1);
 % One material, one group, c = 0.9
 mat         = test_materials(2);
 
@@ -28,13 +29,13 @@ mat         = test_materials(2);
 mesh        = test_mesh(2);
 
 state       = State(input, mesh);
-quadrature  = LevelSymmetric(4);
-boundary    = Boundary(input, mesh, quadrature);
+quadrature  = LevelSymmetric(16);
+boundary    = BoundaryMesh(input, mesh, quadrature);
 
 % Uniform source.
 q_e         = Source(mesh, 2);
 spectra     = [ 1.0 1
-                0.0 0];      
+                1.0 1];      
 placement   = [ 1 2; 2 2];    
 set_sources(q_e, spectra, placement);
 

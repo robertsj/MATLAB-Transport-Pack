@@ -2,22 +2,22 @@
 %> @brief Tests the eigensolver for a 7 group infinite medium using 1-d.
 % ==============================================================================
 
-clear
+clear classes
 
 % ==============================================================================
 % INPUT
 % ==============================================================================
 input = Input();
 put(input, 'number_groups',         7);
-put(input, 'eigen_tolerance',       1e-7);
+put(input, 'eigen_tolerance',       1e-4);
 put(input, 'eigen_max_iters',       100);
-put(input, 'outer_tolerance',       0.00001);
+put(input, 'outer_tolerance',       0.0001);
 put(input, 'outer_max_iters',       20);
 put(input, 'inner_tolerance',       0.0001);
 put(input, 'inner_solver',          'SI');
 put(input, 'bc_left',               'reflect');
 put(input, 'bc_right',              'reflect');
-put(input, 'print_out',             0);
+put(input, 'print_out',             1);
 
 % ==============================================================================
 % MATERIALS (Test two group data)
@@ -62,7 +62,7 @@ semilogy(eigv, 'k-o', 'LineWidth', 3)
 % ==============================================================================
 
 xcm = [0  1 ];
-xfm = [ 10 ];
+xfm = [ 200 ];
 mt  = [  m  ]; % UO2 
 mesh = Mesh1D(xfm, xcm, mt);
 
@@ -71,7 +71,7 @@ mesh = Mesh1D(xfm, xcm, mt);
 % SETUP 
 % ==============================================================================
 state       = State(input, mesh);
-quadrature  = GaussLegendre(2);
+quadrature  = GaussLegendre(64);
 boundary    = BoundaryMesh(input, mesh, quadrature);
 q_e         = Source(mesh, 2);                  % Not initialized = not used.
 q_f         = FissionSource(state, mesh, mat);  % Inititalized = used.
@@ -92,19 +92,19 @@ solver = Eigensolver(input,         ...
 tic
 out = solve(solver); 
 toc
-
-% ==============================================================================
-% POSTPROCESS 
-% ==============================================================================
-figure(1)
-clf
-for g = 1:7
-    f = flux(state, g);
-    ff(g,1) = f(1);
-    semilogy(f, 'Color', [rand rand rand], 'LineWidth', 2)
-    grid on
-    hold on
-end
-
-% This better be constant:
-ff ./ eigv
+% 
+% % ==============================================================================
+% % POSTPROCESS 
+% % ==============================================================================
+% figure(1)
+% clf
+% for g = 1:7
+%     f = flux(state, g);
+%     ff(g,1) = f(1);
+%     semilogy(f, 'Color', [rand rand rand], 'LineWidth', 2)
+%     grid on
+%     hold on
+% end
+% 
+% % This better be constant:
+% ff ./ eigv

@@ -14,6 +14,7 @@ put(input, 'number_groups',         2);
 put(input, 'inner_solver',          'Livolant');
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  3);
+put(input, 'equation',              'SD');
 input.number_groups = 2;
 
 
@@ -30,7 +31,7 @@ mat = test_materials(2);
 % Assembly coarse mesh edges
 base   = [ 1.1580 4.4790 7.8000 11.1210 14.4420 15.6000 ]; 
 % and fine mesh counts.
-basef  = [ 1 2 2 2 2 1 ]*4; 
+basef  = [ 1 2 2 2 2 1 ]*2; 
 % Several such assemblies to make the total coarse mesh definition
 xcm    = [ 0.0  base  base+15.6  base+15.6*2 base+15.6*3 ...
            base+15.6*4 base+15.6*5 base+15.6*6 ];
@@ -64,8 +65,8 @@ set_sources(q_e, spectra, place);
 % SETUP 
 % ==============================================================================
 state       = State(input, mesh);
-quadrature  = GaussLegendre(8);
-boundary    = Boundary(input, mesh, quadrature);
+quadrature  = GaussLegendre(64);
+boundary    = BoundaryMesh(input, mesh, quadrature);
 q_f         = FissionSource(state, mesh, mat);  % Not inititalized = not used.
 
 % ==============================================================================
@@ -89,7 +90,11 @@ toc
 % ==============================================================================
 
 % subplot(2, 1, 1)
-% f = flux(state, 1);
+ f = flux(state, 1); f(1:3)
+ 
+%      7.8575   s64
+%     8.9081
+%     9.8907
 % plot_flux(mesh, f)
 % subplot(2, 1, 2)
 % f = flux(state, 2);

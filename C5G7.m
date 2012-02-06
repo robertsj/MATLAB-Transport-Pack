@@ -1,7 +1,7 @@
 %> @file  C5G7.m
 %> @brief Two-dimensional, seven group transport benchmark problem.
 
-clear all;
+%clear all;
 plots = 0;
 
 tic
@@ -22,19 +22,19 @@ put(input, 'bc_left',               'reflect');
 put(input, 'bc_right',              'vacuum');
 put(input, 'bc_top',                'reflect');
 put(input, 'bc_bottom',             'vacuum');
-input.number_groups = 2;
+put(input, 'print_out',             1);
 
 % ==============================================================================
 % MATERIALS (Test two group data)
 % ==============================================================================
-mat = C5G7_materials();
+mat = C5G7_materials(0);
 
 % ==============================================================================
 % PINS
 % ==============================================================================
 
 % Shared pin properties
-pitch = 1.26; radii = 0.54; number = 8;
+pitch = 1.26; radii = 0.54; number = 13;
 % Pin 1 - UO2 
 matid = [1 7];  pin1 = PinCell(pitch, radii, matid); meshify(pin1, number);
 % Pin 2 - 4.3% MOX
@@ -137,7 +137,7 @@ if plots, figure(7), plot_mesh_map(core, 'MATERIAL'), end
 % SETUP 
 % ==============================================================================
 state       = State(input, core);
-quadrature  = QuadrupleRange(2);
+quadrature  = QuadrupleRange(18);
 boundary    = BoundaryMesh(input, core, quadrature);
 q_e         = Source(core, 2);                  % Not initialized = not used.
 q_f         = FissionSource(state, core, mat);  % Inititalized = used.
@@ -156,5 +156,5 @@ toc
 % ==============================================================================
 % POSTPROCESS 
 % ==============================================================================
-VTK.savevtk(state, 2, mesh, 'c5g7_n8_qr2.vtk')
+VTK.savevtk(state, 7, core, 'c5g7_n8_qr2.vtk')
 save('c5g7_n8_qr2.mat')

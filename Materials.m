@@ -70,22 +70,22 @@ classdef Materials < handle
         % Setters
         
         function obj = set_sigma_t(obj, m, g, v)
-            check(obj, m, g)
+            %check(obj, m, g)
             obj.d_sigma_t(m, g) = v;
         end
         
         function obj = set_nu_sigma_f(obj, m, g, v)
-            check(obj, m, g)
+            %check(obj, m, g)
             obj.d_nu_sigma_f(m, g) = v;
         end
         
         function obj = set_chi(obj, m, g, v)
-            check(obj, m, g)
+            %check(obj, m, g)
             obj.d_chi(m, g) = v;
         end
         
         function obj = set_sigma_s(obj, m, g, gp, v)
-            check(obj, m, g, gp)
+            %check(obj, m, g, gp)
             obj.d_sigma_s(m, g, gp) = v;
         end
         
@@ -95,7 +95,7 @@ classdef Materials < handle
             obj.d_sigma_t(m, :) = v;
         end
         
-        function obj = set_nu_sigma_v(obj, m, v)
+        function obj = set_nu_sigma_f_v(obj, m, v)
             obj.d_nu_sigma_f(m, :) = v;
         end
         
@@ -110,22 +110,22 @@ classdef Materials < handle
         % Getters
         
         function y = sigma_t(obj, m, g)
-            check(obj, m, g)
+            %check(obj, m, g)
             y = obj.d_sigma_t(m, g);
         end
         
         function y = nu_sigma_f(obj, m, g)
-            check(obj, m, g)
+            %check(obj, m, g)
             y = obj.d_nu_sigma_f(m, g);
         end
         
         function y = chi(obj, m, g)
-            check(obj, m, g)
+            %check(obj, m, g)
             y = obj.d_chi(m, g);
         end
         
         function y = sigma_s(obj, m, g, gp)
-            check(obj, m, g, gp)
+            %check(obj, m, g, gp)
             y = obj.d_sigma_s(m, g, gp);
         end 
         

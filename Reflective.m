@@ -92,25 +92,29 @@ classdef Reflective < BoundaryCondition
                 o_in  = obj.d_octants(o, 1); % Put fluxes IN this octant
                 o_out = obj.d_octants(o, 2); % Get fluxes OUT of this octant
                 
-                for a = 1:number_angles_octant(obj.d_quadrature)
+                %for a = 1:number_angles_octant(obj.d_quadrature)
                       
                     if obj.d_side == Mesh.LEFT || obj.d_side == Mesh.RIGHT 
                         % Get the OUTGOING fluxes for this octant and angle
-                        f = get_psi_v(obj.d_boundary, o_out, a, Boundary.OUT);
+                        %f = get_psi_v(obj.d_boundary, o_out, a, Boundary.OUT);
+                        f = get_psi_v_octant(obj.d_boundary, o_out, Boundary.OUT);
                         %f = f*0 + 1;
                         % Get the OUTGOING fluxes for this octant and angle
-                        set_psi_v(obj.d_boundary, o_in, a, f, Boundary.IN);
+                        %set_psi_v(obj.d_boundary, o_in, a, f, Boundary.IN);
+                        set_psi_v_octant(obj.d_boundary, o_in, f, Boundary.IN);
                         
                     elseif obj.d_side == Mesh.TOP || obj.d_side == Mesh.BOTTOM 
                         % Get the OUTGOING fluxes for this octant and angle
-                        f = get_psi_h(obj.d_boundary, o_out, a, Boundary.OUT);
+                        %f = get_psi_h(obj.d_boundary, o_out, a, Boundary.OUT);
+                        f = get_psi_h_octant(obj.d_boundary, o_out, Boundary.OUT);
                         % Get the OUTGOING fluxes for this octant and angle
-                        set_psi_h(obj.d_boundary, o_in, a, f, Boundary.IN);
+                        %set_psi_h(obj.d_boundary, o_in, a, f, Boundary.IN);
+                        set_psi_h_octant(obj.d_boundary, o_in, f, Boundary.IN);
                     else
                         error(' 3-D not done yet')
                     end
                     
-                end
+                %end
                 
             end
             

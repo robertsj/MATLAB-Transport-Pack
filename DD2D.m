@@ -11,7 +11,9 @@ classdef DD2D < Equation
     properties
         d_con_x
         d_con_y
+        d_sig_all
         d_sig
+        d_beta
     end
     
     properties (Constant)
@@ -31,14 +33,53 @@ classdef DD2D < Equation
         %>
         %> @return Instance of the Equation class.
         % ======================================================================
-        function obj = DD2D(mesh, mat)
+        function obj = DD2D(mesh, mat, quadrature)
             % Call the base class.
-            obj = obj@Equation(mesh, mat); 
+            obj = obj@Equation(mesh, mat, quadrature); 
+            
             % Presize coefficient vectors.
-            obj.d_con_x = zeros(number_cells_x(mesh), 1);
-            obj.d_con_y = zeros(number_cells_y(mesh), 1);
-            obj.d_sig   = zeros(number_cells_x(mesh), number_cells_y(mesh));
+            obj.d_sig_all   = zeros(number_cells_x(mesh), ...
+                number_cells_y(mesh), number_groups(mat));
+            
+            % Get mu's.  By construction, we only need the positive values.
+            mu  = angle_octant(obj.d_quadrature, 1);
+            eta = angle_octant(obj.d_quadrature, 2);
+
+            % Get weight. 
+            wt = weight_octant(obj.d_quadrature);
+            
+            % Get the widths from mesh.
+            w = widths(obj.d_mesh);
+            
+            % Build the angle-dependent constants.  (For DD only right now)
+            obj.d_con_x = zeros(length(w{1}), length(wt));
+            for i = 1:length(mu)
+                obj.d_con_x(:, i) = 2*mu(i)./w{1};
+            end
+            obj.d_con_y = zeros(length(w{1}), length(wt));
+            for i = 1:length(eta)
+                obj.d_con_y(:, i) = 2*eta(i)./w{1};
+            end
+            obj.d_beta = [2; -1]; 
+            
+            %
+            for g = 1:number_groups(mat)
+                for j = 1:number_cells_y(obj.d_mesh)
+                    for i = 1:number_cells_x(obj.d_mesh)
+                        obj.d_sig_all(i, j, g) = ...
+                            sigma_t(obj.d_mat, obj.d_mat_map(i, j), g);
+                    end
+                end
+            end
+            
         end
+        
+        function c = get_con_x(obj, octant)
+            c = obj.d_con_x;
+        end    
+        function c = get_con_y(obj, octant)
+            c = obj.d_con_y;
+        end           
         
         % ======================================================================
         %> @brief Setup the equations for a group.
@@ -51,12 +92,13 @@ classdef DD2D < Equation
         % ======================================================================
         function obj = setup_group(obj, group)
             % 
-            for j = 1:number_cells_y(obj.d_mesh)
-                for i = 1:number_cells_x(obj.d_mesh)
-                    obj.d_sig(i, j) = ...
-                        sigma_t(obj.d_mat, obj.d_mat_map(i, j), group);
-                end
-            end
+%             for j = 1:number_cells_y(obj.d_mesh)
+%                 for i = 1:number_cells_x(obj.d_mesh)
+%                     obj.d_sig(i, j) = ...
+%                         sigma_t(obj.d_mat, obj.d_mat_map(i, j), group);
+%                 end
+%             end
+            obj.d_sig = obj.d_sig_all(:, :, group);
         end
         
         % ======================================================================
