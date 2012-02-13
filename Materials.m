@@ -21,6 +21,9 @@ classdef Materials < handle
         % Scatter [material, group<-, group')
         d_sigma_s = 0;
         
+        % Diffusion coefficient [material, group]
+        d_diff_coef = 0;
+        
         % Scatter bounds applied to all materials [group, 2]
         d_scatter_bounds = 0;
         
@@ -55,6 +58,7 @@ classdef Materials < handle
             obj.d_chi        = zeros(number_materials, number_groups);
             obj.d_sigma_s    = zeros(number_materials, number_groups, ...
                                      number_groups);
+            obj.d_diff_coef  = zeros(number_materials, number_groups);                                 
                                  
             % Default: all groups are always added to the scatter source.
             obj.d_scatter_bounds = zeros(number_groups, 2);
@@ -89,6 +93,11 @@ classdef Materials < handle
             obj.d_sigma_s(m, g, gp) = v;
         end
         
+        function obj = set_diff_coef(obj, m, g, v)
+            %check(obj, m, g)
+            obj.d_diff_coef(m, g) = v;
+        end        
+        
         % Setters (vectorized)
         
         function obj = set_sigma_t_v(obj, m, v)
@@ -105,7 +114,11 @@ classdef Materials < handle
         
         function obj = set_sigma_s_v(obj, m, v)
             obj.d_sigma_s(m, :, :) = v;
-        end      
+        end   
+        
+        function obj = set_diff_coef_v(obj, m, v)
+            obj.d_diff_coef(m, :) = v;
+        end        
         
         % Getters
         
@@ -127,7 +140,12 @@ classdef Materials < handle
         function y = sigma_s(obj, m, g, gp)
             %check(obj, m, g, gp)
             y = obj.d_sigma_s(m, g, gp);
-        end 
+        end
+        
+        function y = diff_coef(obj, m, g)
+            %check(obj, m, g)
+            y = obj.d_diff_coef(m, g);
+        end        
         
         function g = number_groups(obj)
            g = obj.d_number_groups; 
