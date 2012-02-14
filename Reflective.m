@@ -3,7 +3,7 @@
 % ==============================================================================
 %> @brief Reflective boundary condition.
 %
-%> This is essentially an empty condition, since nothing needs to be done.
+%> 
 % ==============================================================================
 classdef Reflective < BoundaryCondition
     % Base boundary condition class.
@@ -26,8 +26,8 @@ classdef Reflective < BoundaryCondition
         %>
         %> @return Instance of the Reflective class.
         % ======================================================================
-        function obj = Reflective(boundary, mesh, quadrature, side)
-            obj = obj@BoundaryCondition(boundary, mesh, quadrature, side);
+        function obj = Reflective(boundary, input,  mesh, quadrature, side)
+            obj = obj@BoundaryCondition(boundary, input,  mesh, quadrature, side);
 
             % If I'm a vertical side, a exhange mu's, e.g. I->II
             % If I'm a horizontal side, eta's echange (e.g. I->IV)

@@ -2,7 +2,7 @@
 %> @brief BoundaryMesh class definition.
 % ==============================================================================
 %> @brief Holds the incident and outgoing boundary fluxes for a mesh.
-%
+%>
 %> More here...
 % ==============================================================================
 classdef BoundaryMesh < Boundary

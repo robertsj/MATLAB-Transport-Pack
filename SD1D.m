@@ -18,12 +18,12 @@
 %> yields
 %> @f[
 %>      \psi_{i,n} = 
-%>      \frac{Q_{i,n} + \psi_{i,n,in} \frac{2\mu}{\Delta(\alpha_{i,n}+1}
-%>           {\frac{2\mu}{\Delta(\alpha_{i,n}+1} + \Sigma \, ,
+%>      \frac{Q_{i,n} + \psi_{i,n,in} \frac{2\mu}{\Delta(\alpha_{i,n}+1)}}
+%>           {\frac{2\mu}{\Delta(\alpha_{i,n}+1)} + \Sigma} \, ,
 %> @f] 
 %> and
 %> @f[
-%>      \psi_{i,n,out} = \frac{2}{\Delta(\alpha_{i,n}+1}\psi_{i,n} + 
+%>      \psi_{i,n,out} = \frac{2}{\Delta(\alpha_{i,n}+1)}\psi_{i,n} + 
 %>             \frac{\alpha_{i,n}-1}{\alpha_{i,n}+1} \psi_{i,n,in} \, .
 %> @f]
 %> For the step difference approximation, @f$\alpha = 1 @f$ over

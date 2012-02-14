@@ -18,12 +18,12 @@
 %> yields
 %> @f[
 %>      \psi_{i,n} = 
-%>      \frac{Q_{i,n} + \psi_{i,n,in} \frac{2\mu}{\Delta(\alpha_{i,n}+1}
-%>           {\frac{2\mu}{\Delta(\alpha_{i,n}+1} + \Sigma \, ,
+%>      \frac{Q_{i,n} + \psi_{i,n,in} \frac{2\mu}{\Delta(\alpha_{i,n}+1)}}
+%>           {\frac{2\mu}{\Delta(\alpha_{i,n}+1)} + \Sigma} \, ,
 %> @f] 
 %> and
 %> @f[
-%>      \psi_{i,n,out} = \frac{2}{\Delta(\alpha_{i,n}+1}\psi_{i,n} + 
+%>      \psi_{i,n,out} = \frac{2}{\alpha_{i,n}+1}\psi_{i,n} + 
 %>             \frac{\alpha_{i,n}-1}{\alpha_{i,n}+1} \psi_{i,n,in} \, .
 %> @f]
 %> For the diamond difference approximation, @f$\alpha = 0 @f$ over
@@ -31,7 +31,7 @@
 %> 
 %> In general, we define
 %> @f[
-%>      con_{x,i,n} = \frac{2\mu}{\Delta(\alpha_{i,n}+1} ,
+%>      con_{x,i,n} = \frac{2\mu}{\Delta(\alpha_{i,n}+1)} ,
 %> @f]
 %> @f[
 %>      \beta{1} = \frac{2}{\alpha_{i,n}+1} \, ,

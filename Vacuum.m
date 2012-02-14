@@ -26,8 +26,8 @@ classdef Vacuum < BoundaryCondition
         %>
         %> @return Instance of the Vacuum class.
         % ======================================================================
-        function obj = Vacuum(boundary, mesh, quadrature, side)
-            obj = obj@BoundaryCondition(boundary, mesh, quadrature, side); 
+        function obj = Vacuum(boundary, input, mesh, quadrature, side)
+            obj = obj@BoundaryCondition(boundary, input, mesh, quadrature, side); 
 
         end
         

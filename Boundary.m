@@ -13,6 +13,8 @@ classdef Boundary < handle
     end
 
     properties (Access = protected)
+        %> Input
+        d_input
         %> Spatial mesh.
         d_mesh
         %> Angular mesh.
@@ -41,6 +43,7 @@ classdef Boundary < handle
         % ======================================================================
         function this = Boundary(input, mesh, quadrature)
         
+            this.d_input         = input;
             this.d_mesh          = mesh;
             this.d_quadrature    = quadrature;
 
@@ -49,32 +52,35 @@ classdef Boundary < handle
             
             if strcmp(get(input, 'bc_left'), 'vacuum')
                 this.d_bc{mesh.LEFT}   = ...
-                    Vacuum(this, mesh, quadrature, mesh.LEFT);
+                    Vacuum(this, input, mesh, quadrature, mesh.LEFT);
             elseif strcmp(get(input, 'bc_left'), 'reflect')
                 this.d_bc{mesh.LEFT}   = ...
-                    Reflective(this, mesh, quadrature, mesh.LEFT);
+                    Reflective(this, input, mesh, quadrature, mesh.LEFT);
+            elseif strcmp(get(input, 'bc_left'), 'response')
+                this.d_bc{mesh.LEFT}   = ...
+                    Response(this, input, mesh, quadrature, mesh.LEFT);
             end
             if strcmp(get(input, 'bc_right'), 'vacuum')
                 this.d_bc{mesh.RIGHT}   = ...
-                    Vacuum(this, mesh, quadrature, mesh.RIGHT);
+                    Vacuum(this, input,  mesh, quadrature, mesh.RIGHT);
             elseif strcmp(get(input, 'bc_right'), 'reflect')
                 this.d_bc{mesh.RIGHT}   = ...
-                    Reflective(this, mesh, quadrature, mesh.RIGHT);
+                    Reflective(this, input, mesh, quadrature, mesh.RIGHT);
             end   
             if mesh.DIM > 1
                 if strcmp(get(input, 'bc_bottom'), 'vacuum')
                     this.d_bc{mesh.BOTTOM}   = ...
-                        Vacuum(this, mesh, quadrature, mesh.BOTTOM);
+                        Vacuum(this, input, mesh, quadrature, mesh.BOTTOM);
                 elseif strcmp(get(input, 'bc_bottom'), 'reflect')
                     this.d_bc{mesh.BOTTOM}   = ...
-                        Reflective(this, mesh, quadrature, mesh.BOTTOM);
+                        Reflective(this, input, mesh, quadrature, mesh.BOTTOM);
                 end
                 if strcmp(get(input, 'bc_top'), 'vacuum')
                     this.d_bc{mesh.TOP}   = ...
-                        Vacuum(this, mesh, quadrature, mesh.TOP);
+                        Vacuum(this, input, mesh, quadrature, mesh.TOP);
                 elseif strcmp(get(input, 'bc_top'), 'reflect')
                     this.d_bc{mesh.TOP}   = ...
-                        Reflective(this, mesh, quadrature, mesh.TOP);
+                        Reflective(this, input, mesh, quadrature, mesh.TOP);
                 end
             end
             

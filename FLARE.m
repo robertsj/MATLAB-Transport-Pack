@@ -8,31 +8,56 @@
 classdef FLARE < handle
     
     properties
-        d_input                 % User input.
-        d_mat                   % Materials.
-        d_map                   % Core map
+        %> User input.
+        d_input                 
+        %> Material database.
+        d_mat                   
+        %> Core map (2-d array of bundle id's)
+        d_map                   
+        %> 1-d array of bundle types.
         d_mat_map
-        d_neighbors             %
+        %> List of neighbors of each bundle.
+        d_neighbors             
+        %> Number of bundles.
         d_number_nodes
+        %> 1-d array of the number of neigbors each bundle has.
         d_number_neighbors
+        %> Bundle width.
         d_h
+        %> 1-d array of bundle kinf's.
         d_kinf
+        %> K-eigenvalue
         d_k
+        %> Fission density
         d_s
+        %> 2-d array of fission density (plots, etc.)
         d_f
-        d_tolerance_k           % Tolerance on eigenvalue
-        d_tolerance_s           % Tolerance on fission source
-        d_max_iters             % Maximum outers
-        d_wpp                   % this coupling coefficients
-        d_wqp                   % Outgoing coupling coefficient
-        d_wleak                 % Fraction of me that leaks
+        %> 1-d array of peaking factors
+        d_p
+        %> Maximum peaking factor
+        d_max_p
+        %> Tolerance on eigenvalue.
+        d_tolerance_k           
+        %> Tolerance on fission source.
+        d_tolerance_s           
+        % Maximum iterations.
+        d_max_iters             
+        % Probability of self-collision
+        d_wpp                   
+        % Probability of leak in a single neighbor
+        d_wqp                   
+        % Total leakage probability (includes albedo effect)
+        d_wleak              
     end
     
     methods
         
         % ======================================================================
         %> @brief Class constructor
-        %> @return                  Instance of the FLARE class.
+        %> @param   input   User input
+        %> @param   mat     Material database
+        %> @param   map     Map of assembly type placement
+        %> @return          Instance of the FLARE class.
         % ======================================================================
         function this = FLARE(input, mat, map)
             this.d_input = input;
@@ -141,7 +166,7 @@ classdef FLARE < handle
                 % My leakage to another
                 this.d_wqp(i) = w;  
             end
-            
+           
         end
         
         % ======================================================================
@@ -158,21 +183,6 @@ classdef FLARE < handle
             
             % Outer iteration
             for j = 1:100
-                
-                
-                % G-S, Inner iteration (just one)
-%                 s_o = s;
-%                 for p = 1:this.d_number_nodes
-%                     s(p) = this.d_wpp(p) * s(p) * this.d_kinf(p)/k;
-%                     for q = 1:4
-%                         if this.d_neighbors(p, q) == 0
-%                             continue
-%                         end
-%                         qq = this.d_neighbors(p, q);
-%                         s(p) = s(p) + this.d_wqp(qq)*s(qq)* this.d_kinf(p)/k;
-%                     end
-%                     %s(p) = s(p) * this.d_kinf(p)/k;
-%                 end
                 
                 % Jacobi, sInner iteration (just one)
                 s_o = s;
@@ -195,19 +205,18 @@ classdef FLARE < handle
                 s   = s / norm(s);
                 kerr = abs(k-k_o);
                 serr = norm(s-s_o); 
-                disp([' it = ', num2str(j), ' k = ', num2str(k), ...
-                      ' kerr = ', num2str(kerr), ' k2 = ', num2str(k2), ...
-                      ' serr = ', num2str(serr)  ])
-                if  serr < 1e-9
+%                 disp([' it = ', num2str(j), ' k = ', num2str(k), ...
+%                       ' kerr = ', num2str(kerr), ' k2 = ', num2str(k2), ...
+%                       ' serr = ', num2str(serr)  ])
+                if  serr < 1e-4
                     break
                 end
             end
             this.d_s = s;
             this.d_k = k;
- 
         end
         
-        function plot_power(this)
+        function make_power(this)
             f = this.d_map * 0.0;
             for i = 1:length(f(:, 1));
                 for j = 1:length(f(1, :));
@@ -221,6 +230,16 @@ classdef FLARE < handle
             this.d_f = f;
             this.d_f(:, 1) = this.d_f(1, :);
         end
+        
+        function plot_peak(this)
+            make_power(this);
+            mean_s = mean(this.d_s);
+            this.d_p = this.d_s / mean_s;
+            this.d_max_p = max(this.d_p);
+            pcolor(this.d_f/mean_s)
+            axis square
+        end
+        
     end
     
 end

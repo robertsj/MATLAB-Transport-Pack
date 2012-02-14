@@ -1,32 +1,39 @@
+%> @file  QuadratureRange.m
+%> @brief QuadratureRange class definition.
+% ===========================================================================
+%> @brief Abu-Shumay's quadruple range quadrature.
+%
+%> See Abu-Shumays, I. K. "Compatible Product Angular Quadrature for
+%>     Neutron  Transport in xy Geometry," Nucl. Sci. Engr., 64, (1978)
+% ===========================================================================
 classdef QuadrupleRange < Quadrature
-    % Quadruple Range quadrature.
-    %
-    % 
-    
-    properties
-        
+
+    properties (Access = private)
+        %> Quadrature order (specific to these product quadratures)
+        d_L = 0;
     end
     
     methods
         
-        % ----------------------------------------------------------------------
-        % Constructor
-        % ----------------------------------------------------------------------
         
+        % ======================================================================
+        %> @brief Class constructor
+        %>
+        %> More detailed description of what the constructor does.
+        %>
+        %> @param order         Quadrature order. This differs from quadrature 
+        %>                      to quadrature, but e.g. for level symmetric, 
+        %>                      it's the number of unique directional cosines.
+        %>
+        %> @return Instance of the QuadrupleRange class.
+        % ======================================================================
         function obj = QuadrupleRange(order)
-            % function obj = Quadrature(order)
-            %
-            % Constructor.
-            %
-            % Inputs:
-            %   order --    Quadrature order. This differs from quadrature to
-            %               quadrature, but e.g. for level symmetric, it's the
-            %               number of unique directional cosines.
             obj = obj@Quadrature(order, 2); % Call base class.
-            obj.d_order = order;         % Set order.
+            obj.d_order = order;            % Set order.
             
             % Get data from an old table function.
-            [obj.d_mu, obj.d_eta, obj.d_weights] = quad_range_table(order);
+            [obj.d_mu, obj.d_eta, obj.d_weights, obj.d_L] = ...
+                quad_range_table(order);
             obj.d_number_angles = length(obj.d_weights);
         end
   
@@ -39,7 +46,7 @@ classdef QuadrupleRange < Quadrature
     
 end
 
-function [mu,eta,w] = quad_range_table(N)
+function [mu,eta,w,L] = quad_range_table(N)
 % function [mu,eta,w] = level_sym_table(N)
 %   Returns Abu-Shumays' Symmetric Quadruple-Range Quadrature
 %  
@@ -50,11 +57,13 @@ function [mu,eta,w] = quad_range_table(N)
 %           Symmetric Quadruple-Range Quadrature", unpublished note
 
     if N == 2   	% N=3.12 (same number of angles as LevelSym of order N)
+        L = 1;
         v = [...
                 2.58287076195660450493134e-01    7.41712923804339549506866e-01     1.57079632679489661923132e+00   
                 7.41712923804339549506866e-01    2.58287076195660450493134e-01     1.57079632679489661923132e+00 ];   
 
     elseif N == 8   % N=7.06
+        L = 3;
         v = [...
                 4.46976567552685291442200e-02    3.96864413885541210035759e-01     1.39829431524808231013885e-01   
                 1.02344482002639025620492e-01    9.08702733272681703905853e-01     4.18269587013405891181035e-01   
@@ -66,6 +75,7 @@ function [mu,eta,w] = quad_range_table(N)
                 9.08702733272681703905853e-01    1.02344482002639025620492e-01     4.18269587013405891181035e-01 ];     
 
     elseif N == 18  % N=11.04
+        L = 5;
         v = [...
                 1.27093041690748155694790e-02    2.30802637750809193462514e-01     2.37121323934635538907957e-02   
                 3.51871416751388519299383e-02    6.39003127590160553427465e-01     9.49188485831943760573218e-02   
@@ -87,6 +97,7 @@ function [mu,eta,w] = quad_range_table(N)
                 9.53052923625619995600235e-01    5.24805072144006166981908e-02     1.59351473226513713102283e-01 ];     
 
     elseif N == 32  % N=15.03
+        L = 7;
         v = [...
                 4.84865386755284740971726e-03    1.49170366723694487208718e-01     5.95624062302719324968259e-03   
               	1.44637686913213988466785e-02    4.44982409309420062054082e-01     2.72781777699681592264424e-02   
@@ -122,6 +133,7 @@ function [mu,eta,w] = quad_range_table(N)
               	9.71327406489868938691973e-01    3.15721579934219848830777e-02     7.60033105836691651890701e-02 ];  
             
     elseif N == 50  % N=19.02
+        L = 9;
         v = [...
               	2.22512555496971569531120e-03    1.03923086819525939997089e-01    1.92746657569833023326533e-03    
               	6.89070423895247740610388e-03    3.21825999109555867138856e-01    9.52891618610322775265370e-03    
