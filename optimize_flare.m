@@ -6,7 +6,7 @@
 %  For core 2
 %   -1.4911192363312082	-0.3564574661838369	0.07210842603953055
 function y = optimize_flare(x)
-core = 3;
+core = 2;
 % Get the sample materials for fresh, once-, and twice-burned bundles.
 input = Input();
 put(input, 'node_width',  21  );
@@ -55,6 +55,7 @@ elseif core == 2 % optimized (mostly; hand tweaking to get symmetry)
              0     3     3     3     0     0     0     0     0
              0     0     0     0     0     0     0     0     0];
 else
+    % 0.9884979114056625	-0.13803858216284481	-0.004050725958076542
     mat = flare_mat(2);
     refp =[ 1.09075   1.10125   1.24251   1.22033   1.08871   0.98202   1.09489   1.01482 ...
                       1.11730   1.13386   1.22347   1.06763   1.03198   1.07188   0.97076 ...
@@ -98,7 +99,7 @@ p  = s / mean_s;
 max_p  = max(p);
 
 err_k  = abs(k - refkeff)/refkeff
-err_p  = norm((p-refp)./refp)
+err_p  = norm((p-refp)./refp, Inf)
 err_max_p = abs(max_p - refmaxpeak)/refmaxpeak
 
 y = 10*err_k + 10*err_max_p +  10*err_p;

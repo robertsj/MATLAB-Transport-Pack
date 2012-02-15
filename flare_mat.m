@@ -34,13 +34,13 @@ if which == 1
     set_sigma_s(mat, 2, 1, 1,   0.2302 - 2.5800e-02);
     set_sigma_s(mat, 2, 2, 1,   1.4800e-02);
     set_sigma_s(mat, 2, 2, 2,   0.8990 - 1.2000e-01);
-    set_nu_sigma_f(mat, 2, 1,   7.9000e-03);
-    set_nu_sigma_f(mat, 2, 2,   1.6920e-01);
+    set_nu_sigma_f(mat, 2, 1,   6.9000e-03);
+    set_nu_sigma_f(mat, 2, 2,   1.7450e-01);
     set_chi(mat, 2, 1,          1.0);
 
     % twice
-    set_diff_coef(mat, 3, 1,    1.4479e+00);
-    set_diff_coef(mat, 3, 2,    3.7080e-01);
+    set_diff_coef(mat, 3, 1,    1.4494e+00);
+    set_diff_coef(mat, 3, 2,    3.6760e-01);
     set_sigma_t(mat, 3, 1,      0.2300);
     set_sigma_t(mat, 3, 2,      0.9068);
     set_sigma_s(mat, 3, 1, 1,   0.2300 - 2.6200e-02);

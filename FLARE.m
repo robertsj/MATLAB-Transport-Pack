@@ -47,7 +47,9 @@ classdef FLARE < handle
         % Probability of leak in a single neighbor
         d_wqp                   
         % Total leakage probability (includes albedo effect)
-        d_wleak              
+        d_wleak       
+        d_wpq
+        d_model
     end
     
     methods
@@ -127,6 +129,7 @@ classdef FLARE < handle
             end
             this.d_neighbors = neighbors;
             this.d_number_nodes = n;
+            
             % Now, compute the coefficients, wpp and wqp.  
             g   = get(input, 'mixing_factor');
             aI  = get(input, 'albedo_single');
@@ -135,6 +138,21 @@ classdef FLARE < handle
             this.d_wpp   = zeros(n, 1);
             this.d_wqp   = zeros(n, 1);
             this.d_kinf  = zeros(n, 1);
+            this.d_wpq   = zeros(n, 4, 2);
+            this.d_model = 1;
+            
+            for i = 1:n
+                % Compute the migration area
+                id   = this.d_mat_map(i);
+                D1   = diff_coef(mat, id, 1);
+                D2   = diff_coef(mat, id, 2);
+                sig1 = sigma_t(mat, id, 1) - sigma_s(mat, id, 1, 1);
+                sig2 = sigma_t(mat, id, 2) - sigma_s(mat, id, 2, 2);
+                this.d_kinf(i) = (nu_sigma_f(mat, id, 1) + ...
+                                  nu_sigma_f(mat, id, 2) * ...
+                                  sigma_s(mat, id, 2, 1)  / sig2) / sig1;   
+            end
+            
             for i = 1:n
                 % Compute the migration area
                 id   = this.d_mat_map(i);
@@ -146,27 +164,62 @@ classdef FLARE < handle
                 this.d_kinf(i) = (nu_sigma_f(mat, id, 1) + ...
                                   nu_sigma_f(mat, id, 2) * ...
                                   sigma_s(mat, id, 2, 1)  / sig2) / sig1;
-                % Compute a single probability for me
-                w = (1 - g) * 0.5 * M / this.d_h + g * M^2 / this.d_h^2;
+                              
                 % Compute the this-probabilities
-                this.d_number_neighbors(i) = sum(neighbors(i, :)>0);
-                % Subtract leakage to actual neigbors
-                this.d_wpp(i)    = 1.0 - this.d_number_neighbors(i) * w; 
+                this.d_number_neighbors(i) = sum(neighbors(i, :)>0);  
+                
+                % FLARE MODEL
+                w = (1 - g) * 0.5 * M / this.d_h + g * M^2 / this.d_h^2;
+                
+                
+                % COMET-G MODEL
+                w = (1 - g) * 0.5 * M / this.d_h + ...
+                    g * M^2/this.d_h^2 * ...
+                    (1/this.d_kinf(i));
+                
+                for q = 1:4
+                    if neighbors(i, q) > 0
+                        id2   = this.d_mat_map(neighbors(i, q));
+                        D1b   = diff_coef(mat, id2, 1);
+                        D2b   = diff_coef(mat, id2, 2);
+                        sig1b = sigma_t(mat, id2, 1) - sigma_s(mat, id2, 1, 1);
+                        sig2b = sigma_t(mat, id2, 2) - sigma_s(mat, id2, 2, 2);
+                        Mb    = sqrt(D1b/sig1b + D2b/sig2b);
+                        % store both to and from
+                        this.d_wpq(i, q, 1) = ...
+                                       (1 - g) * 0.5 * M / this.d_h + ...
+                                       g*M^2/this.d_h^2 * ...
+                                       (1/this.d_kinf(i)) * ...
+                                       (2 / (1 + Mb/M));
+                        this.d_wpq(i, q, 2) = ...
+                                       (1 - g) * 0.5 * Mb / this.d_h + ...                            
+                                       g*Mb^2/this.d_h^2 * ...
+                                       (1/this.d_kinf(neighbors(i, q))) * ...
+                                       (2 / (1 + M/Mb));                                  
+                    end
+                end
+                
+                if this.d_model == 1
+                    this.d_wpp(i) = 1.0 - this.d_number_neighbors(i) * w; 
+                else
+                    this.d_wpp(i) = 1.0 - sum(this.d_wpq(i, :, 1));
+                end
+ 
                 if 4 - this.d_number_neighbors(i) == 1
-                    this.d_wpp(i) =this.d_wpp(i) - w*(1-aI);
+                    this.d_wpp(i)    = this.d_wpp(i) - w*(1-aI);
                     this.d_wleak(i)  = w*(1-aI);
                 elseif 4 - this.d_number_neighbors(i) == 2
-                    this.d_wpp(i) = this.d_wpp(i) - 2*w*(1-aII);
+                    this.d_wpp(i)    = this.d_wpp(i) - 2*w*(1-aII);
                     this.d_wleak(i)  = 2*w*(1-aII);
                 elseif this.d_number_neighbors(i) == 4
                     this.d_wleak(i)  = 0.0;
                 else
                     error('number of neighbors is off!!')
-                end
+                end                
                 % My leakage to another
                 this.d_wqp(i) = w;  
             end
-           
+            
         end
         
         % ======================================================================
@@ -183,34 +236,56 @@ classdef FLARE < handle
             
             % Outer iteration
             for j = 1:100
+                s_oo = s;
                 
-                % Jacobi, sInner iteration (just one)
-                s_o = s;
-                for p = 1:this.d_number_nodes
-                    s(p) = this.d_wpp(p) * s_o(p);
-                    for q = 1:4
-                        if this.d_neighbors(p, q) == 0
-                            continue
+                if this.d_model == 1
+                    % Jacobi inner iteration
+                    for it = 1:10
+                        s_o = s;
+                        for p = 1:this.d_number_nodes
+                            s(p) = this.d_wpp(p) * s_o(p);
+                            for q = 1:4
+                                if this.d_neighbors(p, q) > 0
+                                    qq = this.d_neighbors(p, q);
+                                    s(p) = s(p) + this.d_wqp(qq)*s_o(qq);
+                                end
+                            end
+                            s(p) = s(p) * this.d_kinf(p)/k;
                         end
-                        qq = this.d_neighbors(p, q);
-                        s(p) = s(p) + this.d_wqp(qq)*s_o(qq)* this.d_kinf(p)/k;
                     end
-                    s(p) = s(p) * this.d_kinf(p)/k;
+                else
+                    % COMET-G model
+                    for it = 1:10
+                        s_o = s;
+                        for p = 1:this.d_number_nodes
+                            s(p) = this.d_wpp(p) * s_o(p);
+                            for q = 1:4
+                                if this.d_neighbors(p, q) > 0
+                                    qq = this.d_neighbors(p, q);
+                                    s(p) = s(p) + this.d_wpq(p, q, 2)*s_o(qq);
+                                end
+                            end
+                            s(p) = s(p) * this.d_kinf(p)/k;
+                        end
+                    end
                 end
+                
+                s = s/norm(s);
                 
                 % Update k
                 k_o = k;
                 k   = (sum(s) - sum(s.*this.d_wleak)) / sum(s./this.d_kinf);
-                k2  = k_o*norm(s)/norm(s_o);
-                s   = s / norm(s);
+                k2  = k_o*norm(s)/norm(s_oo);
                 kerr = abs(k-k_o);
-                serr = norm(s-s_o); 
+                %serr = 1e-10;
+                serr = norm(s-s_oo); 
 %                 disp([' it = ', num2str(j), ' k = ', num2str(k), ...
 %                       ' kerr = ', num2str(kerr), ' k2 = ', num2str(k2), ...
 %                       ' serr = ', num2str(serr)  ])
-                if  serr < 1e-4
+                if  serr < 1e-3 && kerr < 0.0001
                     break
                 end
+                
             end
             this.d_s = s;
             this.d_k = k;
@@ -236,6 +311,7 @@ classdef FLARE < handle
             mean_s = mean(this.d_s);
             this.d_p = this.d_s / mean_s;
             this.d_max_p = max(this.d_p);
+            %this.d_f/mean_s
             pcolor(this.d_f/mean_s)
             axis square
         end
