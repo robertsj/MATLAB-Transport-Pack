@@ -66,7 +66,10 @@ classdef Boundary < handle
             elseif strcmp(get(input, 'bc_right'), 'reflect')
                 this.d_bc{mesh.RIGHT}   = ...
                     Reflective(this, input, mesh, quadrature, mesh.RIGHT);
-            end   
+            elseif strcmp(get(input, 'bc_right'), 'response')
+                this.d_bc{mesh.RIGHT}   = ...
+                    Response(this, input, mesh, quadrature, mesh.RIGHT);
+            end
             if mesh.DIM > 1
                 if strcmp(get(input, 'bc_bottom'), 'vacuum')
                     this.d_bc{mesh.BOTTOM}   = ...
@@ -74,6 +77,9 @@ classdef Boundary < handle
                 elseif strcmp(get(input, 'bc_bottom'), 'reflect')
                     this.d_bc{mesh.BOTTOM}   = ...
                         Reflective(this, input, mesh, quadrature, mesh.BOTTOM);
+                elseif strcmp(get(input, 'bc_bottom'), 'response')
+                    this.d_bc{mesh.BOTTOM}   = ...
+                        Response(this, input, mesh, quadrature, mesh.BOTTOM);
                 end
                 if strcmp(get(input, 'bc_top'), 'vacuum')
                     this.d_bc{mesh.TOP}   = ...
@@ -81,7 +87,10 @@ classdef Boundary < handle
                 elseif strcmp(get(input, 'bc_top'), 'reflect')
                     this.d_bc{mesh.TOP}   = ...
                         Reflective(this, input, mesh, quadrature, mesh.TOP);
-                end
+                elseif strcmp(get(input, 'bc_top'), 'response')
+                    this.d_bc{mesh.TOP}   = ...
+                        Response(this, input, mesh, quadrature, mesh.TOP);
+            end
             end
             
         end
@@ -101,6 +110,13 @@ classdef Boundary < handle
             this.d_g = g;
         end
         
+        % ======================================================================
+        %> @brief Get the current group.
+        %> @return Current group.
+        % ======================================================================
+        function g = group(this, g)
+            g = this.d_g;
+        end
         
         % ======================================================================
         %> @brief Set the incident boundary fluxes.

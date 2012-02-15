@@ -122,22 +122,36 @@ classdef Response < BoundaryCondition
             % i.e. for a given side, the data is stored by space and 
             % discrete angle and group.  The angle is the *cardinal*
             % index.  The quadrature is arranged (pol1,azi1,pol1,azi2,...)
-            
+
             % Compute the incident flux if needed.
-            if this.d_set == 0
-                this.d_set = 1;
-                for o = 1:length(this.d_octants(:, 1))
+            if this.d_set == 0 && group(this.d_boundary) == this.d_order_group
+                this.d_set = 1;   
+            
+                Ps = this.d_basis_space(:, this.d_order_space+1);
+                Pa = this.d_basis_azimuth(:, this.d_order_azimuth+1);
+                Pp = this.d_basis_polar(:, this.d_order_polar+1);
+                
+                for o = 1:1%length(this.d_octants(:, 1))
                     
                     o_in  = this.d_octants(o, 1); % incident octant
                     
                     f = zeros(this.d_number_space, ...
                         this.d_number_azimuth*this.d_number_polar);
 
+                    if o == 1
+                        a1 = 1; 
+                        a2 = this.d_number_azimuth;
+                        a3 = 1;
+                    else
+                        a1 = this.d_number_azimuth;
+                        a2 = 1;
+                        a3 = -1;
+                    end
                     for s = 1:this.d_number_space
                         angle = 1;
-                        for a = (o-1)*this.d_number_azimuth+1:o*this.d_number_azimuth
+                        for a = a1:a3:a2
                             for p = 1:this.d_number_polar
-                                f(s, angle) = 1;
+                                f(s, angle) = Ps(s)*Pa(a)*Pp(p);
                                 angle = angle + 1;
                             end
                         end
