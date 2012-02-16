@@ -6,20 +6,32 @@
 %> The multigroup transport equations are solved via Gauss-Seidel with
 %> iterations over the upscatter block. 
 % ==============================================================================
-classdef Fixed
+classdef Fixed < handle
     
     properties
-        d_input                 % User input.
-        d_mesh                  % Cartesian mesh.
-        d_mat                   % Materials.
-        d_quadrature            % Angular mesh.
-        d_source                % External volume source.
-        d_boundary_source       % External boundary source.
-        d_fission_source        % Fission source.
-        d_state                 % State variables.
+        %> User input.
+        d_input
+        %> Problem Geometry.
+        d_mesh                 
+        %> Material Database
+        d_mat                   
+        %> Angular mesh.
+        d_quadrature            
+        %> External volume source.
+        d_source                
+        %> External boundary source.
+        d_boundary_source       
+        %> Fission source.
+        d_fission_source        
+        %> State variables.
+        d_state             
+        %> Within-group solver.
         d_inner_solver 
+        %> Boundary flux container.
         d_boundary
+        %> Convergence tolerance.
         d_tolerance
+        %> Maximum number of iterations.
         d_max_iters
     end
     
@@ -54,6 +66,8 @@ classdef Fixed
            obj.d_mat        = mat;
            obj.d_quadrature = quadrature;
            obj.d_boundary   = boundary;
+           obj.d_source     = external_source;
+           obj.d_fission_source = fission_source;
            
            % Check input; otherwise, set defaults for optional parameters.
            obj.d_tolerance = get(input, 'outer_tolerance');
@@ -92,20 +106,19 @@ classdef Fixed
             % solves the problem.
             for g = 1:number_groups(obj.d_mat)
                 
-                % Set the group source.
-                % group_source = d_group_s;
-                
                 [flux_g_error(g), inners] = ...
-                    solve(obj.d_inner_solver, g);%, obj.d_source);
+                    solve(obj.d_inner_solver, g);
                 
                 total_inners = total_inners + inners;
+                
             end
             flux_error = max(flux_g_error);
             print_iteration(obj, 1, flux_error, total_inners)
             
+            
             flux_error = 1;
             iteration  = 1;
-            % Outer group iterations for upscatter, if not a
+            % Outer group iterations for upscatter/fission, if not a
             % downscatter-only problem.
             if (~downscatter(obj.d_mat))
                 while (flux_error > obj.d_tolerance && ...
@@ -148,6 +161,6 @@ classdef Fixed
         function reset_convergence(obj, max_iters, tolerance)
             reset_convergence(obj.d_inner_solver, max_iters, tolerance);
         end
-        
+
     end
 end

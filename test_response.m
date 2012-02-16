@@ -17,7 +17,8 @@ input = Input();
 put(input, 'number_groups',         1);
 
 % Inner iteration parameters.
-put(input, 'inner_tolerance',       1e-4);
+put(input, 'inner_tolerance',       1e-3);
+put(input, 'outer_tolerance',       1e-5);
 put(input, 'inner_solver',          'SI');
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  6);
@@ -53,10 +54,10 @@ set_sources(q_e, spectra, placement);
 
 % Empty fission source.
 q_f = FissionSource(state, mesh, mat);
-%initialize(q_f);
+initialize(q_f);
 
 % Make the inner iteration.
-solver= Fixed(input,        ...
+solver= FixedMultiply(input,        ...
               state,    	...
               boundary,     ...
               mesh,     	...
@@ -73,12 +74,13 @@ toc
 
 % Get the flux
 f = flux(state, 1);
-subplot(2,1,1)
+%subplot(2,1,1)
 plot_flux(mesh, f)
 axis square
-% Get the flux
-f = flux(state, 1);
-% and plot it
-subplot(2,1,2)
-plot_flux(mesh, f)
-axis square
+shading flat
+% % Get the flux
+% f = flux(state, 1);
+% % and plot it
+% subplot(2,1,2)
+% plot_flux(mesh, f)
+% axis square

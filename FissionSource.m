@@ -89,8 +89,10 @@ classdef FissionSource < handle
            % obj.d_fission_density = obj.d_nu_sigma_f(:, end);
             
             % and normalize to unity.
-            obj.d_fission_density = obj.d_fission_density / ...
-                norm(obj.d_fission_density);
+            nrm = norm(obj.d_fission_density);
+            if nrm ~= 0.0
+                obj.d_fission_density = obj.d_fission_density / nrm;
+            end
                                  
             % Signal we're ready
             obj.d_initialized = 1;

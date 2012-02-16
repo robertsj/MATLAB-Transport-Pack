@@ -14,7 +14,7 @@ function [P] = DiscreteLP(M)
     P(1:end, 1) = 1; 
     
     % First
-    if M > 1
+    if M > 0
         P(1:end, 2) = 1 - (2*k)/M;  
     end
     

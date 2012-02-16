@@ -12,7 +12,7 @@
 %> 
 %> The standard power iteration method is employed.
 % ==============================================================================
-classdef Eigensolver
+classdef Eigensolver < handle
     
     properties
         %> User input.

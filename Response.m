@@ -131,7 +131,7 @@ classdef Response < BoundaryCondition
                 Pa = this.d_basis_azimuth(:, this.d_order_azimuth+1);
                 Pp = this.d_basis_polar(:, this.d_order_polar+1);
                 
-                for o = 1:1%length(this.d_octants(:, 1))
+                for o = 1:length(this.d_octants(:, 1))
                     
                     o_in  = this.d_octants(o, 1); % incident octant
                     
@@ -151,7 +151,10 @@ classdef Response < BoundaryCondition
                         angle = 1;
                         for a = a1:a3:a2
                             for p = 1:this.d_number_polar
-                                f(s, angle) = Ps(s)*Pa(a)*Pp(p);
+                                if 1 == 1%s == 15 && a == 1
+                                f(s, angle) = Ps(s)*...
+                                    Pa(a+(o-1)*this.d_number_azimuth)*Pp(p);
+                                end
                                 angle = angle + 1;
                             end
                         end
