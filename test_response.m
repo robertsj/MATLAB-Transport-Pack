@@ -17,9 +17,10 @@ input = Input();
 put(input, 'number_groups',         1);
 
 % Inner iteration parameters.
-put(input, 'inner_tolerance',       1e-3);
+put(input, 'inner_tolerance',       1e-5);
+put(input, 'max_inner_iters',       100);
 put(input, 'outer_tolerance',       1e-5);
-put(input, 'inner_solver',          'SI');
+put(input, 'inner_solver',          'Livolant');
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  6);
 put(input, 'bc_left',               'vacuum');
@@ -32,9 +33,9 @@ put(input, 'print_out',             1);
 put(input, 'rf_order_group',        1);
 put(input, 'rf_order_space',        0);
 put(input, 'rf_order_polar',        0);
-put(input, 'rf_order_azimuth',      0);
-put(input, 'quad_number_polar',     2);
-put(input, 'quad_number_azimuth',   4);
+put(input, 'rf_order_azimuth',      1);
+put(input, 'quad_number_polar',     3);
+put(input, 'quad_number_azimuth',   6);
 % One material, one group, c = 0.9
 mat         = test_materials(1);
 
@@ -42,7 +43,7 @@ mat         = test_materials(1);
 mesh        = test_mesh(1);
 
 state       = State(input, mesh);
-quadrature  = QuadrupleRange(8);
+quadrature  = QuadrupleRange(18);
 boundary    = BoundaryMesh(input, mesh, quadrature);
 
 % Uniform source.

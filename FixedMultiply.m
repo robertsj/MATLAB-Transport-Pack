@@ -60,12 +60,20 @@ classdef FixedMultiply < Fixed
             flux_error = 1;
             iteration  = 1;
             flag = 1;
+            phi_old = zeros(number_cells(this.d_mesh), ...
+                number_groups(this.d_mat));
+            
             % Outer group iterations over all groups
             while ((flux_error > this.d_tolerance && ...
                    iteration < this.d_max_iters) || flag==1)
                 
                 setup_outer(this.d_fission_source, 1/this.d_keff);
                
+                % Save old group fluxes
+                for g = 1:number_groups(this.d_mat)
+                    phi_old(:, g) = flux(this.d_state, g);
+                end
+                
                 % Iterate over all groups
                 for g = 1:number_groups(this.d_mat)
                     
@@ -73,19 +81,19 @@ classdef FixedMultiply < Fixed
                         solve(this.d_inner_solver, g);
                     
                     total_inners = total_inners + inners;
+                   
                     
-                    print_iteration(this, iteration, flux_error, ...
-                        total_inners)
-                    
+                    flux_g_error(g) = norm(flux(this.d_state, g)-phi_old(:, g));
                 end
-                
+
                 update(this.d_fission_source);
 
                 iteration  = iteration + 1;
-                flux_error = max(flux_g_error)
-                if iteration > 3
+                flux_error = max(flux_g_error);
+                if iteration > 6
                     flag = 0;
                 end
+                print_iteration(this, iteration, flux_error, total_inners)
                 
             end
             output.flux_error   = flux_error;

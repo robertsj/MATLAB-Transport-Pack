@@ -171,6 +171,7 @@ function y = apply(x, obj)
     % Build the within-group source.  This is equivalent to
     %   x <-- M*S*x
     build_scatter_source(obj, obj.d_g, x); 
+        
     sweep_source = obj.d_scatter_source;
     
     % Set incident boundary fluxes.
@@ -179,6 +180,7 @@ function y = apply(x, obj)
     % Sweep over all angles and meshes.  This is equivalent to
     %   y <-- D*inv(L)*M*S*x
     y = sweep(obj.d_sweeper, sweep_source, obj.d_g);
+    
     
     % Now, return the following
     % y <-- x - D*inv(L)*M*S*x = (I - D*inv(L)*M*S)*x 
