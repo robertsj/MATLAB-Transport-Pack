@@ -16,10 +16,10 @@ if n == 1
     % Total
     mat = set_sigma_t(mat, 1, 1, 1.0); % (object, material, group, value)
     % Fission 
-    mat = set_nu_sigma_f(mat, 1, 1, 1.0); 
+    mat = set_nu_sigma_f(mat, 1, 1, 0.4); 
     mat = set_chi(mat, 1, 1, 1.0);     
     % Scattering
-    mat = set_sigma_s(mat, 1, 1, 1, 0.3); % (object, material, g, g', value);
+    mat = set_sigma_s(mat, 1, 1, 1, 0.2); % (object, material, g, g', value);
 
     
     % Total
