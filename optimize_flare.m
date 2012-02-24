@@ -6,7 +6,7 @@
 %  For core 2
 %   -1.4911192363312082	-0.3564574661838369	0.07210842603953055
 function y = optimize_flare(x)
-core = 2;
+core = 3;
 % Get the sample materials for fresh, once-, and twice-burned bundles.
 input = Input();
 put(input, 'node_width',  21  );
@@ -83,10 +83,13 @@ end
 
 % Generate the input and add FLARE-specific things.  
 
-
+if length(x) == 3
+    x(4) = 0;
+end
 put(input, 'mixing_factor', x(1));
 put(input, 'albedo_single', x(2));
 put(input, 'albedo_double', x(3)); 
+put(input, 'mixing_factor_4', x(4));
 
 % Create the solver.  This generates the coupling coefficients.
 solver = FLARE(input, mat, map);
@@ -102,6 +105,6 @@ err_k  = abs(k - refkeff)/refkeff
 err_p  = norm((p-refp)./refp, Inf)
 err_max_p = abs(max_p - refmaxpeak)/refmaxpeak
 
-y = 10*err_k + 10*err_max_p +  10*err_p;
+y = 10*err_k + 100*err_max_p +  10*err_p;
 
 end

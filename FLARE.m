@@ -131,7 +131,8 @@ classdef FLARE < handle
             this.d_number_nodes = n;
             
             % Now, compute the coefficients, wpp and wqp.  
-            g   = get(input, 'mixing_factor');
+            gg  = get(input, 'mixing_factor');
+            h   = get(input, 'mixing_factor_2');
             aI  = get(input, 'albedo_single');
             aII = get(input, 'albedo_double');
             this.d_wleak = zeros(n, 1);
@@ -151,6 +152,7 @@ classdef FLARE < handle
                 this.d_kinf(i) = (nu_sigma_f(mat, id, 1) + ...
                                   nu_sigma_f(mat, id, 2) * ...
                                   sigma_s(mat, id, 2, 1)  / sig2) / sig1;   
+                MigA(i) = sqrt(D1/sig1 + D2/sig2);
             end
             
             for i = 1:n
@@ -168,14 +170,17 @@ classdef FLARE < handle
                 % Compute the this-probabilities
                 this.d_number_neighbors(i) = sum(neighbors(i, :)>0);  
                 
+                % MODIFIED FLARE
+                g = gg + h*this.d_number_neighbors(i);
+                
                 % FLARE MODEL
-                w = (1 - g) * 0.5 * M / this.d_h + g * M^2 / this.d_h^2;
+                w = (1 - g) * 0.5 * M / this.d_h + ...
+                    g * M^2 / this.d_h^2;
                 
                 
                 % COMET-G MODEL
-                w = (1 - g) * 0.5 * M / this.d_h + ...
-                    g * M^2/this.d_h^2 * ...
-                    (1/this.d_kinf(i));
+                 w = (1 - g) * 0.5 * M / this.d_h + ...
+                     g * M^2 / this.d_h^2 * (1/this.d_kinf(i)) * 2/(1+mean(MigA)/M);
                 
                 for q = 1:4
                     if neighbors(i, q) > 0
@@ -265,6 +270,7 @@ classdef FLARE < handle
                                     s(p) = s(p) + this.d_wpq(p, q, 2)*s_o(qq);
                                 end
                             end
+                            error(' ')
                             s(p) = s(p) * this.d_kinf(p)/k;
                         end
                     end
