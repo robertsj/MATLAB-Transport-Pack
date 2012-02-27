@@ -3,7 +3,10 @@
 % ==============================================================================
 %> @brief Holds the incident and outgoing boundary fluxes for a mesh.
 %>
-%> More here...
+%> For now, this class is largely limited to 1-d and 2-d problems.  Access is
+%> with respect to "vertical" (1-d/2-d) and "horizontal (2-d only) edges,
+%> specified as a function of octant and whether the incident or outgoing flux 
+%> is desired.
 % ==============================================================================
 classdef BoundaryMesh < Boundary
     
@@ -69,9 +72,6 @@ classdef BoundaryMesh < Boundary
         %> @param inout Incoming/outgoing switch 
         %> @return      Boundary flux array.
         % ======================================================================
-        % example:  We are starting from the left, octant 1, going right.  We
-        % call this function with o=1, inout=IN=1.  We get LEFT.
-        %
         function f = get_psi_v(this, o, a, inout)
             if this.d_quadrature.octant(o, 1) == inout % 1/-1
                 side = this.d_mesh.LEFT;     % We are starting from the left.
@@ -111,9 +111,6 @@ classdef BoundaryMesh < Boundary
         %> @param inout Incoming/outgoing switch 
         %> @return      Boundary flux array.
         % ======================================================================
-        % example:  We are starting from the left, octant 1, going right.  We
-        % call this function with o=1, inout=IN=1.  We get LEFT.
-        %
         function f = get_psi_v_octant(this, o, inout)
             if this.d_quadrature.octant(o, 1) == inout % 1/-1
                 side = this.d_mesh.LEFT;     % We are starting from the left.

@@ -105,6 +105,15 @@ classdef Response < BoundaryCondition
                 % normal LP expansion; we'll look at DPn later.
                 this.d_basis_azimuth = DiscreteLP(2*this.d_number_azimuth-1);
                 
+                % This azimuth basis is for left-to-right.  The angles as stored
+                % are in mu_1 < mu_2 < ... < mu_N (or eta_1 > ...)
+                % Hence, they are in order for vertical surfaces.
+                if side > 2
+                    b  = this.d_basis_azimuth;
+                    lb = length(b);
+                    this.d_basis_azimuth(1:lb/2, :) = b(lb/2:-1:1, :);
+                    this.d_basis_azimuth(lb/2+1:end, :) = b(end:-1:lb/2+1, :);
+                end
             else
                 error('Only DIM = 1, 2  supported')
             end
@@ -137,8 +146,19 @@ classdef Response < BoundaryCondition
                     
                     f = zeros(this.d_number_space, ...
                         this.d_number_azimuth*this.d_number_polar);
-
-                    if o == 1
+                    
+                    % If oo = 1, it's a vertical side, else a horizontal side.
+                    % The indices are selected so that psi is defined as a
+                    % function of monotonically increasing angle with respect to
+                    % its incident surface.  In other words, all incident
+                    % angular fluxes are defined left to right along an edge
+                    % both in space and angle.
+%                     if (this.d_side == Mesh.LEFT || this.d_side == Mesh.RIGHT)
+%                         oo = 1;
+%                     else
+%                         oo = 1;
+%                     end
+                    if (o == 1) % this makes angles symmetric
                         a1 = 1; 
                         a2 = this.d_number_azimuth;
                         a3 = 1;
@@ -148,17 +168,21 @@ classdef Response < BoundaryCondition
                         a3 = -1;
                     end
                     for s = 1:this.d_number_space
-                        angle = 1;
+                        ang = 1; % cardinal index
                         for a = a1:a3:a2
                             for p = 1:this.d_number_polar
-                                if 1 == 1%s == 15 && a == 1
-                                f(s, angle) = Ps(s)*...
-                                    Pa(a+(o-1)*this.d_number_azimuth)*Pp(p);
+                                if 1==1%s == 25 && angle == 1
+                                if s==1
+                                    [muu] = angle(this.d_quadrature, o, ang)
                                 end
-                                angle = angle + 1;
+                                % a is the right
+                                f(s, (a-1)*this.d_number_polar+p) = Ps(s)*...
+                                    Pa(ang+(o-1)*this.d_number_azimuth)*Pp(p);
+                                end
                             end
+                            ang = ang + 1;
                         end
-                    end        
+                    end
                     
                     if this.d_side == Mesh.LEFT || this.d_side == Mesh.RIGHT
                         set_psi_v_octant(this.d_boundary, o_in, f, Boundary.IN);

@@ -117,7 +117,7 @@ classdef FixedMultiply < Fixed
         end
         
         function set_keff(this, k)
-            d_keff = keff; 
+            this.d_keff = k; 
         end
     end
 end

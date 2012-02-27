@@ -9,9 +9,15 @@
 %>     2) GMRES for response (bc's not updated right now...)
 %>     3) Multigroup acceleration?  CMFD?
 %>     4) RF table format
+% there is
+%
+% Add the capability to compute the flux for a given set of incident responses.
+% That way, we can see what higher current modes might mean physically.
+%
+% Also, does the "adjoint" fall out somewhere?
 % ==============================================================================
 
-
+flag = 1;
 
 %clear classes
 
@@ -22,17 +28,24 @@ input = Input();
 put(input, 'number_groups',         1);
 
 % Inner iteration parameters.
-put(input, 'inner_tolerance',       1e-4);
+put(input, 'inner_tolerance',       1e-8);
 put(input, 'inner_max_iters',       100);
-put(input, 'outer_tolerance',       1e-4);
-put(input, 'outer_max_iters',       200);
-put(input, 'inner_solver',          'Livolant');
+put(input, 'outer_tolerance',       1e-8);
+put(input, 'outer_max_iters',       300);
+put(input, 'inner_solver',          'SI');
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  6);
-put(input, 'bc_left',               'vacuum');
+if flag == 0
+put(input, 'bc_left',               'reflect');
+put(input, 'bc_right',              'reflect');
+put(input, 'bc_top',                'reflect');
+put(input, 'bc_bottom',             'reflect');
+else
+put(input, 'bc_left',               'response');
 put(input, 'bc_right',              'vacuum');
 put(input, 'bc_top',                'vacuum');
-put(input, 'bc_bottom',             'response');
+put(input, 'bc_bottom',             'vacuum');
+end
 put(input, 'print_out',             1);
 
 % Set the incident response order
@@ -40,8 +53,8 @@ put(input, 'rf_order_group',        1);
 put(input, 'rf_order_space',        0);
 put(input, 'rf_order_polar',        0);
 put(input, 'rf_order_azimuth',      0);
-put(input, 'quad_number_polar',     1);
-put(input, 'quad_number_azimuth',   2);
+put(input, 'quad_number_polar',     4);
+put(input, 'quad_number_azimuth',   8);
 
 % One material, one group, c = 0.9
 mat         = test_materials(1);
@@ -50,7 +63,7 @@ mat         = test_materials(1);
 mesh        = test_mesh(1);
 
 state       = State(input, mesh);
-quadrature  = QuadrupleRange(2);
+quadrature  = QuadrupleRange(32);
 
 boundary    = BoundaryMesh(input, mesh, quadrature);
 
@@ -61,8 +74,9 @@ q_e         = Source(mesh, 2);
 q_f = FissionSource(state, mesh, mat);
 initialize(q_f);
 
+if (flag==0)
 % Make the inner iteration.
-solver= FixedMultiply(input,        ...
+solver= Eigensolver(input,        ...
               state,    	...
               boundary,     ...
               mesh,     	...
@@ -71,18 +85,26 @@ solver= FixedMultiply(input,        ...
               q_e,          ...
               q_f);
  
-          
-          
+%set_keff(solver, 0.49);
+solve(solver);          %0.421086  0.5=0.99997268
+error('stop')
+end
+
 % RESPONSE LOOP
 k = 0;
 coef = cell(4, 1);
-coef{1} = zeros(2*2*1, 2*2*1);
-coef{2} = zeros(2*2*1, 2*2*1);
-coef{3} = zeros(2*2*1, 2*2*1);
-coef{4} = zeros(2*2*1, 2*2*1);
-for s_o = 0:1
-    for a_o = 0:1
-        for p_o = 0:0
+max_s_o = 4;
+max_a_o = 4;
+max_p_o = 3;
+max_o   = max_s_o * max_a_o * max_p_o;
+coef{1} = zeros(max_o);
+coef{2} = zeros(max_o);
+coef{3} = zeros(max_o);
+coef{4} = zeros(max_o);
+for s_o = 0:max_s_o
+    for a_o = 0:max_a_o
+        for p_o = 0:max_p_o
+            
             k = k + 1;       
             % Set the incident response order
             put(input, 'rf_order_group',        1);
@@ -101,16 +123,18 @@ for s_o = 0:1
                 quadrature, 	...
                 q_e,          ...
                 q_f);
-             
+            set_keff(solver, 0.5);
             % Solve the problem
             tic
                 out = solve(solver); 
             toc
 
             %Get the flux
-            phi = flux(state, 1);
+            phi{k} = flux(state, 1);
             %subplot(2,1,1)
-            plot_flux(mesh, phi)
+            %figure(k)
+            plot_flux(mesh, phi{k})
+            pause(1)
             axis square
             shading flat
 
@@ -132,24 +156,24 @@ for s_o = 0:1
             num_ang        = number_polar*number_azimuth;
 
 
-            octants = [4 3   % ref
-                       2 1   % far
-                       3 2   % lef
-                       1 4]; % rig
+            octants = [3 2   % ref
+                       1 4   % far
+                       4 3   % lef
+                       2 1]; % rig
 
             
 
             % Expand the coefficients
             for side = 1:4
                 % always left to right in space w/r to outgoing flux
-                if side == 2 || side == 3
+                if side > 0 || side == 2 || side == 3
                     s1 = 1;
                     s2 = number_space;
                     s3 = 1;
                 else
                     s1 = number_space;
-                    s2 = -1;
-                    s3 = 1;
+                    s2 = 1;
+                    s3 = -1;
                 end
                 for o = 1:2
                     o_in  = octants(side, o); % incident octant
@@ -164,21 +188,31 @@ for s_o = 0:1
                         a3 = -1;
                     end
                     % Get psi(x, angles)
-                    ft = get_psi_h_octant(boundary, o_in, Boundary.OUT);
+                    if (side == 1 || side == 2)
+                        ft = get_psi_v_octant(boundary, o_in, Boundary.OUT);
+                        if (side == 1)
+                           ft(1:end,:)=ft(end:-1:1,:); 
+                        end
+                    else
+                        ft = get_psi_h_octant(boundary, o_in, Boundary.OUT);  
+                        if (side == 4)
+                           ft(1:end,:)=ft(end:-1:1,:); 
+                        end                        
+                    end
                     for s = s1:s3:s2
-                        angle = 1;
+                        ang = 1;
                         for a = a1:a3:a2
-                            f(s, (o-1)*num_ang+angle) = ft(s, a);
-                            angle = angle + 1;
+                            f(s, (o-1)*num_ang+ang) = ft(s, a);
+                            ang = ang + 1;
                         end
                     end
                 end
 
                 % Space->Azimuth->Polar.  f(space, angle, group)
                 i = 1;
-                for ord_s = 1:2
-                    for ord_a = 1:2
-                        for ord_p = 1:1
+                for ord_s = 1:max_s_o+1
+                    for ord_a = 1:max_a_o+1
+                        for ord_p = 1:max_p_o+1
                             psi_ap = zeros(number_azimuth, number_polar);
                             angle = 0;
                             for a = 1:number_azimuth*2
@@ -187,9 +221,15 @@ for s_o = 0:1
                                     psi_ap(a, p) = f(:, angle)'*basis_space(:, ord_s);
                                 end
                             end
-                            psi_p = zeros(number_polar, 1);
+                            psi_p = zeros(number_polar, 1); 
+                            b = basis_azimuth(:, ord_a);
+                            if side > 2
+                                lb = length(b);
+                                b(1:lb/2) = b(lb/2:-1:1);
+                                b(lb/2+1:end) = b(end:-1:lb/2+1);
+                            end
                             for p = 1:number_polar
-                                psi_p(p) = psi_ap(:, p)'*basis_azimuth(:, ord_a);
+                                psi_p(p) = psi_ap(:, p)'*b;
                             end
                             coef{side}(i, k) = psi_p'*basis_polar(:, ord_p); % i <- k
                             i = i + 1;
@@ -202,4 +242,28 @@ for s_o = 0:1
         end % azimuth loop
     end % polar loop
 end % space loop
+
+max_o = (max_s_o + 1)*(max_a_o + 1)*(max_p_o + 1);
+R( (0*max_o)+1: 1*max_o, (0*max_o)+1: 1*max_o) = coef{1}(:, :); % left -> left
+R( (1*max_o)+1: 2*max_o, (0*max_o)+1: 1*max_o) = coef{2}(:, :); % left -> right
+R( (2*max_o)+1: 3*max_o, (0*max_o)+1: 1*max_o) = coef{3}(:, :); % left -> top
+R( (3*max_o)+1: 4*max_o, (0*max_o)+1: 1*max_o) = coef{4}(:, :); % left -> bottom
+
+
+R( (0*max_o)+1: 1*max_o, (1*max_o)+1: 2*max_o) = coef{2}(:, :); % right -> lef
+R( (1*max_o)+1: 2*max_o, (1*max_o)+1: 2*max_o) = coef{1}(:, :); % right -> right
+R( (2*max_o)+1: 3*max_o, (1*max_o)+1: 2*max_o) = coef{4}(:, :); % right -> top
+R( (3*max_o)+1: 4*max_o, (1*max_o)+1: 2*max_o) = coef{3}(:, :); % right -> bottom
+
+
+R( (0*max_o)+1: 1*max_o, (2*max_o)+1: 3*max_o) = coef{3}(:, :); % bottom -> left
+R( (1*max_o)+1: 2*max_o, (2*max_o)+1: 3*max_o) = coef{4}(:, :); % bottom -> right
+R( (2*max_o)+1: 3*max_o, (2*max_o)+1: 3*max_o) = coef{1}(:, :); % bottom -> bottom
+R( (3*max_o)+1: 4*max_o, (2*max_o)+1: 3*max_o) = coef{2}(:, :); % bottom -> top
+
+
+R( (0*max_o)+1: 1*max_o, (3*max_o)+1: 4*max_o) = coef{4}(:, :); % top -> left
+R( (1*max_o)+1: 2*max_o, (3*max_o)+1: 4*max_o) = coef{3}(:, :); % top -> right
+R( (2*max_o)+1: 3*max_o, (3*max_o)+1: 4*max_o) = coef{2}(:, :); % top -> bottom
+R( (3*max_o)+1: 4*max_o, (3*max_o)+1: 4*max_o) = coef{1}(:, :); % top -> top
 
