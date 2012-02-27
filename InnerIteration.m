@@ -293,6 +293,23 @@ classdef InnerIteration < handle
         end % end function build_scatter_source
         
         % ======================================================================
+        %> @brief Build all the scattering sources.
+        %
+        %> @param   g       Group for this problem.  (I.e. row in MG).
+        %> @param   phi     Current MG flux.
+        % ======================================================================
+        function obj = build_all_scatter_source(obj, g, phi)
+
+            for gp = lower(obj.d_mat, g):upper(obj.d_mat, g)
+                obj.d_scatter_source = obj.d_scatter_source + ...
+                    phi(:, gp) .* obj.d_sigma_s{g}(:, gp);
+            end
+            % Apply moments-to-discrete operator.
+            obj.d_scatter_source = apply(obj.d_M, obj.d_scatter_source); 
+            
+        end % end function build_scatter_source
+        
+        % ======================================================================
         %> @brief Build source for this group excluding within-group scatter.
         %
         %> @param   g       Group for this problem.

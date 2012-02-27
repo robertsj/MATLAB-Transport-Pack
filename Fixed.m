@@ -51,7 +51,7 @@ classdef Fixed < handle
         %>
         %> @return Instance of the Fixed class.
         % ======================================================================
-        function obj = Fixed(input,            ...
+        function this = Fixed(input,            ...
                              state,            ...
                              boundary,         ...
                              mesh,             ...
@@ -60,29 +60,29 @@ classdef Fixed < handle
                              external_source,  ...
                              fission_source )
             
-           obj.d_input      = input;
-           obj.d_state      = state;
-           obj.d_mesh       = mesh;
-           obj.d_mat        = mat;
-           obj.d_quadrature = quadrature;
-           obj.d_boundary   = boundary;
-           obj.d_source     = external_source;
-           obj.d_fission_source = fission_source;
+           this.d_input      = input;
+           this.d_state      = state;
+           this.d_mesh       = mesh;
+           this.d_mat        = mat;
+           this.d_quadrature = quadrature;
+           this.d_boundary   = boundary;
+           this.d_source     = external_source;
+           this.d_fission_source = fission_source;
            
            % Check input; otherwise, set defaults for optional parameters.
-           obj.d_tolerance = get(input, 'outer_tolerance');
-           obj.d_max_iters = get(input, 'outer_max_iters');
+           this.d_tolerance = get(input, 'outer_tolerance');
+           this.d_max_iters = get(input, 'outer_max_iters');
            
            % Setup the within-group solver.
            inner = get(input, 'inner_solver');
            if strcmp(inner, 'SI')
-               obj.d_inner_solver = SourceIteration();
+               this.d_inner_solver = SourceIteration();
            elseif strcmp(inner, 'Livolant')
-               obj.d_inner_solver = Livolant(); 
+               this.d_inner_solver = Livolant(); 
            elseif strcmp(inner, 'GMRES')
-               obj.d_inner_solver = GMRESIteration(); 
+               this.d_inner_solver = GMRESIteration(); 
            end
-           setup(obj.d_inner_solver,	...
+           setup(this.d_inner_solver,	...
                  input,                 ...
                  state,                 ...
                  boundary,              ...
@@ -94,47 +94,61 @@ classdef Fixed < handle
            
         end
         
-        function output = solve(obj)
+        function output = solve(this)
             
             % Group-wise flux residual.  All residuals are *relative* and
             % are based on the L-infinity norm.
-            flux_g_error = zeros(number_groups(obj.d_mat), 1);
+            flux_g_error = zeros(number_groups(this.d_mat), 1);
             total_inners = 0;
             
             % Initial downscatter.  We traverse all groups, solving the
             % within-group equations.  If there is no upscatter, this
             % solves the problem.
-            for g = 1:number_groups(obj.d_mat)
+            for g = 1:number_groups(this.d_mat)
                 
                 [flux_g_error(g), inners] = ...
-                    solve(obj.d_inner_solver, g);
+                    solve(this.d_inner_solver, g);
                 
                 total_inners = total_inners + inners;
                 
             end
             flux_error = max(flux_g_error);
-            print_iteration(obj, 1, flux_error, total_inners)
+            print_iteration(this, 1, flux_error, total_inners)
             
             
             flux_error = 1;
             iteration  = 1;
             % Outer group iterations for upscatter/fission, if not a
             % downscatter-only problem.
-            if (~downscatter(obj.d_mat))
-                while (flux_error > obj.d_tolerance && ...
-                        iteration < obj.d_max_iters )
+            if (~downscatter(this.d_mat))
+                
+                phi_old = zeros(number_cells(this.d_mesh), ...
+                                number_groups(this.d_mat));
+                            
+                while (flux_error > this.d_tolerance && ...
+                        iteration < this.d_max_iters )
+                    
+                    % Save the old group fluxes
+                    for g = 1:number_groups(this.d_mat)
+                        phi_old(:, g) = flux(this.d_state, g);
+                    end
+                    
                     
                     % Iterate only on those groups for which upscattering
                     % occurs.
-                    for g = upscatter_cutoff(obj.d_mat):number_groups(obj.d_mat)
+                    for g = upscatter_cutoff(this.d_mat):number_groups(this.d_mat)
                         
                         [flux_g_error(g), inners] = ...
-                            solve(obj.d_inner_solver, g);%, obj.d_source);
+                            solve(this.d_inner_solver, g);%, this.d_source);
                         
                         total_inners = total_inners + inners;
                         
-                        print_iteration(obj, iteration, flux_error, ...
+                        print_iteration(this, iteration, flux_error, ...
                             total_inners)
+                        
+                        % Compute the norm of the group flux residual.
+                        flux_g_error(g) = norm(flux(this.d_state, g) - ...
+                                               phi_old(:, g));
  
                     end
                     iteration  = iteration + 1;
@@ -147,8 +161,8 @@ classdef Fixed < handle
             
         end
         
-        function print_iteration(obj, iteration, flux_error, total_inners)
-            if (get(obj.d_input, 'print_out'))
+        function print_iteration(this, iteration, flux_error, total_inners)
+            if (get(this.d_input, 'print_out'))
                 fprintf(...
                     '-------------------------------------------------------\n')
                 fprintf('       Iter: %5i, Error: %12.8f, Inners: %5i\n',...
@@ -158,8 +172,8 @@ classdef Fixed < handle
             end
         end
         
-        function reset_convergence(obj, max_iters, tolerance)
-            reset_convergence(obj.d_inner_solver, max_iters, tolerance);
+        function reset_convergence(this, max_iters, tolerance)
+            reset_convergence(this.d_inner_solver, max_iters, tolerance);
         end
 
     end

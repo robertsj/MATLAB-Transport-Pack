@@ -127,29 +127,73 @@ elseif n == 2
     % This sets the scattering bounds, which can eliminate a few operations.
     mat = finalize(mat);
 
-% ---------------------------
-% VERIFY          
-% ---------------------------
-%DBC.Require('mat.sigma_t(1, 1) == 0.1891');
-%DBC.Insist('mat.sigma_t(1, 1) == 0.1891', 'I insist!');
+    % ---------------------------
+    % VERIFY          
+    % ---------------------------
+    %DBC.Require('mat.sigma_t(1, 1) == 0.1891');
+    %DBC.Insist('mat.sigma_t(1, 1) == 0.1891', 'I insist!');
 
-if (mat.sigma_t(1, 1) ~= 0.1890)
-    error('Wrong!')
-end
-if (mat.nu_sigma_f(2, 2) ~= 0.1241)
-    error('Wrong!')
-end
-if (mat.chi(3, 2) ~= 0.0)
-    error('Wrong!')
-end
-if (mat.sigma_s(4, 1, 2) ~= 0)
-    error('Wrong!')
-end
-if (mat.sigma_s(4, 2, 1) ~= 0.0136)
-    error('Wrong!')
-end
+    if (mat.sigma_t(1, 1) ~= 0.1890)
+        error('Wrong!')
+    end
+    if (mat.nu_sigma_f(2, 2) ~= 0.1241)
+        error('Wrong!')
+    end
+    if (mat.chi(3, 2) ~= 0.0)
+        error('Wrong!')
+    end
+    if (mat.sigma_s(4, 1, 2) ~= 0)
+        error('Wrong!')
+    end
+    if (mat.sigma_s(4, 2, 1) ~= 0.0136)
+        error('Wrong!')
+    end
 
-end
+elseif n == 3
+    % Create the Materials object.
+    mat = Materials(2, ...  % groups
+                    2);     % materials
 
+    % ---------------------------
+    % Material 1: Water
+    % ---------------------------
+    
+    % Total
+    mat = set_sigma_t(mat, 1, 1, 0.1890);       % (obj, matid, g, value);
+    mat = set_sigma_t(mat, 1, 2, 1.4633);
+    
+    % Fission
+    mat = set_nu_sigma_f(mat, 1, 1, 0.0);       % Note, default is zero
+    mat = set_nu_sigma_f(mat, 1, 2, 0.0);
+    mat = set_chi(mat, 1, 1, 0.0);
+    mat = set_chi(mat, 1, 2, 0.0);
+    
+    % Scattering
+    mat = set_sigma_s(mat, 1, 1, 1, 0.1507);    % 1 <- 1
+    mat = set_sigma_s(mat, 1, 1, 2, 0.0600);    % 1 <- 2
+    mat = set_sigma_s(mat, 1, 2, 1, 0.0380);    % 2 <- 1
+    mat = set_sigma_s(mat, 1, 2, 2, 1.4536);    % 2 <- 2
+    
+    % ---------------------------
+    % Material 2: Fuel I
+    % ---------------------------
+    
+    % Total
+    mat = set_sigma_t(mat, 2, 1, 0.2263);       % (obj, matid, g, value);
+    mat = set_sigma_t(mat, 2, 2, 1.0119);
+    
+    % Fission
+    mat = set_nu_sigma_f(mat, 2, 1, 0.0067);
+    mat = set_nu_sigma_f(mat, 2, 2, 0.1241);
+    mat = set_chi(mat, 2, 1, 1.0);
+    mat = set_chi(mat, 2, 2, 0.0);
+    
+    % Scattering
+    mat = set_sigma_s(mat, 2, 1, 1, 0.2006);    % 1 <- 1
+    mat = set_sigma_s(mat, 2, 1, 2, 0.0300);    % 1 <- 2
+    mat = set_sigma_s(mat, 2, 2, 1, 0.0361);    % 2 <- 1
+    mat = set_sigma_s(mat, 2, 2, 2, 0.9355);    % 2 <- 2
+
+    mat = finalize(mat);
 
 end

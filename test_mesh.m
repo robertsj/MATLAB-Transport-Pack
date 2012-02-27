@@ -43,13 +43,13 @@ elseif n == 2
     
 elseif n == 3
     
-    xcm    = [ 0.0  20     40]/10;
-    xfm    = [    20 20  ];
-    ycm    = [ 0.0  20    40]/10;
-    yfm    = [    20 20  ];
+    xcm    = [ 0.0  20     40];
+    xfm    = [    5 5  ];
+    ycm    = [ 0.0  20    40];
+    yfm    = [    5 5  ];
 
-    mat_map = [ 1 1
-                1 1];  % | y   x -->
+    mat_map = [ 2 2
+                2 2];  % | y   x -->
 
     mesh = Mesh2D(xfm, yfm, xcm, ycm, mat_map);
 
