@@ -133,7 +133,7 @@ classdef Response < BoundaryCondition
             % index.  The quadrature is arranged (pol1,azi1,pol1,azi2,...)
 
             % Compute the incident flux if needed.
-            if this.d_set == 0 && group(this.d_boundary) == this.d_order_group
+            if group(this.d_boundary) == this.d_order_group
                 this.d_set = 1;   
             
                 Ps = this.d_basis_space(:, this.d_order_space+1);
@@ -172,9 +172,9 @@ classdef Response < BoundaryCondition
                         for a = a1:a3:a2
                             for p = 1:this.d_number_polar
                                 if 1==1%s == 25 && angle == 1
-                                if s==1
-                                    [muu] = angle(this.d_quadrature, o, ang)
-                                end
+%                                 if s==1
+%                                     [muu] = angle(this.d_quadrature, o, ang)
+%                                 end
                                 % a is the right
                                 f(s, (a-1)*this.d_number_polar+p) = Ps(s)*...
                                     Pa(ang+(o-1)*this.d_number_azimuth)*Pp(p);

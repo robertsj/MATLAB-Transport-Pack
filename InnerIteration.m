@@ -103,7 +103,7 @@ classdef InnerIteration < handle
         %>
         %> @return Instance of the InnerIteration class.
         % ======================================================================
-    	function obj = InnerIteration()
+    	function this = InnerIteration()
             % Nothing here for now.
         end
         
@@ -114,7 +114,7 @@ classdef InnerIteration < handle
         %>
         %> @return Flux residual (L-inf norm) and iteration count.
         % ======================================================================
-        [flux_error, iteration] = solve(obj, g);
+        [flux_error, iteration] = solve(this, g);
         
         % ======================================================================
         %> @brief Reset convergence criteria.
@@ -127,9 +127,13 @@ classdef InnerIteration < handle
         %> @param max_iters     Maximum number of iterations.
         %> @param tolerance     Maximum point-wise error in flux
         % ======================================================================
-        function reset_convergence(obj, max_iters, tolerance)
-            obj.d_max_iters = max_iters;
-            obj.d_tolerance = tolerance;
+        function reset_convergence(this, max_iters, tolerance)
+            this.d_max_iters = max_iters;
+            this.d_tolerance = tolerance;
+        end
+        
+        function display_me(this)
+            disp(' inner! ') 
         end
     end
     
@@ -140,7 +144,7 @@ classdef InnerIteration < handle
         %
         %> By keeping everything out of the constructor, we can avoid having to
         %> copy the signature for all derived classes, both in their
-        %> definitions and whereever objects are instantiated.  However, derived
+        %> definitions and whereever thisects are instantiated.  However, derived
         %> classes have other setup issues that need to be done, and so this
         %> serves as a general setup function that \em must be called before
         %> other setup stuff.
@@ -154,7 +158,7 @@ classdef InnerIteration < handle
         %> @param external_source 	User-defined external source.
         %> @param fission_source 	Fission source.
         % ======================================================================
-        function obj = setup_base(obj,              ...
+        function this = setup_base(this,              ...
                                   input,            ...
                                   state,            ...
                                   boundary,         ...
@@ -164,34 +168,34 @@ classdef InnerIteration < handle
                                   external_source,  ...
                                   fission_source    )
                             
-            obj.d_input      = input;                  
-            obj.d_state      = state;
-            obj.d_boundary   = boundary;
-            obj.d_mat        = mat;
-            obj.d_mesh       = mesh;
-            obj.d_quadrature = quadrature;
+            this.d_input      = input;                  
+            this.d_state      = state;
+            this.d_boundary   = boundary;
+            this.d_mat        = mat;
+            this.d_mesh       = mesh;
+            this.d_quadrature = quadrature;
             
             % Check input; otherwise, set defaults for optional parameters.
-            obj.d_tolerance = get(input, 'inner_tolerance');
-            obj.d_max_iters = get(input, 'inner_max_iters');
+            this.d_tolerance = get(input, 'inner_tolerance');
+            this.d_max_iters = get(input, 'inner_max_iters');
             
             % Add external source
-            obj.d_external_source = external_source;
+            this.d_external_source = external_source;
       
             % Add fission source
-            obj.d_fission_source = fission_source;
+            this.d_fission_source = fission_source;
               
             % Initialize the group source
-            obj.d_fixed_source = zeros(number_cells(mesh), 1);
+            this.d_fixed_source = zeros(number_cells(mesh), 1);
             
             % Initialize the within-group source
-            obj.d_scatter_source = zeros(number_cells(mesh), 1);
+            this.d_scatter_source = zeros(number_cells(mesh), 1);
             
             % Initialize scatter data.
-            initialize_scatter(obj);
+            initialize_scatter(this);
             
             % Initialize moment to discrete.
-            obj.d_M = MomentsToDiscrete(mesh.DIM);
+            this.d_M = MomentsToDiscrete(mesh.DIM);
             
             % Get discretization type.
             eq = get(input, 'equation');
@@ -200,38 +204,38 @@ classdef InnerIteration < handle
                 
                 % Equation.
                 if strcmp(eq, 'DD')
-                    obj.d_equation = DD1D(mesh, mat, quadrature);
+                    this.d_equation = DD1D(mesh, mat, quadrature);
                 elseif strcmp(eq, 'SD')
-                    obj.d_equation = SD1D(mesh, mat, quadrature);
+                    this.d_equation = SD1D(mesh, mat, quadrature);
                 else
                    error('unsupported 1D discretization') 
                 end
 
                 % Sweeper
-%                 obj.d_sweeper = Sweep1D(input, mesh, mat, quadrature, ...
-%                     obj.d_boundary, obj.d_equation); 
-                obj.d_sweeper = Sweep1D_mod(input, mesh, mat, quadrature, ...
-                    obj.d_boundary, obj.d_equation);                 
+%                 this.d_sweeper = Sweep1D(input, mesh, mat, quadrature, ...
+%                     this.d_boundary, this.d_equation); 
+                this.d_sweeper = Sweep1D_mod(input, mesh, mat, quadrature, ...
+                    this.d_boundary, this.d_equation);                 
                 
             elseif mesh.DIM == 2 && meshed(mesh)
                 
                 % Equation.
-                obj.d_equation = DD2D(mesh, mat, quadrature);
+                this.d_equation = DD2D(mesh, mat, quadrature);
 
                 % Sweeper
-                obj.d_sweeper = Sweep2D_mod(input, mesh, mat, quadrature, ...
-                    obj.d_boundary, obj.d_equation); 
+                this.d_sweeper = Sweep2D_mod(input, mesh, mat, quadrature, ...
+                    this.d_boundary, this.d_equation); 
                 
             elseif mesh.DIM == 3
                 
             elseif mesh.DIM == 2 && tracked(mesh)
 
                  % Equation.
-                 obj.d_equation = SCMOC(mesh, mat);
+                 this.d_equation = SCMOC(mesh, mat);
                  
                  % Sweeper
-                 obj.d_sweeper = SweepMOC(input, mesh, mat, quadrature, ...
-                     obj.d_boundary, obj.d_equation);
+                 this.d_sweeper = SweepMOC(input, mesh, mat, quadrature, ...
+                     this.d_boundary, this.d_equation);
                  
             else
                 error('Invalid mesh dimension.')
@@ -247,27 +251,27 @@ classdef InnerIteration < handle
         %> While not the most *memory* efficient, this saves *time* by
         %> eliminate lots of loops.
         % ======================================================================
-        function obj = initialize_scatter(obj)
+        function this = initialize_scatter(this)
 
-            for g = 1:number_groups(obj.d_mat)
-            	obj.d_sigma_s{g} = zeros(number_cells(obj.d_mesh), ...
-                                         number_groups(obj.d_mat));
+            for g = 1:number_groups(this.d_mat)
+            	this.d_sigma_s{g} = zeros(number_cells(this.d_mesh), ...
+                                         number_groups(this.d_mat));
             end
             
             % Get the fine mesh material map or the region material map.
-            if meshed(obj.d_mesh)
-                mat = reshape(mesh_map(obj.d_mesh, 'MATERIAL'), ...
-                    number_cells(obj.d_mesh), 1);
+            if meshed(this.d_mesh)
+                mat = reshape(mesh_map(this.d_mesh, 'MATERIAL'), ...
+                    number_cells(this.d_mesh), 1);
             else                
-                mat = region_mat_map(obj.d_mesh);
+                mat = region_mat_map(this.d_mesh);
             end
             
             % Build the local scattering matrix.
-            for i = 1:number_cells(obj.d_mesh)
-                for g = 1:number_groups(obj.d_mat)
-                    for gp = lower(obj.d_mat, g):upper(obj.d_mat, g)
-                        obj.d_sigma_s{g}(i, gp) = ...
-                            sigma_s(obj.d_mat, mat(i), g, gp);
+            for i = 1:number_cells(this.d_mesh)
+                for g = 1:number_groups(this.d_mat)
+                    for gp = lower(this.d_mat, g):upper(this.d_mat, g)
+                        this.d_sigma_s{g}(i, gp) = ...
+                            sigma_s(this.d_mat, mat(i), g, gp);
                     end
                 end
             end
@@ -281,14 +285,14 @@ classdef InnerIteration < handle
         %> @param   g       Group for this problem.
         %> @param   phi     Current group flux.
         % ======================================================================
-        function obj = build_scatter_source(obj, g, phi)
+        function this = build_scatter_source(this, g, phi)
 
             % Build the source.
-            obj.d_scatter_source = ...
-                phi .* obj.d_sigma_s{g}(:, g);
+            this.d_scatter_source = ...
+                phi .* this.d_sigma_s{g}(:, g);
             
             % Apply moments-to-discrete operator.
-            obj.d_scatter_source = apply(obj.d_M, obj.d_scatter_source); 
+            this.d_scatter_source = apply(this.d_M, this.d_scatter_source); 
             
         end % end function build_scatter_source
         
@@ -298,96 +302,119 @@ classdef InnerIteration < handle
         %> @param   g       Group for this problem.  (I.e. row in MG).
         %> @param   phi     Current MG flux.
         % ======================================================================
-        function obj = build_all_scatter_source(obj, g, phi)
-
-            for gp = lower(obj.d_mat, g):upper(obj.d_mat, g)
-                obj.d_scatter_source = obj.d_scatter_source + ...
-                    phi(:, gp) .* obj.d_sigma_s{g}(:, gp);
+        function this = build_all_scatter_source(this, g, phi)
+            % Reset
+            this.d_scatter_source(:) = 0.0;
+            for gp = lower(this.d_mat, g):upper(this.d_mat, g)
+                this.d_scatter_source = this.d_scatter_source + ...
+                    phi(:, gp) .* this.d_sigma_s{g}(:, gp);
             end
             % Apply moments-to-discrete operator.
-            obj.d_scatter_source = apply(obj.d_M, obj.d_scatter_source); 
+            this.d_scatter_source = apply(this.d_M, this.d_scatter_source); 
             
-        end % end function build_scatter_source
+        end % end function build_scatter_source   
         
         % ======================================================================
         %> @brief Build source for this group excluding within-group scatter.
         %
         %> @param   g       Group for this problem.
         % ======================================================================
-        function obj = build_fixed_source(obj, g)
-        % function Q = build_source(obj, g)
+        function this = build_fixed_source(this, g)
+        % function Q = build_source(this, g)
         %   This builds the source (excluding within-group scatter) for the
         %   sweep.  Specifically, a *discrete* source is generated, i.e. the
         %   source appropriate for T*psi = Q.
-            obj.d_g = g;
+            this.d_g = g;
             
-            if (get(obj.d_input, 'print_out'))
+            if (get(this.d_input, 'print_out'))
                 fprintf('          Group: %5i\n', g);
             end
             
-            obj.d_fixed_source(:) = 0;
+            this.d_fixed_source(:) = 0;
             
             % Add downscatter source.
-            for gp = lower(obj.d_mat, g) : g - 1
+            for gp = lower(this.d_mat, g) : g - 1
                 
                 % Get the group gp flux.
-                phi = flux(obj.d_state, gp);
+                phi = flux(this.d_state, gp);
 
                 % Add group contribution.
-                obj.d_fixed_source = obj.d_fixed_source + ...
-                	 phi .* obj.d_sigma_s{g}(:, gp);
+                this.d_fixed_source = this.d_fixed_source + ...
+                	 phi .* this.d_sigma_s{g}(:, gp);
                  
             end
                 
             % Add upscatter source. 
-            for gp = g + 1 : upper(obj.d_mat, g)
+            for gp = g + 1 : upper(this.d_mat, g)
                 
                 % Get the group gp flux.
-                phi = flux(obj.d_state, gp);
+                phi = flux(this.d_state, gp);
                 
 
                 % Add group contribution.
-                obj.d_fixed_source = obj.d_fixed_source + ...
-                	 phi .* obj.d_sigma_s{g}(:, gp);
+                this.d_fixed_source = this.d_fixed_source + ...
+                	 phi .* this.d_sigma_s{g}(:, gp);
                  
             end
             
             % Apply the moments-to-discrete operator.
-            obj.d_fixed_source = apply(obj.d_M, obj.d_fixed_source);
+            this.d_fixed_source = apply(this.d_M, this.d_fixed_source);
             
             % Add the fission source if required.
-            if (initialized(obj.d_fission_source))
+            if (initialized(this.d_fission_source))
 
                 % Get the group gp fission source.
-                f = source(obj.d_fission_source, g);
+                f = source(this.d_fission_source, g);
                 
                 % Add it.  This *assumes* the fission source returns a
                 % vector prescaled to serve as a discrete source.
-                obj.d_fixed_source = obj.d_fixed_source + f;
+                this.d_fixed_source = this.d_fixed_source + f;
                 
             end
 
             
             % External (if required)
-            if (initialized(obj.d_external_source))
+            if (initialized(this.d_external_source))
                 
-            	obj.d_fixed_source = obj.d_fixed_source + ...
-                    source(obj.d_external_source, g);
+            	this.d_fixed_source = this.d_fixed_source + ...
+                    source(this.d_external_source, g);
                 
             end
             
         end % end function build_fixed_source
         
-        function check_convergence(obj, iteration, flux_error)
-            if iteration == obj.d_max_iters && flux_error > obj.d_tolerance
+        function build_external_source(this, g)
+            this.d_fixed_source = this.d_fixed_source*0;
+            % Add the fission source if required.
+            if (initialized(this.d_fission_source))
+
+                % Get the group gp fission source.
+                f = source(this.d_fission_source, g);
+                
+                % Add it.  This *assumes* the fission source returns a
+                % vector prescaled to serve as a discrete source.
+                this.d_fixed_source = this.d_fixed_source + f;
+                
+            end
+            % External (if required)
+            if (initialized(this.d_external_source))
+                
+            	this.d_fixed_source = this.d_fixed_source + ...
+                    source(this.d_external_source, g);
+                
+            end 
+        end
+        
+        function check_convergence(this, iteration, flux_error)
+            if iteration == this.d_max_iters && flux_error > this.d_tolerance
                 warning('solver:convergence', ...
                     'Maximum iterations reached without convergence.')
             end
         end % end function check_convergence
 
     
-        function print_iteration(obj, it, e0, e1, e2)
-            if (get(obj.d_input, 'print_out'))
+        function print_iteration(this, it, e0, e1, e2)
+            if (get(this.d_input, 'print_out'))
                 fprintf('           Iter: %5i, Error: %12.8f\n', it, e0);
                 if it > 2
                     fprintf('                         Rate: %12.8f\n', ...

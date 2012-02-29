@@ -98,6 +98,13 @@ classdef FissionSource < handle
             obj.d_initialized = 1;
         end
         
+        function obj = reset(obj)
+            if initialized(obj)
+                obj.d_fission_density(:) = 0.0;
+                obj.d_fission_source(:)  = 0.0;
+            end
+        end
+        
         function y = initialized(obj)
             y = obj.d_initialized;
         end

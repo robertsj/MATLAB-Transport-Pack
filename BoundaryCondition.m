@@ -2,17 +2,13 @@
 %> @brief Boundary condition class definition.
 % ==============================================================================
 %> @brief Base boundary condition class.
-%
-%> This contains everything that needs to be known throughout most of the
-%> problem.  The scalar flux (and maybe moments later on), an eigenvalue, and
-%> boundary fluxes all live here.
 % ==============================================================================
 classdef BoundaryCondition < handle
 
     properties (Access = protected) 
         %>
         d_input
-        %> Boundary flux object.
+        %> Boundary flux thisect.
         d_boundary
         %> Mesh 
         d_mesh
@@ -34,18 +30,29 @@ classdef BoundaryCondition < handle
         %>
         %> @return Instance of the Boundary class.
         % ======================================================================
-        function obj = BoundaryCondition(boundary, input,  mesh, quadrature, side)
-            obj.d_input         = input;
-            obj.d_boundary      = boundary;
-            obj.d_mesh      	= mesh;
-            obj.d_quadrature    = quadrature;
-            obj.d_side          = side;
+        function this = BoundaryCondition(boundary, input, mesh, ...
+                                          quadrature, side)
+            this.d_input         = input;
+            this.d_boundary      = boundary;
+            this.d_mesh          = mesh;
+            this.d_quadrature    = quadrature;
+            this.d_side          = side;
         end
 
         % ======================================================================
+        %> @brief Initialize the boundary condition.
+        %>
+        %> For fixed boundaries, this is the only relevant call. Other
+        %> need not implement this.
+        % ======================================================================        
+        function this = initialize(this)
+            
+        end        
+        
+        % ======================================================================
         %> @brief Update the boundary flux.
         % ======================================================================
-        obj = update(obj);
+        this = update(this);
         
     end
  

@@ -8,12 +8,12 @@ end
 % Simple 1 group, 2 material
 % ------------------------------------------------------------------------------ 
 if n == 1
-    
+    a=0.5;
     % Simple uniform box.
-    xcm = [ 0.0  5.0 ];
-    xfm = [   49    ];
-    ycm = [ 0.0  5.0 ];
-    yfm = [   49    ];    
+    xcm = [ 0.0  10.0 ]*a;
+    xfm = [   30   ]*a;
+    ycm = [ 0.0  10.0 ]*a;
+    yfm = [   30   ]*a;    
     % Material map
     mat_map = [1];
     % Make the mesh.
@@ -43,9 +43,9 @@ elseif n == 2
     
 elseif n == 3
     
-    xcm    = [ 0.0  20     40];
+    xcm    = [ 0.0  20     40]/4;
     xfm    = [    5 5  ];
-    ycm    = [ 0.0  20    40];
+    ycm    = [ 0.0  20    40]/4;
     yfm    = [    5 5  ];
 
     mat_map = [ 2 2

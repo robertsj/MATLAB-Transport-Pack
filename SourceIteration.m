@@ -121,7 +121,8 @@ classdef SourceIteration < InnerIteration
                 
                 % Set incident boundary fluxes.
                 set(obj.d_boundary);
-                
+                set_group(obj.d_boundary, g); % Set the group
+
                 % Sweep over all angles and meshes.            
                 phi = sweep(obj.d_sweeper, sweep_source, g);            
 

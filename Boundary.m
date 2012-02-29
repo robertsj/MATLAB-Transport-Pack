@@ -12,7 +12,7 @@ classdef Boundary < handle
        OUT  = -1;
     end
 
-    properties (Access = protected)
+    properties (Access = public)
         %> Input
         d_input
         %> Spatial mesh.
@@ -59,6 +59,9 @@ classdef Boundary < handle
             elseif strcmp(get(input, 'bc_left'), 'response')
                 this.d_bc{mesh.LEFT}   = ...
                     Response(this, input, mesh, quadrature, mesh.LEFT);
+            elseif strcmp(get(input, 'bc_left'), 'isotropic')
+                this.d_bc{mesh.LEFT}   = ...
+                    IsotropicBC(this, input, mesh, quadrature, mesh.LEFT);
             end
             if strcmp(get(input, 'bc_right'), 'vacuum')
                 this.d_bc{mesh.RIGHT}   = ...
@@ -109,12 +112,14 @@ classdef Boundary < handle
         function this = initialize(this, g)
             this.d_g = g;
         end
-        
+        function this = set_group(this, g)
+            this.d_g = g;
+        end        
         % ======================================================================
         %> @brief Get the current group.
         %> @return Current group.
         % ======================================================================
-        function g = group(this, g)
+        function g = group(this)
             g = this.d_g;
         end
         
@@ -136,6 +141,16 @@ classdef Boundary < handle
                 update(this.d_bc{side});
             end
         end
+        
+        % ======================================================================
+        %> @brief Reset the incident boundary fluxes to zero.
+        % ======================================================================          
+        function this = reset(this)
+            for o = 1:4
+                set_psi_v_octant(this, o, 0.0, Boundary.IN);
+                set_psi_h_octant(this, o, 0.0, Boundary.IN);
+            end
+        end        
         
         % ======================================================================
         %> @name Getters

@@ -87,6 +87,10 @@ classdef State < handle
             this.d_phi(:, g) = phi(:);
         end
         
+        function this = reset_phi(this)
+            this.d_phi(:, :) = 0.0; 
+        end
+        
         % ======================================================================
         %> @brief Set the eigenvalue.
         %

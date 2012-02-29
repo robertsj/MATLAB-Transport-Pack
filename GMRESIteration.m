@@ -101,8 +101,9 @@ classdef GMRESIteration < InnerIteration
         function [flux_error, iteration] = solve(obj, g)% phi, source)
 
             % Setup the boundary fluxes for this solve.
-            initialize(obj.d_boundary, g);
-            
+            set(obj.d_boundary);          % Update the conditions.
+            set_group(obj.d_boundary, g); % Set the group
+
             % Setup the equations for this group.
             setup_group(obj.d_equation, g);
             
@@ -112,6 +113,9 @@ classdef GMRESIteration < InnerIteration
             % Compute the uncollided flux, i.e. phi_uc = D*inv(T)*Q_fixed.
             % This is the right hand side.
             B = sweep(obj.d_sweeper, obj.d_fixed_source, g); 
+            
+            % Unset the boundary.
+            reset(obj.d_boundary);       % Conditions now homogeneous
             
             % Call the Krylov solver
             if strcmp(obj.d_krylov, 'gmres')
@@ -185,5 +189,5 @@ function y = apply(x, obj)
     % Now, return the following
     % y <-- x - D*inv(L)*M*S*x = (I - D*inv(L)*M*S)*x 
     y = x - y;
-    
+%    fprintf(' %12.8f \n', y(1))
 end

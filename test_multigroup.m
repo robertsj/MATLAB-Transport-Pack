@@ -10,13 +10,13 @@ put(input, 'inner_tolerance',       1e-8);
 put(input, 'inner_max_iters',       100);
 put(input, 'outer_tolerance',       1e-8);
 put(input, 'outer_max_iters',       300);
-put(input, 'inner_solver',          'GMRES');
-put(input, 'bc_left',               'vacuum');
+put(input, 'inner_solver',          'SI');
+put(input, 'bc_left',               'isotropic');
 put(input, 'bc_right',              'vacuum');
 put(input, 'bc_top',                'vacuum');
 put(input, 'bc_bottom',             'vacuum');
 put(input, 'print_out',             1);
-
+put(input, 'bc_isotropic_spectrum', [1 0]);
 % Two materials, two groups, some upscatter
 mat         = test_materials(3);
 
@@ -30,14 +30,14 @@ boundary    = BoundaryMesh(input, mesh, quadrature);
 
 % Empty external source.
 q_e         = Source(mesh, 2);
-spectra     = [ 1.0 1.0
-                1.0 1.0];      
+spectra     = [ 1.0 0.0
+                1.0 0.0];      
 placement   = [ 2 2; 2 2];    
 set_sources(q_e, spectra, placement);
 
 % Use a fission source.
 q_f = FissionSource(state, mesh, mat);
-%initialize(q_f);
+initialize(q_f);
 
 % Make the inner iteration.
 solver= KrylovMG(input,        ...
@@ -49,18 +49,34 @@ solver= KrylovMG(input,        ...
               q_e,          ...
               q_f);
  % Solve the problem
-tic
-out = solve(solver); 
-toc
-
+ tic
+ out = solve(solver); 
+ toc
+%error('lala')
 % Get the flux
-f = flux(state, 1);
+f1 = flux(state, 1);
 subplot(2,1,1)
-plot_flux(mesh, f)
+plot_flux(mesh, f1)
 axis square
 % Get the flux
-f = flux(state, 2);
+f2 = flux(state, 2);
 % and plot it
 subplot(2,1,2)
-plot_flux(mesh, f)
+plot_flux(mesh, f2)
+axis square
+reset(q_f);
+ tic
+ out = solve(solver); 
+ toc
+%error('lala')
+% Get the flux
+f1 = flux(state, 1);
+subplot(2,1,1)
+plot_flux(mesh, f1)
+axis square
+% Get the flux
+f2 = flux(state, 2);
+% and plot it
+subplot(2,1,2)
+plot_flux(mesh, f2)
 axis square

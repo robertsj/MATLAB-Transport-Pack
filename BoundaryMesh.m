@@ -59,6 +59,11 @@ classdef BoundaryMesh < Boundary
                  this.d_octant_indices(i, 2) = ...
                      i*this.d_quadrature.number_angles_octant();
             end
+            
+            % Initialize the boundary conditions
+            for side = 1:2*this.d_mesh.DIM;
+                initialize(this.d_bc{side});
+            end
 
         end
                 

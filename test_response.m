@@ -17,7 +17,7 @@
 % Also, does the "adjoint" fall out somewhere?
 % ==============================================================================
 
-flag = 1;
+flag = 0;
 
 %clear classes
 
@@ -28,7 +28,7 @@ input = Input();
 put(input, 'number_groups',         1);
 
 % Inner iteration parameters.
-put(input, 'inner_tolerance',       1e-8);
+put(input, 'inner_tolerance',       1e-10);
 put(input, 'inner_max_iters',       100);
 put(input, 'outer_tolerance',       1e-8);
 put(input, 'outer_max_iters',       300);
@@ -37,8 +37,8 @@ put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  6);
 if flag == 0
 put(input, 'bc_left',               'reflect');
-put(input, 'bc_right',              'reflect');
-put(input, 'bc_top',                'reflect');
+put(input, 'bc_right',              'vacuum');
+put(input, 'bc_top',                'vacuum');
 put(input, 'bc_bottom',             'reflect');
 else
 put(input, 'bc_left',               'response');
@@ -53,8 +53,20 @@ put(input, 'rf_order_group',        1);
 put(input, 'rf_order_space',        0);
 put(input, 'rf_order_polar',        0);
 put(input, 'rf_order_azimuth',      0);
-put(input, 'quad_number_polar',     4);
-put(input, 'quad_number_azimuth',   8);
+put(input, 'rf_max_order_space',        2);
+put(input, 'rf_max_order_azimuth',      3);
+put(input, 'rf_max_order_polar',        0);
+
+put(input, 'quad_number_polar',     1);
+put(input, 'quad_number_azimuth',   2);
+
+
+elements = [1 
+            ];
+number_elements = 1;        
+
+M = Connect(input, elements, number_elements);
+
 
 % One material, one group, c = 0.9
 mat         = test_materials(1);
@@ -63,7 +75,7 @@ mat         = test_materials(1);
 mesh        = test_mesh(1);
 
 state       = State(input, mesh);
-quadrature  = QuadrupleRange(32);
+quadrature  = QuadrupleRange(2);
 
 boundary    = BoundaryMesh(input, mesh, quadrature);
 
@@ -93,19 +105,24 @@ end
 % RESPONSE LOOP
 k = 0;
 coef = cell(4, 1);
-max_s_o = 4;
-max_a_o = 4;
-max_p_o = 3;
+max_s_o = get(input, 'rf_max_order_space'); 
+max_a_o = get(input, 'rf_max_order_azimuth');
+max_p_o = get(input, 'rf_max_order_polar');
+
+
 max_o   = max_s_o * max_a_o * max_p_o;
 coef{1} = zeros(max_o);
 coef{2} = zeros(max_o);
 coef{3} = zeros(max_o);
 coef{4} = zeros(max_o);
+total = (1+max_s_o)*(1+max_a_o)*(1+max_p_o);
+
 for s_o = 0:max_s_o
     for a_o = 0:max_a_o
         for p_o = 0:max_p_o
             
-            k = k + 1;       
+            k = k + 1;  
+            disp([' doing ',num2str(k),' of ',num2str(total)])
             % Set the incident response order
             put(input, 'rf_order_group',        1);
             put(input, 'rf_order_space',        s_o);
@@ -114,8 +131,8 @@ for s_o = 0:max_s_o
 
             boundary    = BoundaryMesh(input, mesh, quadrature);
             
-            % Make the inner iteration.
-            solver= FixedMultiply(input,        ...
+            % Make the inner iteration. KrylovMG  FixedMultiply
+            solver= KrylovMG(input,        ...
                 state,    	...
                 boundary,     ...
                 mesh,     	...
@@ -123,21 +140,21 @@ for s_o = 0:max_s_o
                 quadrature, 	...
                 q_e,          ...
                 q_f);
-            set_keff(solver, 0.5);
+            set_keff(solver, 0.488); %491
+            %solver.d_keff = 0.5;
             % Solve the problem
             tic
                 out = solve(solver); 
             toc
-
+            reset(q_f);
             %Get the flux
             phi{k} = flux(state, 1);
             %subplot(2,1,1)
-            %figure(k)
-            plot_flux(mesh, phi{k})
-            pause(1)
+           % figure(1)
+           % plot_flux(mesh, phi{k})
+           %error('fuck')
             axis square
             shading flat
-
             % Go through and get boundary responses
 
             % We're incident on the bottom.  
@@ -267,3 +284,7 @@ R( (1*max_o)+1: 2*max_o, (3*max_o)+1: 4*max_o) = coef{3}(:, :); % top -> right
 R( (2*max_o)+1: 3*max_o, (3*max_o)+1: 4*max_o) = coef{2}(:, :); % top -> bottom
 R( (3*max_o)+1: 4*max_o, (3*max_o)+1: 4*max_o) = coef{1}(:, :); % top -> top
 
+
+RR = kron(speye(number_elements), R);
+
+eigs(M*RR)
