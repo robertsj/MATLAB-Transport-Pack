@@ -77,3 +77,6 @@
 \form#76:\[ \psi_{i,n,out} = \frac{2}{\Delta(\alpha_{i,n}+1)}\psi_{i,n} + \frac{\alpha_{i,n}-1}{\alpha_{i,n}+1} \psi_{i,n,in} \, . \]
 \form#77:$\alpha = 1 $
 \form#78:\[ con_{x,i,n} = \frac{2\mu}{\Delta(\alpha_{i,n}+1} , \]
+\form#79:\[ \left( ( \mathbf{I} - \left(\begin{array}{ccc} T_1 & \cdots & 0 \\ 0 & \ddots & 0 \\ 0 & 0 & T_G \end{array}\right) \cdot \left(\begin{array}{ccc} M & \cdots & 0 \\ 0 & \ddots & 0 \\ 0 & 0 & M \end{array}\right) \cdot \left(\begin{array}{ccc} \mathbf{S}_{11} & \cdots & \mathbf{S}_{1G} \\ \vdots & \ddots & \vdots \\ \mathbf{S}_{G1} & 0 & \mathbf{S}_{GG} \end{array}\right) \right ) \cdot \left[ \begin{array}{c} \phi_1 \\ \vdots \\ \phi_G \end{array} \right] = \left[ \begin{array}{c} \mathbf{T}_1 q_1 \\ \vdots \\ \mathbf{T}_G q_G \end{array} \right] \, . \]
+\form#80:\[ (\mathbf{I}-\mathbf{TMS})\phi = \mathbf{T}q \, , \]
+\form#81:$ \mathbf{T} = D\mathbf{L}^{-1} $

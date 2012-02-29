@@ -1,7 +1,3 @@
 <map id="G" name="G">
-<area shape="rect" id="node1" href="$class_quadrature.html" title="Base quadrature class." alt="" coords="7,85,92,115"/>
-<area shape="rect" id="node3" href="$class_gauss_legendre.html" title="GaussLegendre" alt="" coords="155,5,267,35"/>
-<area shape="rect" id="node5" href="$class_level_symmetric.html" title="LevelSymmetric" alt="" coords="153,58,268,89"/>
-<area shape="rect" id="node7" href="$class_quadruple_range.html" title="QuadrupleRange" alt="" coords="152,111,269,142"/>
-<area shape="rect" id="node9" href="$class_uniform_equal_weight.html" title="UniformEqualWeight" alt="" coords="141,165,280,195"/>
+<area shape="rect" id="node1" href="$class_solver.html" title="Solver" alt="" coords="5,5,64,35"/>
 </map>

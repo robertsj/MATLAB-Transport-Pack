@@ -1,6 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" id="node5" href="$class_g_m_r_e_s_iteration.html" title="Source iteration for inner iterations." alt="" coords="5,787,141,933"/>
-<area shape="rect" id="node7" href="$class_livolant.html" title="Livolant acceleration for inner iterations." alt="" coords="165,713,331,1007"/>
-<area shape="rect" id="node9" href="$class_source_iteration.html" title="Source iteration for inner iterations." alt="" coords="355,797,485,923"/>
-<area shape="rect" id="node2" href="$classhandle.html" title="{handle\n||}" alt="" coords="219,6,277,95"/>
+<area shape="rect" id="node5" href="$class_g_m_r_e_s_iteration.html" title="Source iteration for inner iterations." alt="" coords="5,843,141,989"/>
+<area shape="rect" id="node7" href="$class_krylov_m_g.html" title="Krylov multigroup solver." alt="" coords="165,825,323,1007"/>
+<area shape="rect" id="node9" href="$class_livolant.html" title="Livolant acceleration for inner iterations." alt="" coords="347,769,512,1063"/>
+<area shape="rect" id="node11" href="$class_source_iteration.html" title="Source iteration for inner iterations." alt="" coords="536,853,667,979"/>
+<area shape="rect" id="node2" href="$classhandle.html" title="{handle\n||}" alt="" coords="307,6,365,95"/>
 </map>

@@ -52,7 +52,7 @@ Inheritance diagram for BoundaryCondition:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_boundary_condition__inherit__graph.png" border="0" usemap="#_boundary_condition_inherit__map" alt="Inheritance graph"/></div>
 <map name="_boundary_condition_inherit__map" id="_boundary_condition_inherit__map">
-<area shape="rect" id="node5" href="class_boundary_condition_m_o_c.html" title="Base MOC boundary condition class." alt="" coords="168,349,349,438"/><area shape="rect" id="node13" href="class_reflective.html" title="Reflective boundary condition." alt="" coords="373,339,472,447"/><area shape="rect" id="node15" href="class_vacuum.html" title="Vacuum boundary condition." alt="" coords="496,339,584,447"/><area shape="rect" id="node2" href="classhandle.html" title="{handle\n||}" alt="" coords="393,6,452,95"/><area shape="rect" id="node7" href="class_appx_reflective_track.html" title="Approximate reflective MOC boundary condition class." alt="" coords="5,497,168,847"/><area shape="rect" id="node9" href="class_reflective_track.html" title="Vacuum MOC boundary condition class." alt="" coords="192,599,325,745"/><area shape="rect" id="node11" href="class_vacuum_track.html" title="Vacuum MOC boundary condition class." alt="" coords="349,618,469,726"/></map>
+<area shape="rect" id="node5" href="class_boundary_condition_m_o_c.html" title="Base MOC boundary condition class." alt="" coords="168,498,349,587"/><area shape="rect" id="node13" href="class_isotropic_b_c.html" title="Isotropic boundary condition." alt="" coords="373,377,515,709"/><area shape="rect" id="node15" href="class_reflective.html" title="Reflective boundary condition." alt="" coords="539,489,637,597"/><area shape="rect" id="node17" href="class_response.html" title="Reflective boundary condition." alt="" coords="661,386,803,699"/><area shape="rect" id="node19" href="class_vacuum.html" title="Vacuum boundary condition." alt="" coords="827,489,915,597"/><area shape="rect" id="node2" href="classhandle.html" title="{handle\n||}" alt="" coords="559,6,617,95"/><area shape="rect" id="node7" href="class_appx_reflective_track.html" title="Approximate reflective MOC boundary condition class." alt="" coords="5,758,168,1109"/><area shape="rect" id="node9" href="class_reflective_track.html" title="Vacuum MOC boundary condition class." alt="" coords="192,861,325,1006"/><area shape="rect" id="node11" href="class_vacuum_track.html" title="Vacuum MOC boundary condition class." alt="" coords="349,879,469,987"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for BoundaryCondition:</div>
@@ -66,12 +66,15 @@ Collaboration diagram for BoundaryCondition:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_boundary_condition.html#aa2d3d8d2da249c186d60ef31faa7729b">BoundaryCondition</a> (in boundary, in mesh, in quadrature, in side)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#aa2d3d8d2da249c186d60ef31faa7729b"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_boundary_condition.html#aa8f3001ddbf0b8ae269f90f168b06684">BoundaryCondition</a> (in boundary, in input, in mesh, in)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#aa8f3001ddbf0b8ae269f90f168b06684"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_boundary_condition.html#ad60921af3c1e6ad4062e5d72c0b835a9">initialize</a> (in this)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the boundary condition.  <a href="#ad60921af3c1e6ad4062e5d72c0b835a9"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_boundary_condition.html#abc4c1c33f348e1785b286dd07ff598e9">d_input</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_boundary_condition.html#a76ed28b4b2c303c4668a3f5557e96149">d_boundary</a></td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_boundary.html" title="Holds the incident and outgoing boundary fluxes.">Boundary</a> flux object.  <a href="#a76ed28b4b2c303c4668a3f5557e96149"></a><br/></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_boundary.html" title="Holds the incident and outgoing boundary fluxes.">Boundary</a> flux thisect.  <a href="#a76ed28b4b2c303c4668a3f5557e96149"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_boundary_condition.html#a1d60598afe83dd4c518b6f698814686b">d_mesh</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_mesh.html" title="Base Cartesian mesh.">Mesh</a>.  <a href="#a1d60598afe83dd4c518b6f698814686b"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">Property&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_boundary_condition.html#ae403c267d85e827e85d343e1d2636f85">d_quadrature</a></td></tr>
@@ -80,9 +83,8 @@ Protected Attributes</h2></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Base boundary condition class. </p>
-<p>This contains everything that needs to be known throughout most of the problem. The scalar flux (and maybe moments later on), an eigenvalue, and boundary fluxes all live here. </p>
 </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="aa2d3d8d2da249c186d60ef31faa7729b"></a><!-- doxytag: member="BoundaryCondition::BoundaryCondition" ref="aa2d3d8d2da249c186d60ef31faa7729b" args="(in boundary, in mesh, in quadrature, in side)" -->
+<a class="anchor" id="aa8f3001ddbf0b8ae269f90f168b06684"></a><!-- doxytag: member="BoundaryCondition::BoundaryCondition" ref="aa8f3001ddbf0b8ae269f90f168b06684" args="(in boundary, in input, in mesh, in)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -96,19 +98,19 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in&#160;</td>
           <td class="paramname"><em>mesh</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>quadrature</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">in&#160;</td>
-          <td class="paramname"><em>side</em>&#160;</td>
+          <td class="paramname">&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -132,6 +134,29 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="ad60921af3c1e6ad4062e5d72c0b835a9"></a><!-- doxytag: member="BoundaryCondition::initialize" ref="ad60921af3c1e6ad4062e5d72c0b835a9" args="(in this)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">function initialize </td>
+          <td>(</td>
+          <td class="paramtype">in&#160;</td>
+          <td class="paramname"><em>this</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Initialize the boundary condition. </p>
+<p>For fixed boundaries, this is the only relevant call. Other need not implement this. </p>
+
+<p>Reimplemented in <a class="el" href="class_isotropic_b_c.html#ad60921af3c1e6ad4062e5d72c0b835a9">IsotropicBC</a>.</p>
+
+</div>
+</div>
 <hr/><h2>Member Data Documentation</h2>
 <a class="anchor" id="a76ed28b4b2c303c4668a3f5557e96149"></a><!-- doxytag: member="BoundaryCondition::d_boundary" ref="a76ed28b4b2c303c4668a3f5557e96149" args="" -->
 <div class="memitem">
@@ -144,7 +169,20 @@ Protected Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p><a class="el" href="class_boundary.html" title="Holds the incident and outgoing boundary fluxes.">Boundary</a> flux object. </p>
+<p><a class="el" href="class_boundary.html" title="Holds the incident and outgoing boundary fluxes.">Boundary</a> flux thisect. </p>
+
+</div>
+</div>
+<a class="anchor" id="abc4c1c33f348e1785b286dd07ff598e9"></a><!-- doxytag: member="BoundaryCondition::d_input" ref="abc4c1c33f348e1785b286dd07ff598e9" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Property <a class="el" href="class_boundary_condition.html#abc4c1c33f348e1785b286dd07ff598e9">d_input</a><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
 
 </div>
 </div>
@@ -195,7 +233,7 @@ Protected Attributes</h2></td></tr>
 <li>/home/robertsj/Research/matlab_transport_pack/source/<a class="el" href="_boundary_condition_8m.html">BoundaryCondition.m</a></li>
 </ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Mon Feb 6 2012 18:00:34 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Feb 28 2012 22:04:42 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

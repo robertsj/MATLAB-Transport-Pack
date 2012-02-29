@@ -43,12 +43,16 @@
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
-<a href="#pri-methods">Private Member Functions</a>  </div>
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <h1>QuadrupleRange Class Reference</h1>  </div>
 </div>
 <div class="contents">
-<!-- doxytag: class="QuadrupleRange" --><!-- doxytag: inherits="Quadrature" --><div class="dynheader">
+<!-- doxytag: class="QuadrupleRange" --><!-- doxytag: inherits="Quadrature" -->
+<p>Abu-Shumay's quadruple range quadrature.  
+<a href="#_details">More...</a></p>
+<div class="dynheader">
 Inheritance diagram for QuadrupleRange:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_quadruple_range__inherit__graph.png" border="0" usemap="#_quadruple_range_inherit__map" alt="Inheritance graph"/></div>
@@ -60,7 +64,7 @@ Collaboration diagram for QuadrupleRange:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_quadruple_range__coll__graph.png" border="0" usemap="#_quadruple_range_coll__map" alt="Collaboration graph"/></div>
 <map name="_quadruple_range_coll__map" id="_quadruple_range_coll__map">
-<area shape="rect" id="node2" href="class_quadrature.html" title="Base quadrature class." alt="" coords="23,313,196,831"/></map>
+<area shape="rect" id="node2" href="class_quadrature.html" title="Base quadrature class." alt="" coords="79,313,252,831"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="class_quadruple_range-members.html">List of all members.</a></p>
@@ -68,6 +72,7 @@ Collaboration diagram for QuadrupleRange:</div>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_quadruple_range.html#a9531a43ae5efe37efd0273b62fe272e2">QuadrupleRange</a> (in order)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#a9531a43ae5efe37efd0273b62fe272e2"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_quadrature.html#a0f1078cf65ce2daecd0c0f2f74487ff5">weights</a> (in obj)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return weights for all angles.  <a href="#a0f1078cf65ce2daecd0c0f2f74487ff5"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_quadrature.html#af753cc7ee3901ff64b4f815dbca2a82b">weight</a> (in obj, in a)</td></tr>
@@ -123,8 +128,16 @@ Protected Attributes</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_quadruple_range.html#aa611f56c324a782da63a68b3b8eee510">quad_range_table</a> (in N)</td></tr>
+<tr><td colspan="2"><h2><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_quadrature.html#abeba68cc6f1a45270b6014cf800bd462">Property</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_quadruple_range.html#af47f7948000e25f98e5e1b5cc601fc50">d_L</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_quadrature.html" title="Base quadrature class.">Quadrature</a> order (specific to these product quadratures)  <a href="#af47f7948000e25f98e5e1b5cc601fc50"></a><br/></td></tr>
 </table>
-<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<hr/><a name="_details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>Abu-Shumay's quadruple range quadrature. </p>
+<p>See Abu-Shumays, I. K. "Compatible Product Angular Quadrature for
+        Neutron  Transport in xy Geometry," Nucl. Sci. Engr., 64, (1978) </p>
+</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a9531a43ae5efe37efd0273b62fe272e2"></a><!-- doxytag: member="QuadrupleRange::QuadrupleRange" ref="a9531a43ae5efe37efd0273b62fe272e2" args="(in order)" -->
 <div class="memitem">
 <div class="memproto">
@@ -139,6 +152,16 @@ Private Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Class constructor. </p>
+<p>More detailed description of what the constructor does.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">order</td><td><a class="el" href="class_quadrature.html" title="Base quadrature class.">Quadrature</a> order. This differs from quadrature to quadrature, but e.g. for level symmetric, it's the number of unique directional cosines.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>Instance of the <a class="el" href="class_quadruple_range.html" title="Abu-Shumay&#39;s quadruple range quadrature.">QuadrupleRange</a> class. </dd></dl>
 
 </div>
 </div>
@@ -517,6 +540,21 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="af47f7948000e25f98e5e1b5cc601fc50"></a><!-- doxytag: member="QuadrupleRange::d_L" ref="af47f7948000e25f98e5e1b5cc601fc50" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_quadrature.html#abeba68cc6f1a45270b6014cf800bd462">Property</a> <a class="el" href="class_quadruple_range.html#af47f7948000e25f98e5e1b5cc601fc50">d_L</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p><a class="el" href="class_quadrature.html" title="Base quadrature class.">Quadrature</a> order (specific to these product quadratures) </p>
+
+</div>
+</div>
 <a class="anchor" id="a1b17c063033b5527a6e240dae7bfaf65"></a><!-- doxytag: member="QuadrupleRange::d_mu" ref="a1b17c063033b5527a6e240dae7bfaf65" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -652,7 +690,7 @@ Private Member Functions</h2></td></tr>
 <li>/home/robertsj/Research/matlab_transport_pack/source/<a class="el" href="_quadruple_range_8m.html">QuadrupleRange.m</a></li>
 </ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Mon Feb 6 2012 18:00:34 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Feb 28 2012 22:04:43 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

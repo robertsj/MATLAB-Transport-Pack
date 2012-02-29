@@ -1,6 +1,6 @@
 <map id="G" name="G">
 <area shape="rect" id="node3" href="$class_gauss_legendre.html" title="{GaussLegendre\n||+ GaussLegendre()\l}" alt="" coords="5,583,139,673"/>
 <area shape="rect" id="node5" href="$class_level_symmetric.html" title="{LevelSymmetric\n||+ LevelSymmetric()\l&#45; level_sym_table()\l}" alt="" coords="163,574,296,682"/>
-<area shape="rect" id="node7" href="$class_quadruple_range.html" title="{QuadrupleRange\n||+ QuadrupleRange()\l&#45; quad_range_table()\l}" alt="" coords="320,574,459,682"/>
+<area shape="rect" id="node7" href="$class_quadruple_range.html" title="Abu&#45;Shumay&#39;s quadruple range quadrature." alt="" coords="320,574,459,682"/>
 <area shape="rect" id="node9" href="$class_uniform_equal_weight.html" title="{UniformEqualWeight\n||+ UniformEqualWeight()\l&#45; UEN()\l}" alt="" coords="483,574,640,682"/>
 </map>

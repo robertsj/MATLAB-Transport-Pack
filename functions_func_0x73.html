@@ -55,6 +55,7 @@
       <li><a href="functions_func_0x67.html#index_g"><span>g</span></a></li>
       <li><a href="functions_func_0x69.html#index_i"><span>i</span></a></li>
       <li><a href="functions_func_0x6a.html#index_j"><span>j</span></a></li>
+      <li><a href="functions_func_0x6b.html#index_k"><span>k</span></a></li>
       <li><a href="functions_func_0x6c.html#index_l"><span>l</span></a></li>
       <li><a href="functions_func_0x6d.html#index_m"><span>m</span></a></li>
       <li><a href="functions_func_0x6e.html#index_n"><span>n</span></a></li>
@@ -112,8 +113,21 @@
 <li>set_chi_v()
 : <a class="el" href="class_materials.html#ad2543d9c4eca287af603e0e95ad259ef">Materials</a>
 </li>
+<li>set_diff_coef()
+: <a class="el" href="class_materials.html#aea18ac67f4d9e782662d8d2a5e11f67a">Materials</a>
+</li>
+<li>set_diff_coef_v()
+: <a class="el" href="class_materials.html#a31536374521de008026a13415f453483">Materials</a>
+</li>
 <li>set_eigenvalue()
 : <a class="el" href="class_state.html#afd564f6f2f29f9b2222e982fa8902d47">State</a>
+</li>
+<li>set_group()
+: <a class="el" href="class_boundary.html#a04b91b55843710bb0aa48629b9afc827">Boundary</a>
+</li>
+<li>set_keff()
+: <a class="el" href="class_fixed_multiply.html#aaffb89ec16a3d7b2f4d66f30639b2705">FixedMultiply</a>
+, <a class="el" href="class_krylov_m_g.html#aaffb89ec16a3d7b2f4d66f30639b2705">KrylovMG</a>
 </li>
 <li>set_nu_sigma_f()
 : <a class="el" href="class_materials.html#a8d05385c9a16fc7d85d07fa8cbeeb7b2">Materials</a>
@@ -180,20 +194,20 @@
 , <a class="el" href="class_s_d1_d.html#ab9effdb4c77bf0cc91987b34dfe530fa">SD1D</a>
 </li>
 <li>setup_base()
-: <a class="el" href="class_inner_iteration.html#a20b1a39e3eb630cb842f75f0f79d729e">InnerIteration</a>
+: <a class="el" href="class_inner_iteration.html#a9040b180689069147acbeafab328e632">InnerIteration</a>
 </li>
 <li>setup_group()
-: <a class="el" href="class_s_d1_d.html#add52d46f4d49fc9b2204fb6c0aa49856">SD1D</a>
-, <a class="el" href="class_d_d1_d.html#add52d46f4d49fc9b2204fb6c0aa49856">DD1D</a>
+: <a class="el" href="class_d_d1_d.html#add52d46f4d49fc9b2204fb6c0aa49856">DD1D</a>
 , <a class="el" href="class_d_d2_d.html#add52d46f4d49fc9b2204fb6c0aa49856">DD2D</a>
 , <a class="el" href="class_d_d_m_o_c.html#add52d46f4d49fc9b2204fb6c0aa49856">DDMOC</a>
 , <a class="el" href="class_s_c1_d.html#add52d46f4d49fc9b2204fb6c0aa49856">SC1D</a>
 , <a class="el" href="class_s_c_m_o_c.html#add52d46f4d49fc9b2204fb6c0aa49856">SCMOC</a>
+, <a class="el" href="class_s_d1_d.html#add52d46f4d49fc9b2204fb6c0aa49856">SD1D</a>
 </li>
 <li>setup_octant()
-: <a class="el" href="class_d_d1_d.html#aa269b76f66e0d64be704512d40fba8e4">DD1D</a>
+: <a class="el" href="class_d_d_m_o_c.html#aa269b76f66e0d64be704512d40fba8e4">DDMOC</a>
+, <a class="el" href="class_d_d1_d.html#aa269b76f66e0d64be704512d40fba8e4">DD1D</a>
 , <a class="el" href="class_d_d2_d.html#aa269b76f66e0d64be704512d40fba8e4">DD2D</a>
-, <a class="el" href="class_d_d_m_o_c.html#aa269b76f66e0d64be704512d40fba8e4">DDMOC</a>
 , <a class="el" href="class_s_c1_d.html#aa269b76f66e0d64be704512d40fba8e4">SC1D</a>
 , <a class="el" href="class_s_c_m_o_c.html#aa269b76f66e0d64be704512d40fba8e4">SCMOC</a>
 , <a class="el" href="class_s_d1_d.html#aa269b76f66e0d64be704512d40fba8e4">SD1D</a>
@@ -211,28 +225,29 @@
 : <a class="el" href="class_materials.html#a2c2819785910ce7e2c7561beb0eaddc0">Materials</a>
 </li>
 <li>solve()
-: <a class="el" href="class_discrete_ordinates.html#a077a00b2045df1090c697fa20d4ae4fa">DiscreteOrdinates</a>
-, <a class="el" href="class_s_c_m_o_c.html#a9e90ea7e72223d7153630af24458f013">SCMOC</a>
-, <a class="el" href="class_gauss_seidel.html#abd60e423ebf2680552757c136342195c">GaussSeidel</a>
+: <a class="el" href="class_d_d2_d.html#aa68470b81fe3d99b077c97800bc8b643">DD2D</a>
+, <a class="el" href="class_d_d_m_o_c.html#aca96603357212ce0cd70d85e8a6f83df">DDMOC</a>
+, <a class="el" href="class_discrete_ordinates.html#a077a00b2045df1090c697fa20d4ae4fa">DiscreteOrdinates</a>
+, <a class="el" href="class_fixed_multiply.html#a162ba11d68ba0b96eca655850f0aa994">FixedMultiply</a>
+, <a class="el" href="class_fixed.html#a162ba11d68ba0b96eca655850f0aa994">Fixed</a>
+, <a class="el" href="class_d_d1_d.html#ad80caa1c6621ab72389e5e0ef693620b">DD1D</a>
 , <a class="el" href="class_g_m_r_e_s_iteration.html#ae85c283be4beba9fba54b6cae5b3093c">GMRESIteration</a>
-, <a class="el" href="class_livolant.html#ae85c283be4beba9fba54b6cae5b3093c">Livolant</a>
-, <a class="el" href="class_eigensolver.html#a077a00b2045df1090c697fa20d4ae4fa">Eigensolver</a>
+, <a class="el" href="class_s_c_m_o_c.html#a9e90ea7e72223d7153630af24458f013">SCMOC</a>
 , <a class="el" href="class_s_c1_d.html#ad80caa1c6621ab72389e5e0ef693620b">SC1D</a>
 , <a class="el" href="class_source_iteration.html#ae85c283be4beba9fba54b6cae5b3093c">SourceIteration</a>
 , <a class="el" href="class_s_d1_d.html#ad80caa1c6621ab72389e5e0ef693620b">SD1D</a>
-, <a class="el" href="class_fixed.html#a077a00b2045df1090c697fa20d4ae4fa">Fixed</a>
-, <a class="el" href="class_d_d2_d.html#aa68470b81fe3d99b077c97800bc8b643">DD2D</a>
-, <a class="el" href="class_d_d1_d.html#ad80caa1c6621ab72389e5e0ef693620b">DD1D</a>
-, <a class="el" href="class_d_d_m_o_c.html#aca96603357212ce0cd70d85e8a6f83df">DDMOC</a>
-</li>
-<li>source()
-: <a class="el" href="class_source.html#a50611cf6b8bff7c05fd206729e969381">Source</a>
+, <a class="el" href="class_krylov_m_g.html#a162ba11d68ba0b96eca655850f0aa994">KrylovMG</a>
+, <a class="el" href="class_f_l_a_r_e.html#a162ba11d68ba0b96eca655850f0aa994">FLARE</a>
+, <a class="el" href="class_gauss_seidel.html#abd60e423ebf2680552757c136342195c">GaussSeidel</a>
+, <a class="el" href="class_eigensolver.html#a077a00b2045df1090c697fa20d4ae4fa">Eigensolver</a>
+, <a class="el" href="class_livolant.html#ae85c283be4beba9fba54b6cae5b3093c">Livolant</a>
 </li>
 <li>Source()
 : <a class="el" href="class_source.html#aa1d7d41969d8ec46a87f80ba487cb5f0">Source</a>
 </li>
 <li>source()
 : <a class="el" href="class_fission_source.html#a50611cf6b8bff7c05fd206729e969381">FissionSource</a>
+, <a class="el" href="class_source.html#a50611cf6b8bff7c05fd206729e969381">Source</a>
 </li>
 <li>source_iterations()
 : <a class="el" href="class_livolant.html#a6be5adf3ed53fed6d765637f91afca11">Livolant</a>
@@ -247,11 +262,11 @@
 : <a class="el" href="class_state.html#a2dd3dfe96c6d9f8970b330ee1b275b4e">State</a>
 </li>
 <li>sweep()
-: <a class="el" href="class_sweep1_d__mod.html#a61b9d1b0968bc3441115e15fcbc84263">Sweep1D_mod</a>
-, <a class="el" href="class_sweep2_d__mod.html#a61b9d1b0968bc3441115e15fcbc84263">Sweep2D_mod</a>
+: <a class="el" href="class_sweep2_d__mod.html#a61b9d1b0968bc3441115e15fcbc84263">Sweep2D_mod</a>
 , <a class="el" href="class_sweep1_d.html#ab3212429423d671127c83501df27881a">Sweep1D</a>
-, <a class="el" href="class_sweep_m_o_c.html#ab3212429423d671127c83501df27881a">SweepMOC</a>
 , <a class="el" href="class_sweep2_d.html#ab3212429423d671127c83501df27881a">Sweep2D</a>
+, <a class="el" href="class_sweep_m_o_c.html#ab3212429423d671127c83501df27881a">SweepMOC</a>
+, <a class="el" href="class_sweep1_d__mod.html#a61b9d1b0968bc3441115e15fcbc84263">Sweep1D_mod</a>
 </li>
 <li>Sweep1D()
 : <a class="el" href="class_sweep1_d.html#a74dfebd3cade1256276b0a1078317ed2">Sweep1D</a>
@@ -270,7 +285,7 @@
 </li>
 </ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Mon Feb 6 2012 18:00:34 for MatlabTransportPack by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Feb 28 2012 22:04:42 for MatlabTransportPack by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>
