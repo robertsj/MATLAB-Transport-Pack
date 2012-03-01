@@ -16,8 +16,8 @@
 %
 % Also, does the "adjoint" fall out somewhere?
 % ==============================================================================
-
-flag = 0;
+clear
+flag = 1;
 
 %clear classes
 
@@ -28,9 +28,12 @@ input = Input();
 put(input, 'number_groups',         1);
 
 % Inner iteration parameters.
-put(input, 'inner_tolerance',       1e-10);
+put(input, 'eigen_tolerance',       1e-12);
+put(input, 'eigen_max_iters',       400);
+
+put(input, 'inner_tolerance',       1e-12);
 put(input, 'inner_max_iters',       100);
-put(input, 'outer_tolerance',       1e-8);
+put(input, 'outer_tolerance',       1e-12);
 put(input, 'outer_max_iters',       300);
 put(input, 'inner_solver',          'SI');
 put(input, 'livolant_free_iters',   3);
@@ -50,20 +53,35 @@ put(input, 'print_out',             1);
 
 % Set the incident response order
 put(input, 'rf_order_group',        1);
-put(input, 'rf_order_space',        0);
+put(input, 'rf_order_space',        2);
 put(input, 'rf_order_polar',        0);
-put(input, 'rf_order_azimuth',      0);
-put(input, 'rf_max_order_space',        2);
+put(input, 'rf_order_azimuth',      1);
+
+
+put(input, 'rf_max_order_space',        4);
 put(input, 'rf_max_order_azimuth',      3);
 put(input, 'rf_max_order_polar',        0);
 
+qr=2;
+quadrature  = QuadrupleRange(qr);
+if qr==2
 put(input, 'quad_number_polar',     1);
 put(input, 'quad_number_azimuth',   2);
+elseif qr==8
+put(input, 'quad_number_polar',     2);
+put(input, 'quad_number_azimuth',   4);
+else
+put(input, 'quad_number_polar',     3);
+put(input, 'quad_number_azimuth',   6);
+end
 
 
-elements = [1 
-            ];
-number_elements = 1;        
+% elements = [1  1 
+%             1  1];
+% number_elements = 4;        
+
+elements = [1 ];
+number_elements = 1; 
 
 M = Connect(input, elements, number_elements);
 
@@ -75,7 +93,7 @@ mat         = test_materials(1);
 mesh        = test_mesh(1);
 
 state       = State(input, mesh);
-quadrature  = QuadrupleRange(2);
+
 
 boundary    = BoundaryMesh(input, mesh, quadrature);
 
@@ -140,7 +158,11 @@ for s_o = 0:max_s_o
                 quadrature, 	...
                 q_e,          ...
                 q_f);
-            set_keff(solver, 0.488); %491
+            %set_keff(solver,  0.5); % kinf
+            %set_keff(solver,  0.491764935684919); % 2x2 quad2
+            %set_keff(solver,  0.491245796476235); % 2x2 quad8
+            set_keff(solver,  0.471921202242799); % 1x1 quad2
+            %set_keff(solver,  0.470750515064036); % 1x1 quad8
             %solver.d_keff = 0.5;
             % Solve the problem
             tic
@@ -273,18 +295,18 @@ R( (2*max_o)+1: 3*max_o, (1*max_o)+1: 2*max_o) = coef{4}(:, :); % right -> top
 R( (3*max_o)+1: 4*max_o, (1*max_o)+1: 2*max_o) = coef{3}(:, :); % right -> bottom
 
 
-R( (0*max_o)+1: 1*max_o, (2*max_o)+1: 3*max_o) = coef{3}(:, :); % bottom -> left
-R( (1*max_o)+1: 2*max_o, (2*max_o)+1: 3*max_o) = coef{4}(:, :); % bottom -> right
+R( (0*max_o)+1: 1*max_o, (2*max_o)+1: 3*max_o) = coef{4}(:, :); % bottom -> left
+R( (1*max_o)+1: 2*max_o, (2*max_o)+1: 3*max_o) = coef{3}(:, :); % bottom -> right
 R( (2*max_o)+1: 3*max_o, (2*max_o)+1: 3*max_o) = coef{1}(:, :); % bottom -> bottom
 R( (3*max_o)+1: 4*max_o, (2*max_o)+1: 3*max_o) = coef{2}(:, :); % bottom -> top
 
 
-R( (0*max_o)+1: 1*max_o, (3*max_o)+1: 4*max_o) = coef{4}(:, :); % top -> left
-R( (1*max_o)+1: 2*max_o, (3*max_o)+1: 4*max_o) = coef{3}(:, :); % top -> right
+R( (0*max_o)+1: 1*max_o, (3*max_o)+1: 4*max_o) = coef{3}(:, :); % top -> left
+R( (1*max_o)+1: 2*max_o, (3*max_o)+1: 4*max_o) = coef{4}(:, :); % top -> right
 R( (2*max_o)+1: 3*max_o, (3*max_o)+1: 4*max_o) = coef{2}(:, :); % top -> bottom
 R( (3*max_o)+1: 4*max_o, (3*max_o)+1: 4*max_o) = coef{1}(:, :); % top -> top
 
 
 RR = kron(speye(number_elements), R);
 
-eigs(M*RR)
+eigs(M*RR, 4, 'LR')

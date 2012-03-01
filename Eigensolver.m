@@ -47,7 +47,7 @@ classdef Eigensolver < handle
         %>
         %> @return Instance of the Eigensolver class.
         % ======================================================================
-        function obj = Eigensolver(  input,            ...
+        function this = Eigensolver(  input,            ...
                                      state,            ...
                                      boundary,         ...
                                      mesh,             ...
@@ -56,20 +56,20 @@ classdef Eigensolver < handle
                                      external_source,  ...
                                      fission_source    )
             
-           obj.d_input      = input;
-           obj.d_state      = state;
-           obj.d_mesh       = mesh;
-           obj.d_mat        = mat;
-           obj.d_quadrature = quadrature;
-           obj.d_boundary   = boundary;
-           obj.d_fission_source = fission_source;
+           this.d_input      = input;
+           this.d_state      = state;
+           this.d_mesh       = mesh;
+           this.d_mat        = mat;
+           this.d_quadrature = quadrature;
+           this.d_boundary   = boundary;
+           this.d_fission_source = fission_source;
            
            % Check input; otherwise, set defaults for optional parameters.
-           obj.d_tolerance = get(input, 'eigen_tolerance');
-           obj.d_max_iters = get(input, 'eigen_max_iters');
+           this.d_tolerance = get(input, 'eigen_tolerance');
+           this.d_max_iters = get(input, 'eigen_max_iters');
            
            % Setup the multigroup solver.
-           obj.d_solver = ...
+           this.d_solver = ...
                Fixed(  input,            ...
                        state,            ...
                        boundary,         ...
@@ -80,25 +80,25 @@ classdef Eigensolver < handle
                        fission_source );
         end
         
-        function output = solve(obj)
+        function output = solve(this)
             
             disp('*** Beginning eigensolve***')
             
             % Initialize the fission source.
-            initialize(obj.d_fission_source);
+            initialize(this.d_fission_source);
             
             % Initialize the flux to unity in all groups.
-            phi = ones(number_cells(obj.d_mesh), 1);
-            for g = 1:number_groups(obj.d_mat)
-               set_phi(obj.d_state, phi, g);
+            phi = ones(number_cells(this.d_mesh), 1);
+            for g = 1:number_groups(this.d_mat)
+               set_phi(this.d_state, phi, g);
             end
             
             % Do initial fission density setup
-            update(obj.d_fission_source);
+            update(this.d_fission_source);
             
             % Normalize the density to unity
-            normalize(obj.d_fission_source);
-            fd = density(obj.d_fission_source);
+            normalize(this.d_fission_source);
+            fd = density(this.d_fission_source);
             
             % Group-wise flux residual.  All residuals are *relative* and
             % are based on the L-infinity norm. "1" and "2" are "one time ago"
@@ -113,46 +113,46 @@ classdef Eigensolver < handle
             sweeps = 0;
             
             % Perform outer iteration.
-            while (flux_error > obj.d_tolerance && ...
-                   iteration  < obj.d_max_iters )
+            while (flux_error > this.d_tolerance && ...
+                   iteration  < this.d_max_iters )
                
                 % Setup the fission source.
-                setup_outer(obj.d_fission_source, 1/k_eff);
+                setup_outer(this.d_fission_source, 1/k_eff);
                
                 % Solve the multigroup equations.
-                out     = solve(obj.d_solver);
+                out     = solve(this.d_solver);
                 
                 % Track number of sweeps.
                 sweeps  = sweeps + out.total_inners;
                 
                 % Save density and recompute.
-                update(obj.d_fission_source);
+                update(this.d_fission_source);
                 fd_old = fd;
-                fd     = density(obj.d_fission_source);
+                fd     = density(this.d_fission_source);
                 
                 % Compute L-1 fission density error.
                 flux_error_2 = flux_error_1;
                 flux_error_1 = flux_error;
                 flux_error   = max( abs(fd-fd_old)./fd );
                 
-                %reset_convergence(obj.d_solver, 100, flux_error/10);
+                %reset_convergence(this.d_solver, 100, flux_error/10);
                 
                 % Save and update keff
                 k_eff_1 = k_eff;
                 k_eff   = k_eff_1 * max(fd) / max(fd_old);
                 
                 iteration = iteration + 1;
-                print_iteration(obj, iteration, sweeps, ...
+                print_iteration(this, iteration, sweeps, ...
                     flux_error, flux_error_1, flux_error_2, k_eff)
             end
-            
+            set_eigenvalue(this.d_state, k_eff);
             output.flux_error = flux_error;
             output.sweeps = sweeps;
             
         end
         
         
-        function print_iteration(obj, it, sweeps, e0, e1, e2, k)
+        function print_iteration(this, it, sweeps, e0, e1, e2, k)
             fprintf('=========================================================================\n')
             fprintf('    Iter: %5i, Error: %12.8f, keff: %10.6f, Sweeps: %5i\n',...
                 it, e0, k, sweeps);

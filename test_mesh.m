@@ -11,9 +11,9 @@ if n == 1
     a=0.5;
     % Simple uniform box.
     xcm = [ 0.0  10.0 ]*a;
-    xfm = [   30   ]*a;
+    xfm = [   10   ]*a;
     ycm = [ 0.0  10.0 ]*a;
-    yfm = [   30   ]*a;    
+    yfm = [   10   ]*a;    
     % Material map
     mat_map = [1];
     % Make the mesh.
