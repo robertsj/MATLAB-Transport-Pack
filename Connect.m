@@ -9,9 +9,9 @@ function M = Connect(input, elements, number_elements)
 
 % Assign the boundary conditions
 lef = 1;
-rig = 0;
+rig = 1;
 bot = 1;
-top = 0;
+top = 1;
 
 %--------------------------------------------------------------------------
 % SETUP FOR CONNECTING FACES.  Matrix "mm" connects faces to faces (or 

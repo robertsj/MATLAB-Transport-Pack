@@ -1,9 +1,9 @@
 %> @file  Response.m
 %> @brief Response boundary condition class definition.
 % ==============================================================================
-%> @brief Reflective boundary condition.
+%> @brief Response boundary condition.
 %
-%> 
+%> Currently, this is limited to 2-d problems.
 % ==============================================================================
 classdef Response < BoundaryCondition
     
@@ -122,78 +122,91 @@ classdef Response < BoundaryCondition
         end
         
         % ======================================================================
-        %> @brief Update the boundary flux.
+        %> @brief Set the boundary flux.
+        %
+        %> Since the response condition is fixed, we set it once.
         % ======================================================================
-        function this = update(this)
-            
+        function this = set(this)
+
             % Boundary fluxes are stored as follows
             %   this.d_boundary_flux{side}(:, angle, this.d_g) 
             % i.e. for a given side, the data is stored by space and 
             % discrete angle and group.  The angle is the *cardinal*
             % index.  The quadrature is arranged (pol1,azi1,pol1,azi2,...)
 
-            % Compute the incident flux if needed.
-            if group(this.d_boundary) == this.d_order_group
-                this.d_set = 1;   
-            
-                Ps = this.d_basis_space(:, this.d_order_space+1);
-                Pa = this.d_basis_azimuth(:, this.d_order_azimuth+1);
-                Pp = this.d_basis_polar(:, this.d_order_polar+1);
+            % Set the group of the incident response.
+            set_group(this.d_boundary, this.d_order_group);
+          
+            % Set incident bases.
+            Ps = this.d_basis_space(:, this.d_order_space+1);
+            Pa = this.d_basis_azimuth(:, this.d_order_azimuth+1);
+            Pp = this.d_basis_polar(:, this.d_order_polar+1);
                 
-                for o = 1:length(this.d_octants(:, 1))
+            for o = 1:length(this.d_octants(:, 1))
+                
+                o_in  = this.d_octants(o, 1); % incident octant
+                
+                f = zeros(this.d_number_space, ...
+                    this.d_number_azimuth*this.d_number_polar);
                     
-                    o_in  = this.d_octants(o, 1); % incident octant
-                    
-                    f = zeros(this.d_number_space, ...
-                        this.d_number_azimuth*this.d_number_polar);
-                    
-                    % If oo = 1, it's a vertical side, else a horizontal side.
-                    % The indices are selected so that psi is defined as a
-                    % function of monotonically increasing angle with respect to
-                    % its incident surface.  In other words, all incident
-                    % angular fluxes are defined left to right along an edge
-                    % both in space and angle.
-%                     if (this.d_side == Mesh.LEFT || this.d_side == Mesh.RIGHT)
-%                         oo = 1;
-%                     else
-%                         oo = 1;
-%                     end
-                    if (o == 1) % this makes angles symmetric
-                        a1 = 1; 
-                        a2 = this.d_number_azimuth;
-                        a3 = 1;
-                    else
-                        a1 = this.d_number_azimuth;
-                        a2 = 1;
-                        a3 = -1;
-                    end
-                    for s = 1:this.d_number_space
-                        ang = 1; % cardinal index
-                        for a = a1:a3:a2
-                            for p = 1:this.d_number_polar
-                                if 1==1%s == 25 && angle == 1
-%                                 if s==1
-%                                     [muu] = angle(this.d_quadrature, o, ang)
-%                                 end
-                                % a is the right
-                                f(s, (a-1)*this.d_number_polar+p) = Ps(s)*...
-                                    Pa(ang+(o-1)*this.d_number_azimuth)*Pp(p);
-                                end
-                            end
-                            ang = ang + 1;
-                        end
-                    end
-                    
-                    if this.d_side == Mesh.LEFT || this.d_side == Mesh.RIGHT
-                        set_psi_v_octant(this.d_boundary, o_in, f, Boundary.IN);
-                    elseif this.d_side == Mesh.TOP || this.d_side == Mesh.BOTTOM
-                        set_psi_h_octant(this.d_boundary, o_in, f, Boundary.IN);
-                    end
-                    
+                % If oo = 1, it's a vertical side, else a horizontal side.
+                % The indices are selected so that psi is defined as a
+                % function of monotonically increasing angle with respect to
+                % its incident surface.  In other words, all incident
+                % angular fluxes are defined left to right along an edge
+                % both in space and angle.
+                
+                if (o == 1) % this makes angles symmetric
+                    a1 = 1;
+                    a2 = this.d_number_azimuth;
+                    a3 = 1;
+                else
+                    a1 = this.d_number_azimuth;
+                    a2 = 1;
+                    a3 = -1;
                 end
+                for s = 1:this.d_number_space
+                    ang = 1; % cardinal index
+                    for a = a1:a3:a2
+                        for p = 1:this.d_number_polar
+                            
+                            f(s, (a-1)*this.d_number_polar+p) = Ps(s)*...
+                                Pa(ang+(o-1)*this.d_number_azimuth)*Pp(p);
+                            
+                        end
+                        ang = ang + 1;
+                    end
+                end
+                
+                if this.d_side == Mesh.LEFT || this.d_side == Mesh.RIGHT
+                    set_psi_v_octant(this.d_boundary, o_in, f, Boundary.IN);
+                elseif this.d_side == Mesh.TOP || this.d_side == Mesh.BOTTOM
+                    set_psi_h_octant(this.d_boundary, o_in, f, Boundary.IN);
+                end
+                
             end
             
         end
+        
+        % ======================================================================
+        %> @brief Update the boundary flux.
+        %
+        %> Note, nothing needs to be done, since we've already fixed the
+        %> incident response.
+        % ======================================================================
+        function this = update(this)
+            % do nothing
+        end 
+        
+        % ======================================================================
+        %> @brief (Re)set the incident orders.
+        % ======================================================================
+        function this = set_orders(this, go, so, ao, po)
+             this.d_order_group   = go;
+             this.d_order_space   = so;
+             this.d_order_azimuth = ao;
+             this.d_order_polar   = po;
+        end             
         
     end
     

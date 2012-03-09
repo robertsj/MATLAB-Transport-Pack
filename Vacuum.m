@@ -26,10 +26,20 @@ classdef Vacuum < BoundaryCondition
         %>
         %> @return Instance of the Vacuum class.
         % ======================================================================
-        function obj = Vacuum(boundary, input, mesh, quadrature, side)
-            obj = obj@BoundaryCondition(boundary, input, mesh, quadrature, side); 
+        function this = Vacuum(boundary, input, mesh, quadrature, side)
+            this = this@BoundaryCondition(boundary, input, mesh, quadrature, side); 
 
         end
+        
+        % ======================================================================
+        %> @brief Set the boundary flux.
+        %
+        %> Note, nothing needs to be done for vacuum, as the incident fluxes are
+        %> initialized as zero.
+        % ======================================================================
+        function this = set(this)
+            % do nothing
+        end        
         
         % ======================================================================
         %> @brief Update the boundary flux.
@@ -37,7 +47,7 @@ classdef Vacuum < BoundaryCondition
         %> Note, nothing needs to be done for vacuum, as the incident fluxes are
         %> initialized as zero.
         % ======================================================================
-        function obj = update(obj)
+        function this = update(this)
             % do nothing
         end
         

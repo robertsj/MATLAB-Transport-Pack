@@ -35,7 +35,7 @@ classdef SourceIteration < InnerIteration
         %
         %> @return  Instance of the SourceIteration class.
         % ======================================================================
-        function obj = SourceIteration()
+        function this = SourceIteration()
             % Nothing here for now.
         end
         
@@ -51,7 +51,7 @@ classdef SourceIteration < InnerIteration
         %> @param external_source 	User-defined external source.
         %> @param fission_source 	Fission source.
         % ======================================================================
-        function obj = setup(obj,              ...
+        function this = setup(this,              ...
                              input,            ...
                              state,            ...
                              boundary,         ...
@@ -62,7 +62,7 @@ classdef SourceIteration < InnerIteration
                              fission_source    )
                          
             % First do base class setup.
-            setup_base( obj,              ...
+            setup_base( this,              ...
                         input,            ...
                         state,            ...
                         boundary,         ...
@@ -82,7 +82,7 @@ classdef SourceIteration < InnerIteration
         %>
         %> @return Flux residual (L-inf norm) and iteration count.
         % ======================================================================
-        function [flux_error, iteration] = solve(obj, g)% phi, source)
+        function [flux_error, iteration] = solve(this, g)% phi, source)
             
             % Flux error currently, one time ago, and two times ago.
             flux_error    = 1.0; 
@@ -91,40 +91,40 @@ classdef SourceIteration < InnerIteration
             iteration  = 0;
               
             % Setup the boundary fluxes for this solve.
-            initialize(obj.d_boundary, g);
+            initialize(this.d_boundary, g);
             
             % Setup the equations for this group.
-            setup_group(obj.d_equation, g);
+            setup_group(this.d_equation, g);
             
             % Build the fixed source.
-            build_fixed_source(obj, g);
+            build_fixed_source(this, g);
             
             % Compute the uncollided flux, i.e. phi_uc = D*inv(T)*Q_fixed.
-           % phi_uc = sweep(obj.d_sweeper, obj.d_fixed_source, g); 
+           % phi_uc = sweep(this.d_sweeper, this.d_fixed_source, g); 
             
             % Set the initial flux
-            phi      = flux(obj.d_state, g);% + phi_uc;
+            phi      = flux(this.d_state, g);% + phi_uc;
             phi_old  = phi;
             
-            while flux_error > obj.d_tolerance ...
-                && iteration < obj.d_max_iters
+            while flux_error > this.d_tolerance ...
+                && iteration < this.d_max_iters
             
                 % Build the within-group source
-                build_scatter_source(obj, g, phi); % = M*S*phi
+                build_scatter_source(this, g, phi); % = M*S*phi
                 
                 % Construct total sweep source.  This is just the sum of the
                 % within-group and other terms.  These are *discrete*
                 % values.  Note, in a more general implementation, the
                 % sweep source would be generated for each angle.  Here,
                 % since it's isotropic, we do it once before everything.
-                sweep_source = obj.d_scatter_source + obj.d_fixed_source; 
+                sweep_source = this.d_scatter_source + this.d_fixed_source; 
                 
                 % Set incident boundary fluxes.
-                set(obj.d_boundary);
-                set_group(obj.d_boundary, g); % Set the group
+                set(this.d_boundary);
+                set_group(this.d_boundary, g); % Set the group
 
                 % Sweep over all angles and meshes.            
-                phi = sweep(obj.d_sweeper, sweep_source, g);            
+                phi = sweep(this.d_sweeper, sweep_source, g);            
 
                 % Convergence criteria and diagnostics
                 flux_error_2 = flux_error_1;
@@ -138,17 +138,17 @@ classdef SourceIteration < InnerIteration
                 
                % fprintf('           Iter: %5i, Error: %12.8f\n', iteration, flux_error);
                 if (mod(iteration, 20)==0)
-                    print_iteration(obj, iteration, flux_error, ...
+                    print_iteration(this, iteration, flux_error, ...
                         flux_error_1, flux_error_2)
                 end
                 
             end
             
             % Did we converge?
-            check_convergence(obj, iteration, flux_error);
+            check_convergence(this, iteration, flux_error);
             
             % Update the state.
-            set_phi(obj.d_state, phi, g);
+            set_phi(this.d_state, phi, g);
 
             % Update the boundary fluxes.
 

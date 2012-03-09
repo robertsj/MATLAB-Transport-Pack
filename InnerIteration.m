@@ -299,6 +299,9 @@ classdef InnerIteration < handle
         % ======================================================================
         %> @brief Build all the scattering sources.
         %
+        %> In some cases, including all scattering is required, as is the case
+        %> when performing multigroup Krylov solves.  WHY IS THIS IN INNER?
+        %>
         %> @param   g       Group for this problem.  (I.e. row in MG).
         %> @param   phi     Current MG flux.
         % ======================================================================
@@ -320,10 +323,7 @@ classdef InnerIteration < handle
         %> @param   g       Group for this problem.
         % ======================================================================
         function this = build_fixed_source(this, g)
-        % function Q = build_source(this, g)
-        %   This builds the source (excluding within-group scatter) for the
-        %   sweep.  Specifically, a *discrete* source is generated, i.e. the
-        %   source appropriate for T*psi = Q.
+
             this.d_g = g;
             
             if (get(this.d_input, 'print_out'))
@@ -383,6 +383,11 @@ classdef InnerIteration < handle
             
         end % end function build_fixed_source
         
+        % ======================================================================
+        %> @brief Build fixed source from fission and/or external sources.
+        %
+        %> @param   g       Group for this problem.
+        % ======================================================================        
         function build_external_source(this, g)
             this.d_fixed_source = this.d_fixed_source*0;
             % Add the fission source if required.
@@ -405,6 +410,9 @@ classdef InnerIteration < handle
             end 
         end
         
+        % ======================================================================
+        %> @brief Check convergence and warn if iteration limit reached.
+        % ======================================================================        
         function check_convergence(this, iteration, flux_error)
             if iteration == this.d_max_iters && flux_error > this.d_tolerance
                 warning('solver:convergence', ...
@@ -412,7 +420,9 @@ classdef InnerIteration < handle
             end
         end % end function check_convergence
 
-    
+        % ======================================================================
+        %> @brief Print some diagnostic output.
+        % ======================================================================
         function print_iteration(this, it, e0, e1, e2)
             if (get(this.d_input, 'print_out'))
                 fprintf('           Iter: %5i, Error: %12.8f\n', it, e0);

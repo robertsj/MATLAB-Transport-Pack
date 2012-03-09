@@ -109,12 +109,13 @@ classdef Boundary < handle
         %>
         %> @return Instance of the Boundary class.
         % ======================================================================
-        function this = initialize(this, g)
+        function this = initialize(this, g) % remove me
             this.d_g = g;
         end
         function this = set_group(this, g)
             this.d_g = g;
         end        
+        
         % ======================================================================
         %> @brief Get the current group.
         %> @return Current group.
@@ -126,21 +127,29 @@ classdef Boundary < handle
         % ======================================================================
         %> @brief Set the incident boundary fluxes.
         %>
-        %> This is called after every sweep.  The sweeper updates all the
-        %> outgoing angular fluxes.  This routine updates the incident fluxes
-        %> according to the boundary condition.
-        %>
-        %> @param order         Quadrature order. This differs from quadrature 
-        %>                      to quadrature, but e.g. for level symmetric, 
-        %>                      it's the number of unique directional cosines.
-        %>
-        %> @return Instance of the Quadrature class.
+        %> This is called before the transport solve.  It requests that the
+        %> boundary conditions set any fixed values for all groups.  
         % ======================================================================  
         function this = set(this)
             for side = 1:2*this.d_mesh.DIM;
-                update(this.d_bc{side});
+                set(this.d_bc{side});
             end
         end
+        
+        % ======================================================================
+        %> @brief Update the incident boundary fluxes.
+        %>
+        %> This is called after every sweep.  The sweeper updates all the
+        %> outgoing angular fluxes.  This routine updates the incident fluxes
+        %> according to the boundary condition.  As an example, this update
+        %> would ask a reflecting condition to set the incident flux using an
+        %> updated outgoing flux.
+        % ======================================================================  
+        function this = update(this)
+            for side = 1:2*this.d_mesh.DIM;
+                update(this.d_bc{side});
+            end
+        end        
         
         % ======================================================================
         %> @brief Reset the incident boundary fluxes to zero.
@@ -176,6 +185,13 @@ classdef Boundary < handle
         %> @return      Boundary flux array.
         % ======================================================================
         f = get_psi_h(this, o, a, inout)
+        
+        % ======================================================================
+        %> @brief Get a boundary condition.
+        % ======================================================================
+        function bc = get_bc(this, side)     
+            bc = this.d_bc{side}; 
+        end
         
         % @}
         

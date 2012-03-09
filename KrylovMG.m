@@ -48,6 +48,9 @@
 %> moment contributions added implicitly, and where the Krylov vectors are 
 %> energy-dependent.
 %>
+%> Note, this inherits from @ref InnerIteration since we need all its properties
+%> and do not add much that isn't already there.
+%>
 %> Reference:
 %>   Evans, T., Davidson, G. and Mosher, S. "Parallel Algorithms for 
 %>   Fixed-Source and Eigenvalue Problems", NSTD Seminar (ORNL), May 27, 2010.
@@ -56,6 +59,7 @@
 classdef KrylovMG < InnerIteration
     
     properties
+        %> Scaling factor for fixed source multiplication problems.
         d_keff = 1.0;
     end
     
@@ -107,6 +111,10 @@ classdef KrylovMG < InnerIteration
            
                 
         end
+        
+        % ======================================================================
+        %> @brief Set scaling factor for fixed source multiplication problems.
+        % ======================================================================
         function set_keff(this, k)
             this.d_keff = k; 
         end
@@ -123,11 +131,13 @@ classdef KrylovMG < InnerIteration
         % ======================================================================
         function output = solve(this)
 
+            % Set the boundary conditions.
+            set(this.d_boundary);  
+            
             % Setup.
             n = number_cells(this.d_mesh);
             ng = number_groups(this.d_mat);
-            % Set incident boundary fluxes.
-            set(this.d_boundary);             
+           
             for g = 1:ng
                 set_group(this.d_boundary, g); % Set the group
                 set(this.d_boundary);
@@ -159,7 +169,7 @@ classdef KrylovMG < InnerIteration
                 set_phi(this.d_state, phi(:, g), g);
             end
             
-            % Final sweep to update boundaries
+            % Final sweep to update boundaries... a HACK!
             for g = 1:ng
                 set_group(this.d_boundary, g); % Set the group
                 set(this.d_boundary);
@@ -184,8 +194,7 @@ classdef KrylovMG < InnerIteration
                      warning('solver:convergence', ...
                          'GMRES preconditioner was ill-conditioned.')
                 case 3
-                     warning('solver:convergence', ...
-                         'GMRES stagnated.')
+                     warning('solver:convergence', 'GMRES stagnated.')
                 otherwise
                     error('GMRES returned unknown flag.')
             end
@@ -278,10 +287,11 @@ function y = apply(x, this)
        % initialize(this.d_boundary, g);
        % reset(this.d_boundary);
         
-        % Build all scattering sources.
+        % Build all scattering sources.  This included all scatter from any
+        % group g' into any group g ( within-group scatter is included).
         build_all_scatter_source(this, g, phi);
         
-        % Add scatter from all groups.
+        % Add scatter from all groups.  
         sweep_source = this.d_scatter_source;
 
         if (initialized(this.d_fission_source))

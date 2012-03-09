@@ -16,7 +16,7 @@
 %
 % Also, does the "adjoint" fall out somewhere?
 % ==============================================================================
-%clear
+clear
 flag = 1;
 
 %clear classes
@@ -86,80 +86,17 @@ number_elements = 1;
 M = Connect(input, elements, number_elements);
 
 
-% % One material, one group, c = 0.9
-% mat         = test_materials(1);
-% 
-% % Simple uniformly meshed square
-% mesh        = test_mesh(1);
-
-% ==============================================================================
-% MATERIALS (Test two group data)
-% ==============================================================================
-mat = test_materials(2);
-% ==============================================================================
-% MESH (Assembly of pins)
-% ==============================================================================
-% Shared pin properties
-pitch   = 1.26;                 
-radii   = 0.54;
-number  = 12;
-% Pin 1
-matid  = [2 1]; % IN to OUT
-pin1   = PinCell(pitch, radii, matid);
-meshify(pin1, number);
-% Pin 2
-matid  = [4 1]; 
-pin2   = PinCell(pitch, radii, matid);
-meshify(pin2, number);
-% Pin 3
-matid  = [1]; 
-pin3   = PinCell(pitch, [], matid);
-meshify(pin3, number);
-% Make the assembly.
-pin_map = [ 1 1 1 1 1 1 1 1 1
-            1 1 1 2 1 1 1 1 1
-            1 1 1 1 1 1 2 1 1
-            1 2 1 3 3 1 1 1 1
-            1 1 1 3 3 3 1 1 1
-            1 1 1 1 3 3 1 2 1
-            1 1 2 1 1 1 1 1 1
-            1 1 1 1 1 2 1 1 1
-            1 1 1 1 1 1 1 1 1 ];
-mesh = Assembly({pin1, pin2, pin3}, pin_map);
-meshify(mesh);
-figure(1)
-plot_mesh_map(mesh, 'MATERIAL')
-
-
+mat         = test_materials(1);
+mesh        = test_mesh(1);
 state       = State(input, mesh);
-boundary    = BoundaryMesh(input, mesh, quadrature);
-
-% Empty external source.
 q_e         = Source(mesh, 2);
-
-% Use a fission source.
 q_f = FissionSource(state, mesh, mat);
 initialize(q_f);
-
-if (flag==0)
-% Make the inner iteration.
-solver= Eigensolver(input,        ...
-              state,    	...
-              boundary,     ...
-              mesh,     	...
-              mat,        	...
-              quadrature, 	...
-              q_e,          ...
-              q_f);
- 
-%set_keff(solver, 0.49);
-solve(solver);          %0.421086  0.5=0.99997268
-error('stop')
-end
 
 % RESPONSE LOOP
 k = 0;
 coef = cell(4, 1);
+
 max_s_o = get(input, 'rf_max_order_space'); 
 max_a_o = get(input, 'rf_max_order_azimuth');
 max_p_o = get(input, 'rf_max_order_polar');
@@ -171,7 +108,20 @@ coef{2} = zeros(max_o);
 coef{3} = zeros(max_o);
 coef{4} = zeros(max_o);
 total = (1+max_s_o)*(1+max_a_o)*(1+max_p_o);
-tic
+
+boundary = BoundaryMesh(input, mesh, quadrature);
+bc = get_bc(boundary, Mesh.LEFT);
+
+solver= KrylovMG(   input,        ...
+                    state,    	...
+                    boundary,     ...
+                    mesh,     	...
+                    mat,        	...
+                    quadrature, 	...
+                    q_e,          ...
+                    q_f);
+
+tic                
 for s_o = 0:max_s_o
     for a_o = 0:max_a_o
         for p_o = 0:max_p_o
@@ -183,24 +133,15 @@ for s_o = 0:max_s_o
             put(input, 'rf_order_space',        s_o);
             put(input, 'rf_order_polar',        p_o);
             put(input, 'rf_order_azimuth',      a_o);
-
-            boundary    = BoundaryMesh(input, mesh, quadrature);
+            
+            set_orders(bc, 1, s_o, a_o, p_o);
             
             % Make the inner iteration. KrylovMG  FixedMultiply
-            solver= KrylovMG(input,        ...
-                state,    	...
-                boundary,     ...
-                mesh,     	...
-                mat,        	...
-                quadrature, 	...
-                q_e,          ...
-                q_f);
+
             %set_keff(solver,  0.5); % kinf
             %set_keff(solver,  0.491764935684919); % 2x2 quad2
             %set_keff(solver,  0.491245796476235); % 2x2 quad8
             set_keff(solver,  0.471921202242799); % 1x1 quad2
-            %keff = 0.505;
-            %set_keff(solver, keff); %,5437,5341
             %set_keff(solver,  0.470750515064036); % 1x1 quad8
             %solver.d_keff = 0.5;
             % Solve the problem
@@ -214,8 +155,8 @@ for s_o = 0:max_s_o
            % figure(1)
            % plot_flux(mesh, phi{k})
            %error('fuck')
-%             axis square
-%             shading flat
+           % axis square
+           % shading flat
             % Go through and get boundary responses
 
             % We're incident on the bottom.  
@@ -347,7 +288,5 @@ R( (3*max_o)+1: 4*max_o, (3*max_o)+1: 4*max_o) = coef{1}(:, :); % top -> top
 
 
 RR = kron(speye(number_elements), R);
-% count = count + 1
-% Rs{count} = RR;
-% keffs(count) = keff;
+
 eigs(M*RR, 4, 'LR')

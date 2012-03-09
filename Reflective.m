@@ -81,9 +81,17 @@ classdef Reflective < BoundaryCondition
         end
         
         % ======================================================================
-        %> @brief Update the boundary flux.
+        %> @brief Set the boundary flux.
         %
-        %> Finish me.
+        %> Note, nothing needs to be done for reflective, since the initial
+        %> guess is zero.
+        % ======================================================================
+        function this = set(this)
+            % do nothing
+        end        
+        
+        % ======================================================================
+        %> @brief Update the boundary flux.
         % ======================================================================
         function obj = update(obj)
             

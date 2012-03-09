@@ -46,6 +46,9 @@ classdef FixedMultiply < Fixed
         
         function output = solve(this)
             
+            % Set the boundary conditions.
+            set(this.d_boundary);
+            
             % Group-wise flux residual.  All residuals are *relative* and
             % are based on the L-infinity norm.
             flux_g_error = zeros(number_groups(this.d_mat), 1);

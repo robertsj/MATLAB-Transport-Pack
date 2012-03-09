@@ -139,7 +139,7 @@ classdef Eigensolver < handle
                 
                 % Save and update keff
                 k_eff_1 = k_eff;
-                k_eff   = k_eff_1 * max(fd) / max(fd_old);
+                k_eff   = k_eff_1 * norm(fd) / norm(fd_old);
                 
                 iteration = iteration + 1;
                 print_iteration(this, iteration, sweeps, ...
