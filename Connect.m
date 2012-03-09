@@ -9,9 +9,9 @@ function M = Connect(input, elements, number_elements)
 
 % Assign the boundary conditions
 lef = 1;
-rig = 0;
+rig = 1;
 bot = 1;
-top = 0;
+top = 1;
 
 %--------------------------------------------------------------------------
 % SETUP FOR CONNECTING FACES.  Matrix "mm" connects faces to faces (or 
@@ -112,7 +112,7 @@ order = tot;
 %refl_v     = ones(order+1,1).*(-1).^(1+(1:order+1)');
 refl_v_len = length(refl_v);
 refl  = spdiags( refl_v, 0, refl_v_len, refl_v_len);
-refl  = kron( refl, speye(ng) );
+refl  = kron(  speye(ng), refl );
 
 %--------------------------------------------------------------------------
 % SETUP FOR TRANSMISSION.  Because the current responses are defined as
@@ -121,7 +121,7 @@ refl  = kron( refl, speye(ng) );
 %  of appropriate length (i.e. # orders x # groups), but in matrix form,
 %  i.e. an identity matrix
 tran = speye(order);
-tran = kron( tran, speye(ng) );
+tran = kron(  speye(ng), tran );
 
 %--------------------------------------------------------------------------
 % COMBINE EVERYTHING IN M
