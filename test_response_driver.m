@@ -10,10 +10,10 @@ put(input, 'inner_max_iters',       100);
 put(input, 'outer_tolerance',       1e-12);
 put(input, 'outer_max_iters',       10);
 put(input, 'quad_order',            2);
-put(input, 'rf_max_order_space',        3);
-put(input, 'rf_max_order_azimuth',      3);
+put(input, 'rf_max_order_space',        0);
+put(input, 'rf_max_order_azimuth',      0);
 put(input, 'rf_max_order_polar',        0);
-put(input, 'rf_k_vector',    0.077351014481281);%1.325242580556770);%0.895229);0.077399623905864
+put(input, 'rf_k_vector',   [0.9 1.0 1.1]');%1.325242580556770);%0.895229);0.077399623905864
 
 % ==============================================================================
 % MATERIALS (Test two group data)
@@ -54,20 +54,26 @@ meshify(mesh2);
 % ==============================================================================
 % RESPONSE FUNCTION DRIVER
 % ==============================================================================
-driver = ResponseDriver(input, mat, {mesh1});
+mesh_array = {mesh1, mesh2};
+driver = ResponseDriver(input, mat, mesh_array);
 run(driver);
 [R, F, A, L] = get_responses(driver);
-RR=R{1};
+RR=R(:,:,1,1);
 elements = [1];
 number_elements = 1;        
-% elements = [1 ];
-% number_elements = 1; 
 M = Connect(input, elements, number_elements);
 [v, e]=eigs(M*RR); 
 J = v(:, 1);
 J = sign(J(1))*J;
-FF = F{1};
-AA = A{1}; 
+FF = F(:, 1, 1);
+AA = A(:, 1, 1); 
 e = eigs(M*RR, 4, 'LR')
-leak = L{1}*J;
-(F{1}*J )/(A{1}*J + leak(2) + leak(4))
+LL = L(:, :, 1, 1);
+leak = LL'*J;
+ (FF'*J )/(AA'*J + leak(2) + leak(4))
+ 
+rf_db = ResponseDB(input);
+for i = 1:length(mesh_array)
+   write_response(rf_db, i, ['assembly',num2str(i)], ...
+       R(:,:,:,i), F(:,:,i), A(:,:,i), L(:,:,:,i));
+end

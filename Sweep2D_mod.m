@@ -116,6 +116,7 @@ classdef Sweep2D_mod < handle
                 xb = x_bounds(obj, o);
                 yb = y_bounds(obj, o);
                 
+                % Use the MEX kernel to sweep.  3x(+?) times faster.
                 if obj.d_kernel == 1
                 [phi, psi_v, psi_h] = ...
                     sweep2Dkernel_opt2_mex(phi, psi_v, psi_h, obj.d_nx, yb, xb, sig, ...
