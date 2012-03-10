@@ -17,7 +17,7 @@
 % Also, does the "adjoint" fall out somewhere?
 % ==============================================================================
 %clear
-flag = 1;
+flag = 0;
 
 %clear classes
 
@@ -41,8 +41,8 @@ put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  6);
 if flag == 0
 put(input, 'bc_left',               'reflect');
-put(input, 'bc_right',              'reflect');
-put(input, 'bc_top',                'reflect');
+put(input, 'bc_right',              'vacuum');
+put(input, 'bc_top',                'vacuum');
 put(input, 'bc_bottom',             'reflect');
 else
 put(input, 'bc_left',               'response');
@@ -102,7 +102,7 @@ pitch = 1.26; radii = 0.54; number = 10;
 % Pin 1 - Fuel 1
 matid = [2 1];  pin1 = PinCell(pitch, radii, matid); meshify(pin1, number);
 % Pin 2 - Fuel 2
-matid = [2 1];  pin2 = PinCell(pitch, radii, matid); meshify(pin2, number);
+matid = [4 1];  pin2 = PinCell(pitch, radii, matid); meshify(pin2, number);
 % Pin 3 - MOD
 matid = [  2];  pin3 = PinCell(pitch,    [], matid); meshify(pin3, number);
 

@@ -30,8 +30,9 @@ classdef ResponseDriver < handle
         d_F
         d_A
         d_L
-        d_gain
-        d_loss
+        d_fiss
+        d_abso
+        d_leak
         d_fission
         d_absorption
         d_volume
@@ -166,8 +167,9 @@ classdef ResponseDriver < handle
                     this.d_coef{3} = zeros(this.d_max_o);
                     this.d_coef{4} = zeros(this.d_max_o);
                     
-                    this.d_gain = zeros(mo, 1);
-                    this.d_loss = zeros(mo, 1);
+                    this.d_fiss = zeros(mo, 1);
+                    this.d_abso = zeros(mo, 1);
+                    this.d_leak = zeros(mo, 4);
                     
                     rf_index = 0;
                     for g_o = 1:this.d_max_g_o
@@ -217,10 +219,21 @@ classdef ResponseDriver < handle
                     R( (1*mo)+1: 2*mo, (3*mo)+1: 4*mo) = this.d_coef{4}(:, :); % top -> right
                     R( (2*mo)+1: 3*mo, (3*mo)+1: 4*mo) = this.d_coef{2}(:, :); % top -> bottom
                     R( (3*mo)+1: 4*mo, (3*mo)+1: 4*mo) = this.d_coef{1}(:, :); % top -> top
-
+         
+                    L1 = this.d_leak(:, 1)'; % into 1 ->  leak from 1
+                    L2 = this.d_leak(:, 2)'; % into 1 ->  leak from 2 
+                    L3 = this.d_leak(:, 3)'; % etc. Repeat for assumed sym.
+                    L4 = this.d_leak(:, 4)';                    
+         
+                    this.d_L{i, ki} = [L1 L2 L4 L3  %   |J1|   leak from side 1
+                                       L2 L1 L3 L4  % * |J2| = leak from side 2
+                                       L3 L4 L1 L2  %   |J3|   etc.
+                                       L4 L3 L2 L1];%   |J4|
+                   
                     this.d_R{i, ki} = R;
-                    this.d_F{i, ki} = [this.d_gain' this.d_gain' this.d_gain' this.d_gain'];
-                    this.d_A{i, ki} = [this.d_loss' this.d_loss' this.d_loss' this.d_loss'];
+                    this.d_F{i, ki} = [this.d_fiss' this.d_fiss' this.d_fiss' this.d_fiss'];
+                    this.d_A{i, ki} = [this.d_abso' this.d_abso' this.d_abso' this.d_abso'];
+
                 end % kloop
                 
             end
@@ -333,16 +346,18 @@ classdef ResponseDriver < handle
             
             % Fission and Absorption rates
             update(q_f);
-            
+           
             for g = 1:number_groups(this.d_mat)
                 phi = flux(this.d_state, g);
-                this.d_gain(index_in) = this.d_gain(index_in) + ...
-                    sum(phi.*this.d_fission(:, g));
-                this.d_loss(index_in) = this.d_loss(index_in) + ...
-                    sum(phi.*this.d_absorption(:, g));                
+                this.d_fiss(index_in) = this.d_fiss(index_in) + ...
+                    sum(this.d_volume.*phi.*this.d_fission(:, g));
+                this.d_abso(index_in) = this.d_abso(index_in) + ...
+                    sum(this.d_volume.*phi.*this.d_absorption(:, g));    
+                
+                set_group(this.d_boundary, g);
+                this.d_leak(index_in,:) = this.d_leak(index_in,:) + get_leakage(this.d_boundary);
             end
-            % Leakage
-            
+
             % Pin powers
             % to be added
             
@@ -374,6 +389,13 @@ classdef ResponseDriver < handle
                 for g = 1:ng
                     this.d_fission(i, g)    = nu_sigma_f(this.d_mat, mat(i), g);
                     this.d_absorption(i, g) = sigma_a(this.d_mat, mat(i), g);
+                end
+            end
+            k = 1;
+            for i = 1:number_cells_x(mesh)
+                for j = 1:number_cells_y(mesh)
+                    this.d_volume(k) = dx(mesh, i)*dy(mesh, j);
+                    k = k + 1;
                 end
             end
         end

@@ -5,15 +5,15 @@
 % ==============================================================================
 input = Input();
 put(input, 'number_groups',         2);
-put(input, 'inner_tolerance',       1e-9);
+put(input, 'inner_tolerance',       1e-12);
 put(input, 'inner_max_iters',       100);
-put(input, 'outer_tolerance',       1e-9);
+put(input, 'outer_tolerance',       1e-12);
 put(input, 'outer_max_iters',       10);
 put(input, 'quad_order',            2);
-put(input, 'rf_max_order_space',        2);
-put(input, 'rf_max_order_azimuth',      2);
+put(input, 'rf_max_order_space',        3);
+put(input, 'rf_max_order_azimuth',      3);
 put(input, 'rf_max_order_polar',        0);
-put(input, 'rf_k_vector',   0.896322193280900);%1.325242580556770);%0.895229);
+put(input, 'rf_k_vector',    0.077351014481281);%1.325242580556770);%0.895229);0.077399623905864
 
 % ==============================================================================
 % MATERIALS (Test two group data)
@@ -56,7 +56,7 @@ meshify(mesh2);
 % ==============================================================================
 driver = ResponseDriver(input, mat, {mesh1});
 run(driver);
-[R, F, A] = get_responses(driver);
+[R, F, A, L] = get_responses(driver);
 RR=R{1};
 elements = [1];
 number_elements = 1;        
@@ -65,8 +65,9 @@ number_elements = 1;
 M = Connect(input, elements, number_elements);
 [v, e]=eigs(M*RR); 
 J = v(:, 1);
+J = sign(J(1))*J;
 FF = F{1};
 AA = A{1}; 
-(F{1}*J )/(A{1}*J)
 e = eigs(M*RR, 4, 'LR')
-
+leak = L{1}*J;
+(F{1}*J )/(A{1}*J + leak(2) + leak(4))

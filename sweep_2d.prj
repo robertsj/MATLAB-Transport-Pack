@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <deployment-project>
-  <configuration target="target.matlab.ecoder" target-name="MATLAB Embedded Coder Target" name="sweep_2d" location="/home/robertsj/Research/matlab_transport_pack/source" file="/home/robertsj/Research/matlab_transport_pack/source/sweep_2d.prj" build-checksum="1779092013">
+  <configuration target="target.matlab.ecoder" target-name="MATLAB Embedded Coder Target" name="sweep_2d" location="/home/robertsj/Research/matlab_transport_pack/source" file="/home/robertsj/Research/matlab_transport_pack/source/sweep_2d.prj" build-checksum="2792473426">
     <param.mex.general.TargetLang>option.general.TargetLang.C</param.mex.general.TargetLang>
     <param.mex.general.IntegrityChecks>true</param.mex.general.IntegrityChecks>
     <param.mex.general.ResponsivenessChecks>true</param.mex.general.ResponsivenessChecks>
@@ -97,7 +97,7 @@
     <param.grt.StackUsageMax>200000</param.grt.StackUsageMax>
     <param.grt.ConstantFoldingTimeout>10000</param.grt.ConstantFoldingTimeout>
     <param.UseECoderFeatures>true</param.UseECoderFeatures>
-    <param.mex.outputfile>sweep2Dkernel_opt_mex</param.mex.outputfile>
+    <param.mex.outputfile>sweep2Dkernel_opt2_mex</param.mex.outputfile>
     <param.grt.outputfile>sweep2Dkernel</param.grt.outputfile>
     <param.artifact>option.target.artifact.mex</param.artifact>
     <param.mex.GenCodeOnly>false</param.mex.GenCodeOnly>
@@ -127,9 +127,6 @@
       <param.mex.comments.GenerateComments />
       <param.mex.comments.MATLABSourceComments />
       <param.mex.symbols.ReservedNameArray />
-      <param.mex.customcode.CustomHeaderCode />
-      <param.mex.customcode.CustomInitializer />
-      <param.mex.customcode.CustomTerminator />
       <param.mex.customcode.CustomInclude />
       <param.mex.customcode.CustomSource />
       <param.mex.customcode.CustomLibrary />
