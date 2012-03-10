@@ -140,7 +140,7 @@ classdef Eigensolver < handle
                 % Save and update keff
                 k_eff_1 = k_eff;
                 k_eff   = k_eff_1 * norm(fd) / norm(fd_old);
-                
+                set_eigenvalue(this.d_state, k_eff);
                 iteration = iteration + 1;
                 print_iteration(this, iteration, sweeps, ...
                     flux_error, flux_error_1, flux_error_2, k_eff)

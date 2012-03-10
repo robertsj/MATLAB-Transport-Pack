@@ -13,7 +13,7 @@ put(input, 'quad_order',            2);
 put(input, 'rf_max_order_space',        2);
 put(input, 'rf_max_order_azimuth',      2);
 put(input, 'rf_max_order_polar',        0);
-put(input, 'rf_k_vector', 0.9009968666);
+put(input, 'rf_k_vector',   0.896322193280900);%1.325242580556770);%0.895229);
 
 % ==============================================================================
 % MATERIALS (Test two group data)
@@ -56,3 +56,17 @@ meshify(mesh2);
 % ==============================================================================
 driver = ResponseDriver(input, mat, {mesh1});
 run(driver);
+[R, F, A] = get_responses(driver);
+RR=R{1};
+elements = [1];
+number_elements = 1;        
+% elements = [1 ];
+% number_elements = 1; 
+M = Connect(input, elements, number_elements);
+[v, e]=eigs(M*RR); 
+J = v(:, 1);
+FF = F{1};
+AA = A{1}; 
+(F{1}*J )/(A{1}*J)
+e = eigs(M*RR, 4, 'LR')
+

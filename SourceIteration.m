@@ -119,9 +119,9 @@ classdef SourceIteration < InnerIteration
                 % since it's isotropic, we do it once before everything.
                 sweep_source = this.d_scatter_source + this.d_fixed_source; 
                 
-                % Set incident boundary fluxes.
-                set(this.d_boundary);
-                set_group(this.d_boundary, g); % Set the group
+                % Update incident boundary fluxes.
+                update(this.d_boundary);
+                %set_group(this.d_boundary, g); % Set the group
 
                 % Sweep over all angles and meshes.            
                 phi = sweep(this.d_sweeper, sweep_source, g);            

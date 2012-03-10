@@ -102,16 +102,16 @@ pitch = 1.26; radii = 0.54; number = 10;
 % Pin 1 - Fuel 1
 matid = [2 1];  pin1 = PinCell(pitch, radii, matid); meshify(pin1, number);
 % Pin 2 - Fuel 2
-matid = [4 1];  pin2 = PinCell(pitch, radii, matid); meshify(pin2, number);
+matid = [2 1];  pin2 = PinCell(pitch, radii, matid); meshify(pin2, number);
 % Pin 3 - MOD
 matid = [  2];  pin3 = PinCell(pitch,    [], matid); meshify(pin3, number);
 
 % ==============================================================================
-% ASSEMBLIES
+% ASSEMBLIES 0.701423630411957
 % ==============================================================================
 
 % Assembly 1 
-pin_map1 = [1 1 1 
+pin_map1 = [1 1 1
             1 2 1
             1 1 1];     
 mesh = Assembly({pin1, pin2, pin3}, pin_map1); 
@@ -191,7 +191,7 @@ for s_o = 0:max_s_o
             end
             set_orders(bc, g_o, s_o, a_o, p_o);
             
-            set_keff(solver,  0.9009968666); % kinf 0.9009968666
+            set_keff(solver,  1.325242580556770); % kinf 0.9009968666
 
             out = solve(solver);
             reset(q_f);

@@ -30,6 +30,11 @@ classdef ResponseDriver < handle
         d_F
         d_A
         d_L
+        d_gain
+        d_loss
+        d_fission
+        d_absorption
+        d_volume
         d_coef
         d_max_o
         d_max_g_o
@@ -124,7 +129,8 @@ classdef ResponseDriver < handle
             this.d_F = cell(this.d_number_nodes, length(this.d_k_vector));
             this.d_A = cell(this.d_number_nodes, length(this.d_k_vector));
             this.d_L = cell(this.d_number_nodes, length(this.d_k_vector));
-            this.d_max_o = this.d_max_s_o * this.d_max_a_o * this.d_max_p_o;
+            this.d_max_o = (this.d_max_s_o + 1) * ...
+                 (this.d_max_a_o + 1)*(this.d_max_p_o + 1);
             mo = this.d_max_g_o * (this.d_max_s_o + 1) * ...
                  (this.d_max_a_o + 1)*(this.d_max_p_o + 1);            
             number_responses = mo * this.d_number_nodes * ...
@@ -145,7 +151,9 @@ classdef ResponseDriver < handle
                                   this.d_quadrature, ...
                                   q_e, ...
                                   q_f);
-                
+                              
+                % Build fission and absorption vector                              
+                build_vectors(this, this.d_mesh_array{i});
                              
                 for ki = 1:length(this.d_k_vector)
                 
@@ -157,7 +165,10 @@ classdef ResponseDriver < handle
                     this.d_coef{2} = zeros(this.d_max_o);
                     this.d_coef{3} = zeros(this.d_max_o);
                     this.d_coef{4} = zeros(this.d_max_o);
-
+                    
+                    this.d_gain = zeros(mo, 1);
+                    this.d_loss = zeros(mo, 1);
+                    
                     rf_index = 0;
                     for g_o = 1:this.d_max_g_o
                         for s_o = 0:this.d_max_s_o
@@ -168,11 +179,11 @@ classdef ResponseDriver < handle
 
                                     % Setup and solve.  Reset fission after.
                                     set_orders(this.d_bc, g_o, s_o, a_o, p_o);
-                                    out = solve(solver);
                                     reset(q_f);
-
+                                    out = solve(solver);
+                                    
                                     % Expand the coefficients
-                                    expand(this, rf_index);
+                                    expand(this, rf_index, q_f);
                                     count = count + 1;
                                     time_remaining = toc/count * ...
                                         (number_responses-count);
@@ -208,6 +219,8 @@ classdef ResponseDriver < handle
                     R( (3*mo)+1: 4*mo, (3*mo)+1: 4*mo) = this.d_coef{1}(:, :); % top -> top
 
                     this.d_R{i, ki} = R;
+                    this.d_F{i, ki} = [this.d_gain' this.d_gain' this.d_gain' this.d_gain'];
+                    this.d_A{i, ki} = [this.d_loss' this.d_loss' this.d_loss' this.d_loss'];
                 end % kloop
                 
             end
@@ -215,7 +228,7 @@ classdef ResponseDriver < handle
             fprintf(' ResponseDriver total time (seconds): %12.8f\n', t_final);
         end
         
-        function this = expand(this, index_in)
+        function this = expand(this, index_in, q_f)
             
             
             num_ang        = this.d_number_polar*this.d_number_azimuth;
@@ -227,17 +240,6 @@ classdef ResponseDriver < handle
             
             % Expand the coefficients
             for side = 1:4
-                
-                % always left to right in space w/r to outgoing flux
-                if side > 0 || side == 2 || side == 3
-                    s1 = 1;
-                    s2 = this.d_number_space;
-                    s3 = 1;
-                else
-                    s1 = this.d_number_space;
-                    s2 = 1;
-                    s3 = -1;
-                end
                 
                 for g = 1:this.d_max_g_o
                     
@@ -267,7 +269,7 @@ classdef ResponseDriver < handle
                             end
                         end
                         % populate the vectors we expand
-                        for s = s1:s3:s2
+                        for s = 1:this.d_number_space
                             ang = 1;
                             for a = a1:a3:a2
                                 for p = 1:this.d_number_polar
@@ -291,11 +293,6 @@ classdef ResponseDriver < handle
                                 angle = 0;
                                 az=0;
                                 for o = 1:2
-                                    if (side == Mesh.LEFT || side == Mesh.RIGHT)
-                                        oo = 1;
-                                    else
-                                        oo = 2;
-                                    end
                                     if (1 == 1) % this makes angles symmetric
                                         a1 = 1;
                                         a2 = this.d_number_azimuth;
@@ -328,12 +325,27 @@ classdef ResponseDriver < handle
                                 this.d_coef{side}(index_out, index_in) = ...
                                     psi_p'*this.d_basis_polar(:, ord_p); % i <- k
                                 index_out = index_out + 1;
-                            end
-                        end
-                    end
-                end
-                
+                            end % out p
+                        end % out a
+                    end % out s
+                end % out g
             end % side loop
+            
+            % Fission and Absorption rates
+            update(q_f);
+            
+            for g = 1:number_groups(this.d_mat)
+                phi = flux(this.d_state, g);
+                this.d_gain(index_in) = this.d_gain(index_in) + ...
+                    sum(phi.*this.d_fission(:, g));
+                this.d_loss(index_in) = this.d_loss(index_in) + ...
+                    sum(phi.*this.d_absorption(:, g));                
+            end
+            % Leakage
+            
+            % Pin powers
+            % to be added
+            
         end
         
         function [R, F, A, L] = get_responses(this)
@@ -343,6 +355,28 @@ classdef ResponseDriver < handle
            L = this.d_L;
         end
         
+    end
+    
+    methods (Access = private)
+        function this = build_vectors(this, mesh) 
+            this.d_fission    = zeros(number_cells(mesh), number_groups(this.d_mat));
+            this.d_absorption = zeros(number_cells(mesh), number_groups(this.d_mat));
+            this.d_volume     = zeros(number_cells(mesh), 1);
+            % Get the fine mesh material map or the region material map.
+            n = number_cells(mesh);
+            ng = number_groups(this.d_mat);
+            if meshed(mesh)
+                mat = reshape(mesh_map(mesh, 'MATERIAL'), n, 1);
+            else                
+                mat = region_mat_map(mesh);
+            end            
+            for i = 1:n
+                for g = 1:ng
+                    this.d_fission(i, g)    = nu_sigma_f(this.d_mat, mat(i), g);
+                    this.d_absorption(i, g) = sigma_a(this.d_mat, mat(i), g);
+                end
+            end
+        end
     end
     
 end

@@ -127,6 +127,11 @@ classdef Materials < handle
             y = obj.d_sigma_t(m, g);
         end
         
+        function y = sigma_a(obj, m, g)
+            %check(obj, m, g)
+            y = obj.d_sigma_t(m, g) - sum(obj.d_sigma_s(m, :, g));
+        end        
+        
         function y = nu_sigma_f(obj, m, g)
             %check(obj, m, g)
             y = obj.d_nu_sigma_f(m, g);

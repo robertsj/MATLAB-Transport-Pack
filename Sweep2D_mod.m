@@ -34,7 +34,7 @@ classdef Sweep2D_mod < handle
         %
         d_nx
         d_ny
-        d_kernel = 0;
+        d_kernel = 1;
     end
     
     methods
