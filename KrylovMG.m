@@ -283,9 +283,9 @@ function y = apply(x, this)
         % Setup some constants for this group.
         setup_group(this.d_equation, g);
         
-        % Set incident boundary fluxes.
-       % initialize(this.d_boundary, g);
-       % reset(this.d_boundary);
+        % Update incident boundary fluxes.
+        set_group(this.d_boundary, g);
+        update(this.d_boundary);
         
         % Build all scattering sources.  This included all scatter from any
         % group g' into any group g ( within-group scatter is included).
@@ -305,9 +305,6 @@ function y = apply(x, this)
             
         end
         
-        % Set incident boundary fluxes.
-       % set(this.d_boundary);
-
         % Sweep over all angles and meshes.  This is equivalent to
         %   y <-- D*inv(L)*M*S*x
         y(:, g) = sweep(this.d_sweeper, sweep_source, this.d_g);

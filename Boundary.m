@@ -131,6 +131,8 @@ classdef Boundary < handle
         %> boundary conditions set any fixed values for all groups.  
         % ======================================================================  
         function this = set(this)
+            % First ensure all incident conditions are set to zero.
+            reset(this);
             for side = 1:2*this.d_mesh.DIM;
                 set(this.d_bc{side});
             end
@@ -155,10 +157,14 @@ classdef Boundary < handle
         %> @brief Reset the incident boundary fluxes to zero.
         % ======================================================================          
         function this = reset(this)
-            for o = 1:4
-                set_psi_v_octant(this, o, 0.0, Boundary.IN);
-                set_psi_h_octant(this, o, 0.0, Boundary.IN);
+            for g = 1:get(this.d_input, 'number_groups')
+                set_group(this, g);
+                for o = 1:4
+                    set_psi_v_octant(this, o, 0.0, Boundary.IN);
+                    set_psi_h_octant(this, o, 0.0, Boundary.IN);
+                end
             end
+            set_group(this, 0);
         end        
         
         % ======================================================================

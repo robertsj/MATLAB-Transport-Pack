@@ -116,6 +116,11 @@ classdef Sweep2D_mod < handle
                 xb = x_bounds(obj, o);
                 yb = y_bounds(obj, o);
                 
+                if 1==0
+                [phi, psi_v, psi_h] = ...
+                    sweep2Dkernel_opt_mex(phi, psi_v, psi_h, obj.d_nx, yb, xb, sig, ...
+                                      con_x, con_y, s, wt, beta);
+                else
                 % Sweep over all cells.
                 for j = yb(1):yb(3):yb(2)
                     
@@ -150,7 +155,7 @@ classdef Sweep2D_mod < handle
                     psi_v(j, :) = psi_v_temp;
                     
                 end
-                
+                end
                 % Save outgoing flux vectors.  Note that psi_h has been
                 % computed for the last row of the mesh and so is the
                 % outgoing boundary flux.

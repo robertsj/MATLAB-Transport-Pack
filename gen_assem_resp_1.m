@@ -16,7 +16,7 @@
 %
 % Also, does the "adjoint" fall out somewhere?
 % ==============================================================================
-%clear
+clear
 flag = 1;
 
 %clear classes
@@ -98,7 +98,7 @@ tic
 % ==============================================================================
 
 % Shared pin properties
-pitch = 1.26; radii = 0.54; number = 9;
+pitch = 1.26; radii = 0.54; number = 10;
 % Pin 1 - Fuel 1
 matid = [2 1];  pin1 = PinCell(pitch, radii, matid); meshify(pin1, number);
 % Pin 2 - Fuel 2
@@ -160,16 +160,18 @@ coef{4} = zeros(max_o);
 total = ng*(1+max_s_o)*(1+max_a_o)*(1+max_p_o);
 
 % Get the left bc
-bc_left = get_bc(boundary, Mesh.LEFT);
+boundary = BoundaryMesh(input, mesh, quadrature);
+bc = get_bc(boundary, Mesh.LEFT);
 
-solver= KrylovMG(input,        ...
-    state,    	...
-    boundary,     ...
-    mesh,     	...
-    mat,        	...
-    quadrature, 	...
-    q_e,          ...
-    q_f);
+solver= KrylovMG(   input,        ...
+                    state,    	...
+                    boundary,     ...
+                    mesh,     	...
+                    mat,        	...
+                    quadrature, 	...
+                    q_e,          ...
+                    q_f);
+
 
 t0 = tic;
 t1 = t0;
@@ -187,48 +189,12 @@ for s_o = 0:max_s_o
                 tot  = per * (total-k);
                 disp([' estimated remaining time = ',num2str(tot),' seconds.']) 
             end
-            % Set the incident response order
-            put(input, 'rf_order_group',        g_o);
-            put(input, 'rf_order_space',        s_o);
-            put(input, 'rf_order_polar',        p_o);
-            put(input, 'rf_order_azimuth',      a_o);
-
-            %set_orders(bc_left, g_o, s_o, p_o, a_o);
-            boundary    = BoundaryMesh(input, mesh, quadrature);
-            % Make the inner iteration. KrylovMG  FixedMultiply
-            solver= KrylovMG(input,        ...
-                state,    	...
-                boundary,     ...
-                mesh,     	...
-                mat,        	...
-                quadrature, 	...
-                q_e,          ...
-                q_f);
+            set_orders(bc, g_o, s_o, a_o, p_o);
+            
             set_keff(solver,  0.9009968666); % kinf 0.9009968666
 
-            
-            %solver.d_keff = 0.5;
-            % Solve the problem
-            %tic
-                out = solve(solver); 
-            %toc
+            out = solve(solver);
             reset(q_f);
-            
-            %Get the flux
-            %phi{k} = flux(state, 1);
-            %subplot(2,1,1)
-           % figure(1)
-           % plot_flux(mesh, phi{k})
-           %error('fuck')
-%             axis square
-%             shading flat
-            % Go through and get boundary responses
-
-            % We're incident on the bottom.  
-            %  ref -- bottom
-            %  far -- top
-            %  lef -- left
-            %  rig -- right
 
             % make basis
             number_space   = number_cells_x(mesh);
@@ -239,12 +205,10 @@ for s_o = 0:max_s_o
             basis_azimuth  = DiscreteLP(number_azimuth*2-1);
             num_ang        = number_polar*number_azimuth;
 
-
             octants = [3 2   % ref
                        1 4   % far
                        4 3   % lef
                        2 1]; % rig
-
 
             % Expand the coefficients
             for side = 1:4
