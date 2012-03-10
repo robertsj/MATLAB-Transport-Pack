@@ -27,14 +27,22 @@ classdef QuadrupleRange < Quadrature
         %>
         %> @return Instance of the QuadrupleRange class.
         % ======================================================================
-        function obj = QuadrupleRange(order)
-            obj = obj@Quadrature(order, 2); % Call base class.
-            obj.d_order = order;            % Set order.
+        function this = QuadrupleRange(order)
+            this = this@Quadrature(order, 2); % Call base class.
+            this.d_order = order;            % Set order.
             
             % Get data from an old table function.
-            [obj.d_mu, obj.d_eta, obj.d_weights, obj.d_L] = ...
+            [this.d_mu, this.d_eta, this.d_weights, this.d_L] = ...
                 quad_range_table(order);
-            obj.d_number_angles = length(obj.d_weights);
+            this.d_number_angles = length(this.d_weights);
+        end
+        
+        function n = number_azimuth(this)
+            n = sqrt(this.d_order/2)*2;
+        end
+        
+        function n = number_polar(this)
+            n = sqrt(this.d_order/2);
         end
   
     end

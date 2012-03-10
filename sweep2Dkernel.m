@@ -1,3 +1,8 @@
+%> @file  sweep2Dkernel.m
+%> @brief Performs a 2-D sweep over all angles within an octant.
+%
+%> This function is intended for use with MEX.  Initial studies indicate
+%> it provides a speedup of 3-5 over the pure MATLAB version.
 %#codegen
 function [phi, psi_v, psi_h] = ...
     sweep2Dkernel(phi, psi_v, psi_h, nx, yb, xb, sig, con_x, con_y, s, wt, beta)
@@ -8,9 +13,6 @@ for j = yb(1):yb(3):yb(2)
     psi_v_temp = psi_v(j, :); % psi_v(cells, angles)
     
     for i = xb(1):xb(3):xb(2)
-        
-        % Set incident angular flux.
-        %psi_in = [psi_h(i, :); psi_v_temp];
         
         % Cardinal index.
         k = i + (j - 1) * nx;
@@ -26,9 +28,6 @@ for j = yb(1):yb(3):yb(2)
         
         % Inner product of weights with psi.
         phi(k) = phi(k) + psi_center * wt;
-        
-        % *** Here is where coarse mesh boundary
-        %     information could be dealt with.
         
     end
     

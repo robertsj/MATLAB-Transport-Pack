@@ -16,7 +16,7 @@
 %
 % Also, does the "adjoint" fall out somewhere?
 % ==============================================================================
-clear
+%clear
 flag = 1;
 
 %clear classes

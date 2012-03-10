@@ -8,11 +8,11 @@ end
 % Simple 1 group, 2 material
 % ------------------------------------------------------------------------------ 
 if n == 1
-    a=0.5;
+    a=40;
     % Simple uniform box.
-    xcm = [ 0.0  10.0 ]*a;
+    xcm = [ 0.0  10.0 ];
     xfm = [   10   ]*a;
-    ycm = [ 0.0  10.0 ]*a;
+    ycm = [ 0.0  10.0 ];
     yfm = [   10   ]*a;    
     % Material map
     mat_map = [1];

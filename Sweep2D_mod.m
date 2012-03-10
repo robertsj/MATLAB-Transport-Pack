@@ -34,7 +34,7 @@ classdef Sweep2D_mod < handle
         %
         d_nx
         d_ny
-        
+        d_kernel = 0;
     end
     
     methods
@@ -116,9 +116,9 @@ classdef Sweep2D_mod < handle
                 xb = x_bounds(obj, o);
                 yb = y_bounds(obj, o);
                 
-                if 1==0
+                if obj.d_kernel == 1
                 [phi, psi_v, psi_h] = ...
-                    sweep2Dkernel_opt_mex(phi, psi_v, psi_h, obj.d_nx, yb, xb, sig, ...
+                    sweep2Dkernel_opt2_mex(phi, psi_v, psi_h, obj.d_nx, yb, xb, sig, ...
                                       con_x, con_y, s, wt, beta);
                 else
                 % Sweep over all cells.

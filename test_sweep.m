@@ -1,12 +1,12 @@
 
 
-tic
+
 
 % Test input.
 input = Input();
 
 % Get mesh and materials
-mesh = test_mesh(2);
+mesh = test_mesh(1);
 mat  = test_materials(2);
 
 % Quadrature
@@ -22,9 +22,30 @@ setup_group(equation, 1);
 
 % Make sweeper
 sweeper = Sweep2D_mod(input, mesh, mat, quadrature, boundary, equation);
+sweeper.d_kernel = 0;
 % Make a sweep source
 source  = ones(number_cells(mesh), 1);
-phi     = sweep(sweeper, source, 1);
-plot_flux(mesh, phi)
 
-toc
+n = 2;
+t  = zeros(n, 1);
+for i = 1:n
+    tic
+    phi     = sweep(sweeper, source, 1);
+    t(i) = toc;
+end
+tmean = mean(t);
+tstd  = std(t);
+disp([' tmean = ',num2str(tmean), ' +/- ', num2str(tstd)])
+sweeper.d_kernel = 1;
+t  = zeros(n, 1);
+for i = 1:n
+    tic
+    phi     = sweep(sweeper, source, 1);
+    t(i) = toc;
+end
+tmean = mean(t);
+tstd  = std(t);
+disp([' tmean = ',num2str(tmean), ' +/- ', num2str(tstd)])
+
+
+%plot_flux(mesh, phi)

@@ -199,8 +199,11 @@ classdef KrylovMG < InnerIteration
                     error('GMRES returned unknown flag.')
             end
 
-            fprintf('        MG GMRES Outers: %5i,  Inners: %5i\n', ...
-                iter(1), iter(2));
+            if (get(this.d_input, 'print_out'))
+                fprintf('        MG GMRES Outers: %5i,  Inners: %5i\n', ...
+                    iter(1), iter(2));
+            end
+            
             iteration = iter(1) * iter(2);
 
             output.flux_error   = flux_error;

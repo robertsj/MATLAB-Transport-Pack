@@ -97,8 +97,8 @@ classdef Response < BoundaryCondition
                 else
                     this.d_number_space = number_cells_y(mesh);
                 end
-                this.d_number_polar   = get(input, 'quad_number_polar');
-                this.d_number_azimuth = get(input, 'quad_number_azimuth');                
+                this.d_number_polar   = number_polar(this.d_quadrature);
+                this.d_number_azimuth = number_azimuth(this.d_quadrature);                
                 
                 this.d_basis_space   = DiscreteLP(this.d_number_space-1);
                 this.d_basis_polar   = DiscreteLP(this.d_number_polar-1);
