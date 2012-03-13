@@ -34,7 +34,9 @@ if n == 1
     mat = finalize(mat);
 
 % ------------------------------------------------------------------------------
-elseif n == 2
+elseif n == 2  
+    
+    % Two-group data from 1-d coarse mesh benchmarks (Mosher, Ilas etc.)
     
     % Create the Materials object.
     mat = Materials(2, ...  % groups

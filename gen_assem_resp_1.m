@@ -16,7 +16,7 @@
 %
 % Also, does the "adjoint" fall out somewhere?
 % ==============================================================================
-%clear
+clear
 flag = 0;
 
 %clear classes
@@ -40,9 +40,9 @@ put(input, 'inner_solver',          'SI');
 put(input, 'livolant_free_iters',   3);
 put(input, 'livolant_accel_iters',  6);
 if flag == 0
-put(input, 'bc_left',               'reflect');
-put(input, 'bc_right',              'vacuum');
-put(input, 'bc_top',                'vacuum');
+put(input, 'bc_left',               'vacuum');
+put(input, 'bc_right',              'reflect');
+put(input, 'bc_top',                'reflect');
 put(input, 'bc_bottom',             'reflect');
 else
 put(input, 'bc_left',               'response');
@@ -84,7 +84,7 @@ number_elements = 1;
 % elements = [1 ];
 % number_elements = 1; 
 
-M = Connect(input, elements, number_elements);
+
 
 
 % ==============================================================================
@@ -98,23 +98,33 @@ tic
 % ==============================================================================
 
 % Shared pin properties
-pitch = 1.26; radii = 0.54; number = 10;
+pitch = 1.26; radii = 0.54; number = 8;
 % Pin 1 - Fuel 1
 matid = [2 1];  pin1 = PinCell(pitch, radii, matid); meshify(pin1, number);
 % Pin 2 - Fuel 2
 matid = [4 1];  pin2 = PinCell(pitch, radii, matid); meshify(pin2, number);
 % Pin 3 - MOD
-matid = [  2];  pin3 = PinCell(pitch,    [], matid); meshify(pin3, number);
+matid = [  1];  pin3 = PinCell(pitch,    [], matid); meshify(pin3, number);
+% Pin 4 - Pure Fuel 2
+matid = [  2];  pin4 = PinCell(pitch,    [], matid); meshify(pin4, number);
 
 % ==============================================================================
-% ASSEMBLIES 0.701423630411957
+% ASSEMBLIES 0.701423630411957 1.334776  0.906918 1.320445
 % ==============================================================================
 
 % Assembly 1 
-pin_map1 = [1 1 1
-            1 2 1
-            1 1 1];     
-mesh = Assembly({pin1, pin2, pin3}, pin_map1); 
+pin_map1 = [1 1 1 1 1 1 1 1 1
+            1 1 1 1 1 1 1 1 1
+            1 1 1 1 1 1 1 1 1
+            1 1 1 1 1 1 1 1 1
+            1 1 1 1 1 1 1 1 1
+            1 1 1 1 1 1 1 1 1
+            1 1 1 1 1 1 1 1 1
+            1 1 1 1 1 1 1 1 1
+            1 1 1 1 1 1 1 1 1
+            ];     
+pin_map1 = 4 * pin_map1;            
+mesh = Assembly({pin1, pin2, pin3, pin4}, pin_map1); 
 meshify(mesh);
 toc
 
@@ -350,7 +360,7 @@ R( (3*max_o)+1: 4*max_o, (3*max_o)+1: 4*max_o) = coef{1}(:, :); % top -> top
 
 RR = kron(speye(number_elements), R);
 
-e = eigs(M*RR, 4, 'LR')
-
-lambda(MSO+1,MAO+1,MPO+1) = e(1);
+% e = eigs(M*RR, 4, 'LR')
+% 
+% lambda(MSO+1,MAO+1,MPO+1) = e(1);
 

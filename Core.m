@@ -23,8 +23,8 @@ classdef Core < Mesh2D
         % ======================================================================
         %> @brief Class constructor
         %
-        %> @param   assemblies      Cell array of pin objects.
-        %> @param   assembly_map	2-D array of pin locations.
+        %> @param   assemblies      Cell array of assembly objects.
+        %> @param   assembly_map	2-D array of assembly locations.
         %> @return                  Instance of the Core class.
         % ======================================================================
         function obj = Core(assemblies, assembly_map)
@@ -33,14 +33,14 @@ classdef Core < Mesh2D
                 'length(reshape(assembly_map,[],1)) == length(assemblies)');
             obj.d_assembly              = assemblies;
             obj.d_assembly_map          = flipud(assembly_map)';
-            obj.d_number_assem_row      = length(obj.d_assembly_map(:, 1));
-            obj.d_number_assemblies     = length(length(pins));   
+            obj.d_number_assemblies_row = length(obj.d_assembly_map(:, 1));
+            obj.d_number_assemblies     = length(length(assemblies));   
         end
         
         % ======================================================================
         %> @brief Construct a mesh over the core.
         %
-        %> Using the underlying pin assembly meshes, this constructs 
+        %> Using the underlying assembly meshes, this constructs 
         %> a core
         %> mesh.  The assembly mesh maps are translated to the
         %> assembly.  More work will be to differentiate pins.
@@ -60,7 +60,7 @@ classdef Core < Mesh2D
             % Compute the widths.
             obj.d_dx = zeros(obj.number_cells_x, 1);
             obj.d_dy = zeros(obj.number_cells_y, 1);
-            w = widths(obj.d_pin{1});
+            w = widths(obj.d_assembly{1});
             dx = w{1};
             dy = w{2};
             

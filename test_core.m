@@ -2,7 +2,7 @@
 %> @brief Tests the eigenvalue solver on a 2D core.
 
 clear all;
-plots = 0;
+plots = 1;
 
 % ==============================================================================
 % INPUT
@@ -69,9 +69,9 @@ end
 % ==============================================================================
 
 assembly_map = [ 1 2 3; 2 1 3; 3 3 3];
-core = Assembly({assem1, assem2, assem3}, assembly_map); meshify(core);
+core = Core({assem1, assem2, assem3}, assembly_map); meshify(core);
 if plots, figure(7), plot_mesh_map(core, 'MATERIAL'), end
-
+return
 
 % ==============================================================================
 % SETUP 

@@ -125,12 +125,6 @@ classdef ResponseDriver < handle
             % Empty external source
             q_e = Source(this.d_mesh_array{1}, this.d_max_g_o);
             
-            % Initialize response cell arrays
-%             this.d_R = cell(this.d_number_nodes, length(this.d_k_vector));
-%             this.d_F = cell(this.d_number_nodes, length(this.d_k_vector));
-%             this.d_A = cell(this.d_number_nodes, length(this.d_k_vector));
-%             this.d_L = cell(this.d_number_nodes, length(this.d_k_vector));
-     
             this.d_max_o = (this.d_max_s_o + 1) * ...
                  (this.d_max_a_o + 1)*(this.d_max_p_o + 1);
             mo = this.d_max_g_o * (this.d_max_s_o + 1) * ...
@@ -233,17 +227,11 @@ classdef ResponseDriver < handle
                     L3 = this.d_leak(:, 3)'; % etc. Repeat for assumed sym.
                     L4 = this.d_leak(:, 4)';                    
          
-%                     this.d_L{i, ki} = [L1 L2 L4 L3  %   |J1|   leak from side 1
-%                                        L2 L1 L3 L4  % * |J2| = leak from side 2
-%                                        L3 L4 L1 L2  %   |J3|   etc.
-%                                        L4 L3 L2 L1];%   |J4|
-                    this.d_L(:, 1, ki, i) = [L1 L2 L4 L3]';
-                    this.d_L(:, 2, ki, i) = [L2 L1 L3 L4]';
-                    this.d_L(:, 3, ki, i) = [L3 L4 L1 L2]';
-                    this.d_L(:, 4, ki, i) = [L4 L3 L2 L1]';
-%                     this.d_R{i, ki} = R;
-%                     this.d_F{i, ki} = [this.d_fiss' this.d_fiss' this.d_fiss' this.d_fiss'];
-%                     this.d_A{i, ki} = [this.d_abso' this.d_abso' this.d_abso' this.d_abso'];
+                    this.d_L(:, 1, ki, i) = [L1 L2 L4 L3]'; %   |J1|   leak from side 1
+                    this.d_L(:, 2, ki, i) = [L2 L1 L3 L4]'; % * |J2| = leak from side 2
+                    this.d_L(:, 3, ki, i) = [L3 L4 L1 L2]'; %   |J3|   etc.
+                    this.d_L(:, 4, ki, i) = [L4 L3 L2 L1]'; %   |J4|
+
                     this.d_R(:, :, ki, i) = R;
                     this.d_F(:,    ki, i) = [this.d_fiss; this.d_fiss; this.d_fiss; this.d_fiss];
                     this.d_A(:,    ki, i) = [this.d_abso; this.d_abso; this.d_abso; this.d_abso;];
@@ -252,6 +240,13 @@ classdef ResponseDriver < handle
             end
             t_final = toc;
             fprintf(' ResponseDriver total time (seconds): %12.8f\n', t_final);
+        end
+
+        % ======================================================================
+        %> @brief Class constructor
+        % ======================================================================        
+        function [R, F, A, L] = update(this, keff)
+            
         end
         
         function this = expand(this, index_in, q_f)
@@ -386,6 +381,7 @@ classdef ResponseDriver < handle
     end
     
     methods (Access = private)
+        
         function this = build_vectors(this, mesh) 
             this.d_fission    = zeros(number_cells(mesh), number_groups(this.d_mat));
             this.d_absorption = zeros(number_cells(mesh), number_groups(this.d_mat));
@@ -412,6 +408,7 @@ classdef ResponseDriver < handle
                 end
             end
         end
+        
     end
     
 end
