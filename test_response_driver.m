@@ -1,21 +1,27 @@
 % test of response driver
-clear all
+%clear all
 % ==============================================================================
 % INPUT
 % ==============================================================================
 input = Input();
 put(input, 'number_groups',         2);
+put(input, 'dimension',             2);
 put(input, 'inner_tolerance',       1e-10);
 put(input, 'inner_max_iters',       100);
 put(input, 'outer_tolerance',       1e-10);
 put(input, 'outer_max_iters',       10);
 put(input, 'quad_order',            2);
-put(input, 'rf_max_order_space',       13);
+so=13; 
+put(input, 'rf_max_order_space',       so);
 put(input, 'rf_max_order_azimuth',      3);
 put(input, 'rf_max_order_polar',        0);
+put(input, 'rf_order_space',       so);
+put(input, 'rf_order_azimuth',      3);
+put(input, 'rf_order_polar',        0);
 kv = linspace(0.5, 1.4, 19);
+kv = [ 0.235038714594903 0.740382771979217];
 put(input, 'rf_k_vector',   kv');
-put(input, 'rf_number_nodes', 4);
+put(input, 'rf_number_nodes', 1);
 put(input, 'rf_db_name', 'two_group_3x3.h5');
 
 % ==============================================================================
@@ -73,31 +79,99 @@ meshify(mesh4);
 % ==============================================================================
 % RESPONSE FUNCTION DRIVER
 % ==============================================================================
-mesh_array = {mesh1, mesh2, mesh3, mesh4};
+mesh_array = { mesh4};
 driver = ResponseDriver(input, mat, mesh_array);
-run(driver);
+%run(driver);
+
+
 [R, F, A, L] = get_responses(driver);
-% RR=R(:,:,1,1);
-% elements = [1];
-% number_elements = 1;        
-% M = Connect(input, elements, number_elements);
-% [v, e]=eigs(M*RR); 
-% J = v(:, 1);
-% J = sign(J(1))*J;
-% FF = F(:, 1, 1);
-% AA = A(:, 1, 1); 
+RR=R(:,:,2,1);
+elements = [1 1 1; 1 1 1; 1 1 1];
+number_elements = 1;        
+
+tmp = sparse(RR);
+Rlist = {tmp;tmp;tmp;tmp;tmp;tmp;tmp;tmp;tmp};
+Rblk = blkdiag(Rlist{:});
+
+put(input, 'bc_left',           'vacuum');
+put(input, 'bc_right',          'reflect');
+put(input, 'bc_bottom',         'reflect');
+put(input, 'bc_top',            'reflect');
+connect = Connect(input, elements);
+[M, Mleak] = build(connect);
+% 
+[v, e]=eigs(M*Rblk); 
+J = v(:, 1);
+J = sign(J((abs(J)==max(abs(J)))))*J;
+
+
+FF = F(:, 2);
+AA = A(:, 2); 
+LL(:, :) = sparse(L(:, :, 2, 1));
+Fblk = [FF' FF' FF' FF' FF' FF' FF' FF' FF'];
+Ablk = [AA' AA' AA' AA' AA' AA' AA' AA' AA'];
+Lblk = {LL' LL' LL' LL' LL' LL' LL' LL' LL'};
+Lblk = blkdiag(Lblk{:});
+
+
+gain        = Fblk*J;                            % compute gains
+absorb      = Ablk*J;                            % absorption
+leak        = Mleak*(Lblk*J);                     % leakage
+loss        = leak + absorb;                  % total loss
+gain, absorb, leak, loss, gain/loss
+
+ref.R = Rblk;
+ref.M = M;
+ref.Mleak = Mleak;
+ref.F = Fblk;
+ref.A = Ablk;
+ref.L = Lblk;
+ref.gain = gain;
+ref.absorb = absorb;
+ref.leak = leak;
+ref.loss = loss;
+ref.k_input = 0.740382771979217;
+ref.k_output = gain/loss;
+ref.J = J;
+
+%save('reference.mat', 'ref');
+
+% 
 % e = eigs(M*RR, 4, 'LR')
-% LL = L(:, :, 1, 1);
-% leak = LL'*J;
-%  (FF'*J )/(AA'*J + leak(2) + leak(4))
-%  
-rf_db = ResponseDB(input);
-initialize_write(rf_db);
+% 
+% gain / loss
 
-for i = 1:length(mesh_array)
-   write_response(rf_db, i, ['assembly',num2str(i)], ...
-       R(:,:,:,i), F(:,:,i), A(:,:,i), L(:,:,:,i));
-end
+% % %  
+%rf_db = ResponseDB(input);
+% initialize_write(rf_db);
+% 
+% for i = 1:length(mesh_array)
+%    write_response(rf_db, i, ['assembly',num2str(i)], ...
+%        R(:,:,:,i), F(:,:,i), A(:,:,i), L(:,:,:,i));
+% end
+% 
 
-read_response(rf_db);
+% This should yield the SAME
+% read_response(rf_db);
+% [R, F, A, L] = get_responses(rf_db,  0.740382772061276);
+% RR=R(:,:);     
+% tmp = sparse(RR);
+% Rlist = {tmp;tmp;tmp;tmp;tmp;tmp;tmp;tmp;tmp};
+% Rblk = blkdiag(Rlist{:});
+% [v, e]=eigs(M*Rblk); 
+% J = v(:, 1);
+% J = sign(J((abs(J)==max(abs(J)))))*J;
+% FF = F;
+% AA = A; 
+% LL = L;
+% Fblk = [FF' FF' FF' FF' FF' FF' FF' FF' FF'];
+% Ablk = [AA' AA' AA' AA' AA' AA' AA' AA' AA'];
+% Lblk = {LL' LL' LL' LL' LL' LL' LL' LL' LL'};
+% Lblk = blkdiag(Lblk{:});
+% gain        = Fblk*J;                            % compute gains
+% absorb      = Ablk*J;                            % absorption
+% leak        = Mleak*(Lblk*J);                     % leakage
+% loss        = leak + absorb;                  % total loss
+% gain, absorb, leak, loss, gain/loss
+
 

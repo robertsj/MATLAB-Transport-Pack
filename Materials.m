@@ -172,6 +172,10 @@ classdef Materials < handle
             b = obj.d_upscatter_cutoff; 
         end
         
+        function n = number_materials(obj)
+           n = obj.d_number_materials; 
+        end
+        
         function obj = finalize(obj)
             
             % Set the scatter group bounds.  For each group, we compute the

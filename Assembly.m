@@ -38,7 +38,7 @@ classdef Assembly < Mesh2D
         % ======================================================================
         function obj = Assembly(pins, pin_map)
             DBC.Require('length(pins) > 0');
-            DBC.Require('length(reshape(pin_map,[],1)) == length(pins)');
+            DBC.Require('max(unique(pin_map)) <= length(pins)');
             obj.d_pin             = pins;
             obj.d_pin_map         = flipud(pin_map)';
             obj.d_number_pins_row = length(obj.d_pin_map(:, 1));

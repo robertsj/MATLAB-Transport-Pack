@@ -161,23 +161,22 @@ put(input, 'bc_left',           'reflect');
 put(input, 'bc_right',          'reflect');
 put(input, 'bc_bottom',         'reflect');
 put(input, 'bc_top',            'reflect');
-put(input, 'number_groups',     2);
 put(input, 'inner_tolerance',   1e-12);
 put(input, 'inner_max_iters',   100);
 put(input, 'outer_tolerance',   1e-7);
 put(input, 'outer_max_iters',   10);
 put(input, 'rf_order_space',    4); % Eventually, these will be the
-put(input, 'rf_order_polar',    4); % orders extracted from a DB
-put(input, 'rf_order_azimuth',  2); 
+put(input, 'rf_order_azimuth',  4); % orders extracted from a DB
+put(input, 'rf_order_polar',    2); 
 put(input, 'number_groups',     2);
 put(input, 'dimension',         2);
 
-% assembly_map = [ 3 2 1 2 1
-%                  2 1 2 1 2
-%                  1 2 1 2 1
-%                  2 1 2 1 2
-%                  1 2 1 2 1 ];
-assembly_map = [ 2 ];
+assembly_map = [ 3 2 1 2 1
+                 2 1 2 1 2
+                 1 2 1 2 1
+                 2 1 2 1 2
+                 1 2 1 2 1 ];
+%assembly_map = [ 2 ];
 problem = ERME(input, rf_db, assembly_map);
 solver = ERME_Picard(input, problem);
 solve(solver);

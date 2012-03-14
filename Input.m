@@ -9,18 +9,31 @@
 %> Hence, all parameters are added to a map database (simple structures
 %> could also work).  New algorithms and implementations are then required
 %> to set defaults in the event these are not set. Several standard items
-%> are given defaults upon construction.
+%> are given defaults upon construction.  For convenience, the following
+%> provides a list of several basic parameters with options, default first,
+%> where applicable:
+%>   - number_groups 
+%>   - eigen_tolerance
+%>   - eigen_max_iters
+%>   - outer_tolerance
+%>   - outer_max_iters
+%>   - inner_tolerance
+%>   - inner_max_iters
+%>   - inner_solver ('SI', 'Livolant', 'GMRES')
+%>   - outer_solver ('GS', 'GMRES' [latter precludes inners])
+%>   - bc_left/right/bottom/top/south/north ('vacuum', 'reflect', 'response')
+%>
 % ==============================================================================
 classdef Input < handle
     
     properties (Access = private)
         %> Input data map, consisting of "keys" with "values"
-        d_map = containers.Map();
+        d_map;
     end
          
     % Input parameters.  Some of these are optional/defaulted, as denoted.
     properties (Access = public)
-        
+        name='void';
         % Boundary conditions.  The available options are vacuum and reflected
         % for general problems.  For response function generation ...
         % 
@@ -65,6 +78,8 @@ classdef Input < handle
         %> @return Instance of the Mesh class with standard defaults.
         % ======================================================================
         function obj = Input()
+            
+            obj.d_map = containers.Map();
             
             % Materials
             put(obj, 'number_groups',   1);

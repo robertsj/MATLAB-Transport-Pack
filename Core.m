@@ -29,8 +29,7 @@ classdef Core < Mesh2D
         % ======================================================================
         function obj = Core(assemblies, assembly_map)
             DBC.Require('length(assemblies) > 0');
-            DBC.Require( ...
-                'length(reshape(assembly_map,[],1)) == length(assemblies)');
+            DBC.Require('max(unique(assembly_map)) <= length(assemblies)')
             obj.d_assembly              = assemblies;
             obj.d_assembly_map          = flipud(assembly_map)';
             obj.d_number_assemblies_row = length(obj.d_assembly_map(:, 1));

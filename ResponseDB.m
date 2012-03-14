@@ -7,8 +7,9 @@
 %> populates response operators as functions of keff for each node type and
 %> provides vectorized interpolation.
 %>
-%> @note requires "hdf5tools" from 
+%> @note Requires "hdf5tools" from 
 %>       http://www.mathworks.com/matlabcentral/fileexchange/17172
+%>       Only one function is used now, but more may be used later.
 % ==============================================================================
 classdef ResponseDB < handle
     
@@ -184,15 +185,15 @@ classdef ResponseDB < handle
             for ni = 1:this.d_number_nodes;
                 tmpR = reshape(this.d_R(:, :, :, ni), len_R^2, nk);
                 R(:, :, ni) = reshape( ...
-                    interp1(this.d_k_vector, tmpR', keff, interp_method), ...
+                    interp1(this.d_k_vector, tmpR', keff, interp_method, 'extrap'), ...
                     len_R, len_R);
                 tmpF(:, :) = this.d_F(:, :, ni)';
-                F(:, ni) = interp1(this.d_k_vector, tmpF, keff, interp_method)';
+                F(:, ni) = interp1(this.d_k_vector, tmpF, keff, interp_method, 'extrap')';
                 tmpA(:, :) = this.d_A(:, :, ni)';
-                A(:, ni) = interp1(this.d_k_vector, tmpA, keff, interp_method)';      
+                A(:, ni) = interp1(this.d_k_vector, tmpA, keff, interp_method, 'extrap')';      
                 tmpL = reshape(this.d_L(:, :, :, ni), len_R*4, nk);
                 L(:, :, ni) = reshape( ...
-                    interp1(this.d_k_vector, tmpL', keff, interp_method), ...
+                    interp1(this.d_k_vector, tmpL', keff, interp_method, 'extrap'), ...
                     len_R, 4);
             end
             

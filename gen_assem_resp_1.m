@@ -122,8 +122,7 @@ pin_map1 = [1 1 1 1 1 1 1 1 1
             1 1 1 1 1 1 1 1 1
             1 1 1 1 1 1 1 1 1
             1 1 1 1 1 1 1 1 1
-            ];     
-pin_map1 = 4 * pin_map1;            
+            ];               
 mesh = Assembly({pin1, pin2, pin3, pin4}, pin_map1); 
 meshify(mesh);
 toc
@@ -151,6 +150,7 @@ solver= Eigensolver(input,        ...
               q_e,          ...
               q_f);
  solve(solver);          %  1.27828651128439
+ eigenvalue(state)
 error('stop')
 end
 

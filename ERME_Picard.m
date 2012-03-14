@@ -50,7 +50,7 @@ classdef ERME_Picard < ERME_Solver
             J = init_J(this);
             
             % Initialize k-eigenvalue and lambda-eigenvalue
-            k = 1.0;
+            k =  1.0;
             lambda = 1.0;
             
             % Get response matrices for initial k
