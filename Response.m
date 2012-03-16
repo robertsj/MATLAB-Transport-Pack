@@ -165,12 +165,13 @@ classdef Response < BoundaryCondition
                     a2 = 1;
                     a3 = -1;
                 end
+
+                
                 for s = 1:this.d_number_space
                     ang = 1; % cardinal index
                     for a = a1:a3:a2
                         for p = 1:this.d_number_polar
-                            
-                            f(s, (a-1)*this.d_number_polar+p) = Ps(s)*...
+                            f(s, (a-1)*this.d_number_polar+p) =  Ps(s)*...
                                 Pa(ang+(o-1)*this.d_number_azimuth)*Pp(p);
                             
                         end

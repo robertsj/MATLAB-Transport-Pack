@@ -57,12 +57,18 @@ classdef ResponseDriver < handle
         d_k_vector
     end
     
+    properties (Access = public)
+       rates 
+    end
+    
     methods
         
         % ======================================================================
         %> @brief Class constructor
         % ======================================================================
         function this = ResponseDriver(input, mat, mesh_array)
+            
+            disp('*** Building ResponseDriver')
             
             % Verify input and materials have same group count.
             assert(get(input, 'number_groups') == number_groups(mat));
@@ -111,7 +117,7 @@ classdef ResponseDriver < handle
         % ======================================================================
         function this = run(this)
             tic
-            
+            disp('running...')
             this.d_max_g_o = get(this.d_input, 'number_groups');
             this.d_max_s_o = get(this.d_input, 'rf_max_order_space');
             this.d_max_a_o = get(this.d_input, 'rf_max_order_azimuth');
@@ -188,6 +194,10 @@ classdef ResponseDriver < handle
                                     
                                     % Expand the coefficients
                                     expand(this, rf_index, q_f);
+%                                     rates = reaction_rates(this.d_mat, ... 
+%                                         this.d_mesh_array{i}, this.d_state, ...
+%                                         this.d_boundary)
+%                                     this.rates = rates;
                                     count = count + 1;
                                     time_remaining = toc/count * ...
                                         (number_responses-count);
@@ -262,6 +272,8 @@ classdef ResponseDriver < handle
             % Expand the coefficients
             for side = 1:4
                 
+                f = zeros(this.d_number_space,num_ang,this.d_max_g_o);
+                
                 for g = 1:this.d_max_g_o
                     
                     for o = 1:2
@@ -289,60 +301,72 @@ classdef ResponseDriver < handle
                                 ft(1:end,:)=ft(end:-1:1,:);  % reverse space
                             end
                         end
+                        
                         % populate the vectors we expand
-                        for s = 1:this.d_number_space
+                        %for s = 1:this.d_number_space
                             ang = 1;
                             for a = a1:a3:a2
                                 for p = 1:this.d_number_polar
-                                    f(s, (o-1)*num_ang+ang,g) = ...
-                                        ft(s, (a-1)*this.d_number_polar+p);
+                                    f(:, (o-1)*num_ang+ang,g) =  ...
+                                        ft(:, (a-1)*this.d_number_polar+p);
                                     ang = ang + 1;
                                 end
                             end
-                        end
+                        %end
                     end
                     
                 end
                 
                 % Group->Space->Azimuth->Polar.  f(space, angle, group)
+                
+                
                 index_out = 1;
                 for g = 1:this.d_max_g_o
                     for ord_s = 1:this.d_max_s_o+1
                         for ord_a = 1:this.d_max_a_o+1
+                            
+                            b = this.d_basis_azimuth(:, ord_a);
+                            if side > 2
+                                lb = length(b);
+                                b(1:lb/2) = b(lb/2:-1:1);
+                                b(lb/2+1:end) = b(end:-1:lb/2+1);
+                            end
+                            
                             for ord_p = 1:this.d_max_p_o+1
-                                psi_ap = zeros(this.d_number_azimuth, this.d_number_polar);
-                                angle = 0;
-                                az=0;
-                                for o = 1:2
-                                    if (1 == 1) % this makes angles symmetric
-                                        a1 = 1;
-                                        a2 = this.d_number_azimuth;
-                                        a3 = 1;
-                                    else
-                                        a1 = this.d_number_azimuth;
-                                        a2 = 1;
-                                        a3 = -1;
-                                    end
-                                    
-                                    for a = a1:a3:a2
-                                        az = az+1;
-                                        for p = 1:this.d_number_polar
-                                            angle = angle + 1;
-                                            psi_ap(az, p) = f(:, angle, g)'*this.d_basis_space(:, ord_s);
-                                        end
-                                    end
-                                end
+                               % psi_ap = zeros(2*this.d_number_azimuth, this.d_number_polar);
+                               % angle = 0;
+                                tmp = f(:, :, g)'*this.d_basis_space(:, ord_s);
+                                %az=0;
+%                                 for o = 1:2
+%                                     a1 = 1;
+%                                     a2 = this.d_number_azimuth;
+%                                     a3 = 1;
+%                                     for a = a1:a3:a2
+%                                         az = az+1;
+%                                         for p = 1:this.d_number_polar
+%                                             angle = angle + 1;
+%                                             psi_ap(az, p) = tmp(angle);%f(:, angle, g)'*this.d_basis_space(:, ord_s);
+%                                         end
+%                                     end
+%                                 end
                                 
-                                psi_p = zeros(this.d_number_polar, 1);
-                                b = this.d_basis_azimuth(:, ord_a);
-                                if side > 2
-                                    lb = length(b);
-                                    b(1:lb/2) = b(lb/2:-1:1);
-                                    b(lb/2+1:end) = b(end:-1:lb/2+1);
-                                end
-                                for p = 1:this.d_number_polar
-                                    psi_p(p) = psi_ap(:, p)'*b;
-                                end
+%                                 tmp2 = reshape(tmp(1:end/2),this.d_number_polar,[]);
+%                                 psi_ap(1:this.d_number_azimuth,1:this.d_number_polar) = tmp2';
+%                                 tmp2 = reshape(tmp(end/2+1:end),this.d_number_polar,[]);
+%                                 psi_ap(this.d_number_azimuth+1:end,1:this.d_number_polar) = tmp2';
+%                                 
+                               % psi_ap2 = psi_ap;
+                                psi_ap = reshape(tmp,this.d_number_polar,2*this.d_number_azimuth);
+                                %psi_ap = tmp2';
+                                
+                                
+                                
+                                
+%                                 psi_p = zeros(this.d_number_polar, 1);
+%                                 for p = 1:this.d_number_polar
+%                                     psi_p(p) = psi_ap(:, p)*b; % [np,1]=[np,na][na,1]
+%                                 end
+                                psi_p = psi_ap*b;
                                 this.d_coef{side}(index_out, index_in) = ...
                                     psi_p'*this.d_basis_polar(:, ord_p); % i <- k
                                 index_out = index_out + 1;
@@ -363,7 +387,8 @@ classdef ResponseDriver < handle
                     sum(this.d_volume.*phi.*this.d_absorption(:, g));    
                 
                 set_group(this.d_boundary, g);
-                this.d_leak(index_in,:) = this.d_leak(index_in,:) + get_leakage(this.d_boundary);
+                this.d_leak(index_in,:) = this.d_leak(index_in,:) + ...
+                    get_leakage(this.d_boundary);
             end
 
             % Pin powers

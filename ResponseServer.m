@@ -12,7 +12,7 @@ classdef ResponseServer < handle
         d_mat
         d_mesh_array
         d_number_nodes
-        d_solver_array
+        d_solver
         d_fission_source
         d_quadrature
         d_boundary
@@ -83,6 +83,12 @@ classdef ResponseServer < handle
             qo = get(input, 'quad_order');
             this.d_quadrature  = QuadrupleRange(qo);
             
+            % Get the orders we'll use.
+            this.d_max_g_o = get(this.d_input, 'number_groups');
+            this.d_max_s_o = get(this.d_input, 'rf_order_space');
+            this.d_max_a_o = get(this.d_input, 'rf_order_azimuth');
+            this.d_max_p_o = get(this.d_input, 'rf_order_polar');            
+            
             % I'm not sure how to generalize for MOC at the moment.  For meshes,
             % it's assumed all nodes have same spacing.  This could be a future
             % extension.
@@ -109,7 +115,34 @@ classdef ResponseServer < handle
             % basis sets, like DCT's.
             this.d_basis_space    = DiscreteLP(this.d_number_space-1);
             this.d_basis_polar    = DiscreteLP(this.d_number_polar-1);
-            this.d_basis_azimuth  = DiscreteLP(this.d_number_azimuth*2-1);            
+            this.d_basis_azimuth  = DiscreteLP(this.d_number_azimuth*2-1);         
+            
+            % Initialize solvers and related things for each mesh.  This way,
+            % we don't need to reconstruct everything for each new keff.
+            for i = 1:length(mesh_array)
+                
+                % Empty external source
+                q_e = Source(this.d_mesh_array{i}, this.d_max_g_o);
+                
+                % Create/initialize fission source.
+                this.d_fission_source{i} = ...
+                    FissionSource(this.d_state, ...
+                                  this.d_mesh_array{i}, ...
+                                  this.d_mat);
+                initialize(this.d_fission_source{i});
+                
+                this.d_solver{i} = KrylovMG(this.d_input, ...
+                                            this.d_state, ...
+                                            this.d_boundary, ...
+                                            this.d_mesh_array{i}, ...
+                                            this.d_mat, ...
+                                            this.d_quadrature, ...
+                                            q_e, ...
+                                            this.d_fission_source{i});
+                              
+                % Build fission and absorption vector                              
+                build_vectors(this, this.d_mesh_array{i});
+            end
 
         end
         
@@ -120,6 +153,9 @@ classdef ResponseServer < handle
         %> @return                  Responses    
         % ======================================================================    
         function [R, F, A, L] = get_responses(this, keff)   
+            
+            % Log initial time
+            t = toc;
             
             % Return stored responses if keff was used one or two times ago.
             if keff ~= this.d_keff_last
@@ -134,19 +170,17 @@ classdef ResponseServer < handle
             % Keep this keff.
             this.d_keff_last = keff;
             
+            % Add to timer
+            this.d_time = this.d_time + (toc - t);
+            
         end
         
         
         function this = update(this, keff)
-            tic
             
-            this.d_max_g_o = get(this.d_input, 'number_groups');
-            this.d_max_s_o = get(this.d_input, 'rf_order_space');
-            this.d_max_a_o = get(this.d_input, 'rf_order_azimuth');
-            this.d_max_p_o = get(this.d_input, 'rf_order_polar');
-
-            % Empty external source
-            q_e = Source(this.d_mesh_array{1}, this.d_max_g_o);
+            % Initial time
+            t = toc;
+            
             
             this.d_max_o = (this.d_max_s_o + 1) * ...
                  (this.d_max_a_o + 1)*(this.d_max_p_o + 1);
@@ -161,27 +195,10 @@ classdef ResponseServer < handle
             
             number_responses = mo * this.d_number_nodes;
             count = 0;
-            for i = 1:this.d_number_nodes
+            
+            for i = 1:this.d_number_nodes 
                 
-                q_f = FissionSource(this.d_state, ...
-                                    this.d_mesh_array{i}, ...
-                                    this.d_mat);
-                initialize(q_f);
-                
-                solver = KrylovMG(this.d_input, ...
-                                  this.d_state, ...
-                                  this.d_boundary, ...
-                                  this.d_mesh_array{i}, ...
-                                  this.d_mat, ...
-                                  this.d_quadrature, ...
-                                  q_e, ...
-                                  q_f);
-                              
-                % Build fission and absorption vector                              
-                build_vectors(this, this.d_mesh_array{i});
-                             
-                
-                set_keff(solver,  keff);
+                set_keff(this.d_solver{i},  keff);
                 
                 % Temporary storage of response
                 this.d_coef    = cell(4, 1);
@@ -204,16 +221,18 @@ classdef ResponseServer < handle
                                 
                                 % Setup and solve.  Reset fission after.
                                 set_orders(this.d_bc, g_o, s_o, a_o, p_o);
-                                reset(q_f);
-                                out = solve(solver);
+                                reset(this.d_fission_source{i});
+                                out = solve(this.d_solver{i});
                                 
                                 % Expand the coefficients
-                                expand(this, rf_index, q_f);
+                                expand(this, rf_index, i);
                                 count = count + 1;
-                                time_remaining = toc/count * ...
+                                time_remaining = (toc-t)/count * ...
                                     (number_responses-count);
-                                fprintf(' ResponseDriver: i=%2i g_o=%2i s_o=%2i a_o=%2i p_o=%2i trem=%12.8f\n', ...
-                                    i, g_o, s_o, a_o, p_o, time_remaining );
+                                if (get(this.d_input, 'rf_print_out'))
+                                    fprintf(' ResponseDriver: i=%2i g_o=%2i s_o=%2i a_o=%2i p_o=%2i trem=%12.8f\n', ...
+                                        i, g_o, s_o, a_o, p_o, time_remaining );
+                                end
                                 
                             end % azimuth loop
                         end % polar loop
@@ -258,15 +277,16 @@ classdef ResponseServer < handle
                 this.d_A(:,    i) = [this.d_abso; this.d_abso; this.d_abso; this.d_abso;];
                 
             end % node loop
-            t_final = toc;
+            t_final = toc-t;
             fprintf(' ResponseDriver total time (seconds): %12.8f\n', t_final);
         end
         
-        function this = expand(this, index_in, q_f)
+        function this = expand(this, index_in, node_idx)
             
-            
+            q_f = this.d_fission_source{node_idx};
             num_ang        = this.d_number_polar*this.d_number_azimuth;
             
+            % Octants for incident left conditions
             octants = [ 3 2   % ref
                         1 4   % far
                         4 3   % lef
@@ -359,6 +379,7 @@ classdef ResponseServer < handle
                                 this.d_coef{side}(index_out, index_in) = ...
                                     psi_p'*this.d_basis_polar(:, ord_p); % i <- k
                                 index_out = index_out + 1;
+                                
                             end % out p
                         end % out a
                     end % out s
@@ -370,13 +391,16 @@ classdef ResponseServer < handle
            
             for g = 1:number_groups(this.d_mat)
                 phi = flux(this.d_state, g);
-                this.d_fiss(index_in) = this.d_fiss(index_in) + ...
-                    sum(this.d_volume.*phi.*this.d_fission(:, g));
-                this.d_abso(index_in) = this.d_abso(index_in) + ...
-                    sum(this.d_volume.*phi.*this.d_absorption(:, g));    
-                
+                this.d_fiss(index_in) = ...
+                    this.d_fiss(index_in) + ...
+                    sum(this.d_volume{node_idx}.*phi.*this.d_fission{node_idx}(:, g));
+                this.d_abso(index_in) = ...
+                    this.d_abso(index_in) + ...
+                    sum(this.d_volume{node_idx}.*phi.*this.d_absorption{node_idx}(:, g));    
                 set_group(this.d_boundary, g);
-                this.d_leak(index_in,:) = this.d_leak(index_in,:) + get_leakage(this.d_boundary);
+                this.d_leak(index_in,:) = ... 
+                    this.d_leak(index_in,:) + ...
+                    get_leakage(this.d_boundary);
             end
 
             % Pin powers
@@ -384,18 +408,20 @@ classdef ResponseServer < handle
             
         end
         
-
-        
     end
     
     methods (Access = private)
         
         function this = build_vectors(this, mesh) 
-            this.d_fission    = zeros(number_cells(mesh), number_groups(this.d_mat));
-            this.d_absorption = zeros(number_cells(mesh), number_groups(this.d_mat));
-            this.d_volume     = zeros(number_cells(mesh), 1);
+            
+            idx = length(this.d_fission)+1;
+            
+            fission    = zeros(number_cells(mesh), number_groups(this.d_mat));
+            absorption = zeros(number_cells(mesh), number_groups(this.d_mat));
+            volume     = zeros(number_cells(mesh), 1);
+            
             % Get the fine mesh material map or the region material map.
-            n = number_cells(mesh);
+            n  = number_cells(mesh);
             ng = number_groups(this.d_mat);
             if meshed(mesh)
                 mat = reshape(mesh_map(mesh, 'MATERIAL'), n, 1);
@@ -404,18 +430,24 @@ classdef ResponseServer < handle
             end            
             for i = 1:n
                 for g = 1:ng
-                    this.d_fission(i, g)    = nu_sigma_f(this.d_mat, mat(i), g);
-                    this.d_absorption(i, g) = sigma_a(this.d_mat, mat(i), g);
+                    fission(i, g)    = nu_sigma_f(this.d_mat, mat(i), g);
+                    absorption(i, g) = sigma_a(this.d_mat, mat(i), g);
                 end
             end
             k = 1;
-            for i = 1:number_cells_x(mesh)
-                for j = 1:number_cells_y(mesh)
-                    this.d_volume(k) = dx(mesh, i)*dy(mesh, j);
+            for j = 1:number_cells_y(mesh)
+                for i = 1:number_cells_x(mesh)
+                    volume(k) = dx(mesh, i)*dy(mesh, j);
                     k = k + 1;
                 end
             end
+            
+            this.d_fission{idx} = fission;
+            this.d_absorption{idx} = absorption;
+            this.d_volume{idx} = volume;
+
         end
+        
         
     end
     

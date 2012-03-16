@@ -2,33 +2,35 @@ classdef Materials < handle
     
     properties (Access = private)
         
-        % Number of groups
+        %> Number of groups
         d_number_groups = 0;
         
-        % Number of materials
+        %> Number of materials
         d_number_materials = 0;
         
-        % Downscatter switch (when true, upscatter ignored)
+        %> Downscatter switch (when true, upscatter ignored)
         d_downscatter = 0;
         
         % Total cross section [material, group]
         d_sigma_t = 0;
         
-        % Fission [material, group]
+        %> Fission [material, group]
         d_nu_sigma_f = 0;
+        
+        %> Fission spectrum [material, group]
         d_chi = 0;
         
-        % Scatter [material, group<-, group')
+        %> Scatter [material, group<-, group')
         d_sigma_s = 0;
         
-        % Diffusion coefficient [material, group]
+        %> Diffusion coefficient [material, group]
         d_diff_coef = 0;
         
-        % Scatter bounds applied to all materials [group, 2]
+        %> Scatter bounds applied to all materials [group, 2]
         d_scatter_bounds = 0;
         
-        % Upscatter cutoff.  Only groups equal to or above this cutoff are 
-        % subject to upscatter iterations.
+        %> Upscatter cutoff.  Only groups equal to or above this cutoff are 
+        %> subject to upscatter iterations.
         d_upscatter_cutoff = 1;
         
     end
@@ -225,13 +227,19 @@ classdef Materials < handle
             if obj.d_upscatter_cutoff == obj.d_number_groups + 1
                 if obj.d_downscatter == 0
                    warning('user:input', ...
-                       'Upscatter is being turned off since no upscatter exists in the data.');
+                       ['Upscatter is being turned off since', ...
+                        ' no upscatter exists in the data.']);
                 end
                 obj.d_downscatter = 1;
             end
             
         end
         
+        %> @brief  Print all material data in a nice table.
+        function print_materials(obj)
+            
+            
+        end
   
         
     end

@@ -150,32 +150,48 @@ classdef BoundaryMesh < Boundary
         % ======================================================================
         %> @brief Get total leakage in current group.
         % ======================================================================
-        function leak = get_leakage(this)
+        function leak = get_leakage(this, inout)
+            if nargin == 1
+                inout = Boundary.OUT;
+            end
             w   = weight_octant(this.d_quadrature);
-            leak = zeros(1, 4);
+            leak = zeros(1, 4); 
             for o = 1:4
-                if this.d_quadrature.octant(o, 1) == -1 % 1/-1
+                if this.d_quadrature.octant(o, 1) == inout % 1/-1
                     sidev = this.d_mesh.LEFT;     % We are starting from the left.
                 else
                     sidev = this.d_mesh.RIGHT;    % We are starting from the right.
                 end                
-                if this.d_quadrature.octant(o, 2) == -1 % 1/-1
+                if this.d_quadrature.octant(o, 2) == inout % 1/-1
                     sideh = this.d_mesh.BOTTOM;   % We are starting from the bottom.
                 else
                     sideh = this.d_mesh.TOP;      % We are starting from the top.
                 end                
-                for a = 1:number_angles_octant(this.d_quadrature)
-                    [mu, eta] = angle(this.d_quadrature, o, a);
-                    psi_v = get_psi_v(this, o, a, Boundary.OUT);
-                    for j = 1:length(psi_v(:, 1))
-                        leak(sidev) = leak(sidev) + dy(this.d_mesh, j) * psi_v(j)*abs(mu)*w(a);
-                    end
-                    psi_h = get_psi_h(this, o, a, Boundary.OUT);
-                    for i = 1:length(psi_h(:, 1))
-                        leak(sideh) = leak(sideh) + dx(this.d_mesh, i) * psi_h(i)*abs(eta)*w(a);
-                    end
-                end
+                width = widths(this.d_mesh); 
+                wx = width{1};
+                wy = width{2};
+                psi_v = get_psi_v_octant(this, o, inout);
+                psi_h = get_psi_h_octant(this, o, inout);
+                mu  = angle_octant(this.d_quadrature, 1);
+                eta = angle_octant(this.d_quadrature, 2);
+                w   = weight_octant(this.d_quadrature);
+                % leak = dx(n,1) .* psi(n,m)*muw(m, 1)
+                leak(sidev) = leak(sidev) + wy' * psi_v*(mu.*w);
+                leak(sideh) = leak(sideh) + wx' * psi_h*(eta.*w);
+                %
+%                 for a = 1:number_angles_octant(this.d_quadrature)
+%                     [mu, eta] = angle(this.d_quadrature, o, a);
+%                     psi_v = get_psi_v(this, o, a, inout);
+%                     for j = 1:length(psi_v(:, 1))
+%                         leak(sidev) = leak(sidev) + dy(this.d_mesh, j) * psi_v(j)*abs(mu)*w(a);
+%                     end
+%                     psi_h = get_psi_h(this, o, a, inout);
+%                     for i = 1:length(psi_h(:, 1))
+%                         leak(sideh) = leak(sideh) + dx(this.d_mesh, i) * psi_h(i)*abs(eta)*w(a);
+%                     end
+%                 end
             end
+            
         end
         
         % Setters

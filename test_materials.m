@@ -25,10 +25,10 @@ if n == 1
     % Total
     mat = set_sigma_t(mat, 2, 1,    1.0); % (object, material, group, value)
     % Fission 
-    mat = set_nu_sigma_f(mat, 2, 1, 0.0); 
-    mat = set_chi(mat, 2, 1, 0.0);     
+    mat = set_nu_sigma_f(mat, 2, 1, 0.1); 
+    mat = set_chi(mat, 2, 1, 1.0);     
     % Scattering
-    mat = set_sigma_s(mat, 2, 1, 1, 0.5); % (object, material, g, g', value);
+    mat = set_sigma_s(mat, 2, 1, 1, 0.0); % (object, material, g, g', value);
     
     % Final setup
     mat = finalize(mat);
@@ -185,16 +185,16 @@ elseif n == 3
     mat = set_sigma_t(mat, 2, 2, 1.0119);
     
     % Fission 
-    mat = set_nu_sigma_f(mat, 2, 1, 0.0067);
-    mat = set_nu_sigma_f(mat, 2, 2, 0.1241);
+    mat = set_nu_sigma_f(mat, 2, 1, 0.0067*0);
+    mat = set_nu_sigma_f(mat, 2, 2, 0.1241*0);
     mat = set_chi(mat, 2, 1, 1.0);
     mat = set_chi(mat, 2, 2, 0.0);
     
     % Scattering
-    mat = set_sigma_s(mat, 2, 1, 1, 1*0.2006);    % 1 <- 1
+    mat = set_sigma_s(mat, 2, 1, 1, 0.2263);    % 1 <- 1
     mat = set_sigma_s(mat, 2, 1, 2, 0*0.0300);    % 1 <- 2
-    mat = set_sigma_s(mat, 2, 2, 1, 1*0.0161);    % 2 <- 1
-    mat = set_sigma_s(mat, 2, 2, 2, 1*0.8355);    % 2 <- 2
+    mat = set_sigma_s(mat, 2, 2, 1, 0*0.0161);    % 2 <- 1
+    mat = set_sigma_s(mat, 2, 2, 2, 1.0119);    % 2 <- 2
     F1  = nu_sigma_f(mat, 2, 1); F2 = nu_sigma_f(mat, 2, 2); 
     S12 = sigma_s(mat, 2, 2, 1);
     A2  = sigma_t(mat, 2, 2)-sigma_s(mat, 2, 2, 2);

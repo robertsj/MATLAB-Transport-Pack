@@ -99,8 +99,6 @@ classdef KrylovMG < InnerIteration
                         quadrature,       ...
                         external_source,  ...
                         fission_source);
-
-            display_me(this)
             
             if (strcmp(get(input, 'bc_left'),   'reflect')) || ...
                (strcmp(get(input, 'bc_right'),  'reflect')) || ...
@@ -199,7 +197,7 @@ classdef KrylovMG < InnerIteration
                     error('GMRES returned unknown flag.')
             end
 
-            if (get(this.d_input, 'print_out'))
+            if (get(this.d_input, 'inner_print_out'))
                 fprintf('        MG GMRES Outers: %5i,  Inners: %5i\n', ...
                     iter(1), iter(2));
             end

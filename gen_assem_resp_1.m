@@ -25,14 +25,14 @@ flag = 0;
 input = Input();
 
 % Material etc.
-ng = 2;
+ng = 1;
 put(input, 'number_groups',         ng);
 
 % Inner iteration parameters.
-put(input, 'eigen_tolerance',       1e-9);
+put(input, 'eigen_tolerance',       1e-12);
 put(input, 'eigen_max_iters',       2000);
 
-put(input, 'inner_tolerance',       1e-9);
+put(input, 'inner_tolerance',       1e-13);
 put(input, 'inner_max_iters',       100);
 put(input, 'outer_tolerance',       1e-9);
 put(input, 'outer_max_iters',       10);
@@ -53,16 +53,16 @@ end
 put(input, 'print_out',             1);
 
 % Set the incident response order
-put(input, 'rf_order_group',        0);
-put(input, 'rf_order_space',        0);
-put(input, 'rf_order_polar',        0);
-put(input, 'rf_order_azimuth',      0);
+put(input, 'rf_order_group',        1);
+put(input, 'rf_order_space',       23);
+put(input, 'rf_order_polar',        2);
+put(input, 'rf_order_azimuth',      5);
 
-put(input, 'rf_max_order_space',        2);
-put(input, 'rf_max_order_azimuth',      2);
-put(input, 'rf_max_order_polar',        0);
+put(input, 'rf_max_order_space',       23);
+put(input, 'rf_max_order_azimuth',      5);
+put(input, 'rf_max_order_polar',        3);
 
-qr=2;
+qr=18;
 quadrature  = QuadrupleRange(qr);
 if qr==2
 put(input, 'quad_number_polar',     1);
@@ -90,7 +90,7 @@ number_elements = 1;
 % ==============================================================================
 % MATERIALS (Test two group data)
 % ==============================================================================
-mat = test_materials(2);
+mat = test_materials(1);
 
 tic
 % ==============================================================================
@@ -113,16 +113,8 @@ matid = [  2];  pin4 = PinCell(pitch,    [], matid); meshify(pin4, number);
 % ==============================================================================
 
 % Assembly 1 
-pin_map1 = [1 1 1 1 1 1 1 1 1
-            1 1 1 1 1 1 1 1 1
-            1 1 1 1 1 1 1 1 1
-            1 1 1 1 1 1 1 1 1
-            1 1 1 1 1 1 1 1 1
-            1 1 1 1 1 1 1 1 1
-            1 1 1 1 1 1 1 1 1
-            1 1 1 1 1 1 1 1 1
-            1 1 1 1 1 1 1 1 1
-            ];               
+pin_map1 = [4 4 4; 4 4 4; 4 4 4];   
+        
 mesh = Assembly({pin1, pin2, pin3, pin4}, pin_map1); 
 meshify(mesh);
 toc
@@ -201,8 +193,10 @@ for s_o = 0:max_s_o
             end
             set_orders(bc, g_o, s_o, a_o, p_o);
             
-            set_keff(solver,  1.325242580556770); % kinf 0.9009968666
-
+            %set_keff(solver,  0.74038277197922); % kinf 0.9009968666
+            set_keff(solver,  0.096325313497515); % kinf 0.9009968666
+            set_keff(solver, 0.09546908253984445);
+            set_keff(solver, 0.096151594473819);
             out = solve(solver);
             reset(q_f);
 
@@ -358,9 +352,19 @@ R( (2*max_o)+1: 3*max_o, (3*max_o)+1: 4*max_o) = coef{2}(:, :); % top -> bottom
 R( (3*max_o)+1: 4*max_o, (3*max_o)+1: 4*max_o) = coef{1}(:, :); % top -> top
 
 
-RR = kron(speye(number_elements), R);
+put(input, 'bc_left',               'vacuum');
+put(input, 'bc_right',              'reflect');
+put(input, 'bc_top',                'reflect');
+put(input, 'bc_bottom',             'reflect');
+put(input, 'dimension',         2);
 
-% e = eigs(M*RR, 4, 'LR')
+
+n = 1;
+RR = kron(speye(n), R);
+co = Connect(input, [1]);
+[M,Ml]=co.build();
+
+ e = eigs(M*RR, 4, 'LR')
 % 
 % lambda(MSO+1,MAO+1,MPO+1) = e(1);
 

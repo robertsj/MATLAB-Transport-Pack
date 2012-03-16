@@ -138,7 +138,7 @@ classdef ERME < handle
         function update(this, keff)
             % Get new data.
             [R, F, A, L] = get_responses(this.d_server, keff);
-            
+           
             % Initialize.
             R_list = cell(this.d_number_elements, 1);
             L_list = cell(this.d_number_elements, 1);

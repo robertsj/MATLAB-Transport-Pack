@@ -5,16 +5,21 @@
 %
 %> Currently, only acceleration via Steffensen extrapolation is implemented.
 %> Other ideas being investigated are k updated via a Rayleigh quotient, 
-%> CMFD/p-CMFD, and low order respons
+%> CMFD/p-CMFD, and low order response
+%>
+%> @todo Add Steffensen extrapolation and possible PETSc/SLEPc extension.
+%>
 % ==============================================================================
 classdef ERME_Picard < ERME_Solver
     
     properties
         %> Residual history
         d_norm_residual_hist
-        %> Final solution
+        %> Final expansion coefficients
         d_J
+        %> Final eigenvalue
         d_k
+        %> Final current eigenvalue
         d_lambda
     end
     
@@ -50,7 +55,10 @@ classdef ERME_Picard < ERME_Solver
             J = init_J(this);
             
             % Initialize k-eigenvalue and lambda-eigenvalue
-            k =  1.0;
+            k =  get(this.d_input, 'erme_initial_keff'); 
+            if ~k
+                k = 1.0;
+            end
             lambda = 1.0;
             
             % Get response matrices for initial k

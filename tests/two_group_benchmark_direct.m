@@ -1,4 +1,4 @@
-%> @file  test_two_group_assemblies.m
+%> @file  two_group_benchmark_direct.m
 %> @brief Solve several small assembly problems that have known solutions.
 
 % Include the MTP source directory
@@ -67,7 +67,7 @@ for i = 1:number_problems
     fprintf(1,' problem = %d, keff = %20.14f \n', i, eigenvalue(state));
 end
 
-save('test_two_group_assemblies.mat', 'prob');
+save('two_benchmark_direct.mat', 'prob');
 
 %     1.27828651169820 
 %     0.74038277197922 

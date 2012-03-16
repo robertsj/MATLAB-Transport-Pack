@@ -1,33 +1,40 @@
 % test of response driver
 %clear all
 % ==============================================================================
-% INPUT
+% INPUT 0.836398625920381
 % ==============================================================================
 input = Input();
-put(input, 'number_groups',         2);
+put(input, 'number_groups',         1);
 put(input, 'dimension',             2);
-put(input, 'inner_tolerance',       1e-10);
+put(input, 'inner_tolerance',       1e-12);
 put(input, 'inner_max_iters',       100);
 put(input, 'outer_tolerance',       1e-10);
 put(input, 'outer_max_iters',       10);
 put(input, 'quad_order',            2);
-so=13; 
+mso = 0;
+mao = 0;
+mpo = 0;
+for so = mso
+for ao = mao
+for po = mpo
+
 put(input, 'rf_max_order_space',       so);
-put(input, 'rf_max_order_azimuth',      3);
-put(input, 'rf_max_order_polar',        0);
+put(input, 'rf_max_order_azimuth',     ao);
+put(input, 'rf_max_order_polar',       po);
 put(input, 'rf_order_space',       so);
-put(input, 'rf_order_azimuth',      3);
-put(input, 'rf_order_polar',        0);
+put(input, 'rf_order_azimuth',     ao);
+put(input, 'rf_order_polar',       po);
 kv = linspace(0.5, 1.4, 19);
-kv = [ 0.235038714594903 0.740382771979217];
+kv = [ 0.686189327692726]; % 0.0954288045, 0.096151594473819
+kv = [ 0.096158350188846]; % flux=0.095536639062328  , bal=0.095521247194524
 put(input, 'rf_k_vector',   kv');
 put(input, 'rf_number_nodes', 1);
-put(input, 'rf_db_name', 'two_group_3x3.h5');
+put(input, 'rf_db_name', 'poop.h5');
 
 % ==============================================================================
 % MATERIALS (Test two group data)
 % ==============================================================================
-mat = test_materials(2);
+mat = test_materials(1);
 
 % ==============================================================================
 % PINS
@@ -81,12 +88,14 @@ meshify(mesh4);
 % ==============================================================================
 mesh_array = { mesh4};
 driver = ResponseDriver(input, mat, mesh_array);
-%run(driver);
+run(driver);
 
 
 [R, F, A, L] = get_responses(driver);
-RR=R(:,:,2,1);
-elements = [1 1 1; 1 1 1; 1 1 1];
+RR=R(:,:,1,1);
+elements = [1 1 1
+            1 1 1
+            1 1 1];
 number_elements = 1;        
 
 tmp = sparse(RR);
@@ -100,8 +109,46 @@ put(input, 'bc_top',            'reflect');
 connect = Connect(input, elements);
 [M, Mleak] = build(connect);
 % 
-[v, e]=eigs(M*Rblk); 
+% 
+% [v,e]=eigs(M*R, 1); J=v; e
+% keff = (F'*J)/(A'*J + Mleak*(L'*J))
+% eek(so+1, ao+1) = (kv - keff)/kv * 100
+% ee(so+1, ao+1) = e;
+
+
+
+
+end
+end
+end
+% 
+% for so = 0:mso
+%     for ao = 0:mao
+%         for po = 0:mpo
+%         [R0 F0 A0 L0, M0] = reduce_R(R, F, A, L, M, 1, mso, mao, mpo, so, ao, po);
+%         [J, e] = eigs(M0*R0, 1);
+%         keff = (F0'*J)/(A0'*J + Mleak*(L0'*J));
+%         errk(so+1, ao+1, po+1) = (kv - keff)/kv * 100;
+%         lambda(so+1, ao+1, po+1) = e;
+%         end
+%     end
+% end
+% errk;
+% lambda;
+% 
+% z = driver.rates.lr / driver.rates.ic(1);
+% R2 = [z(1) z(2) z(3) z(3); z(2) z(1) z(3) z(3); z(3) z(3) z(1) z(2); z(3) z(3) z(2) z(1)]; [J2, e2]=eigs(M*R2,1)
+% (F'*J2)/(A'*J2 + Mleak*(L'*J2))
+
+
+[v, e]=eigs(M*R,1); e
 J = v(:, 1);
+(F'*J)/(A'*J + Mleak*(L'*J))
+
+
+
+return
+
 J = sign(J((abs(J)==max(abs(J)))))*J;
 
 
@@ -112,6 +159,7 @@ Fblk = [FF' FF' FF' FF' FF' FF' FF' FF' FF'];
 Ablk = [AA' AA' AA' AA' AA' AA' AA' AA' AA'];
 Lblk = {LL' LL' LL' LL' LL' LL' LL' LL' LL'};
 Lblk = blkdiag(Lblk{:});
+
 
 
 gain        = Fblk*J;                            % compute gains
