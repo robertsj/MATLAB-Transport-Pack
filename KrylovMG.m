@@ -284,7 +284,6 @@ function y = apply(x, this)
     % Update fission source with this Krylov vector if this is a fixed 
     % source problem
     if (this.d_fixed && initialized(this.d_fission_source))
-        error('lala')
         for g = 1:ng
             set_phi(this.d_state, phi(:, g), g);
         end

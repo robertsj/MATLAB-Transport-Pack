@@ -93,7 +93,7 @@ classdef Input < handle
             
             % Discretization
             put(obj, 'equation',        'DD');
-            put(obj, 'dimension',       1);
+            put(obj, 'dimension',       0);
             
             % Quadrature
             put(obj, 'quadrature_type',     'GaussLegendre');

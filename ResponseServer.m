@@ -5,37 +5,46 @@
 %
 %> 
 % ==============================================================================
-classdef ResponseServer < handle
+classdef ResponseServer < ResponseServerBase
 
     properties (Access = private)
-        d_input
+
+        %> Material database
         d_mat
+        %> Cell array of mesh objects
         d_mesh_array
-        d_number_nodes
+        %> Cell array of local solver objects
         d_solver
+        %> Cell array of local solver fission sources
         d_fission_source
+        %> Angular mesh object
         d_quadrature
+        %> Boundary object for all problems (*assumes* identical meshing)
         d_boundary
+        %> Incident condition (*assumes* just one incident side)
         d_bc
+        %> State object for all problems
         d_state
+        
+        
         d_keff_current = -1;
         d_keff_last = -1;
-        d_R
-        d_F
-        d_A
-        d_L
+
+        %> Working array for fission rates
         d_fiss
+        %> Working array for absorption rates
         d_abso
+        %> Working array for leakage rates
         d_leak
+        %> Precomputed fine mesh fission cross section vector
         d_fission
+        %> Precomputed fine mesh absorption cross section vector
         d_absorption
+        %> Precomputed fine mesh volume vector
         d_volume
+        %> Working cell array of arrays of boundary responses
         d_coef
-        d_max_o
-        d_max_g_o
-        d_max_s_o
-        d_max_a_o
-        d_max_p_o
+
         %> Spatial basis
         d_basis_space
         %> Polar angle basis        
@@ -48,8 +57,7 @@ classdef ResponseServer < handle
         d_number_polar
         %> Number of azimuthal angles
         d_number_azimuth        
-        %> Total time spent in the server.
-        d_time = 0;
+
     end
     
     methods
@@ -61,6 +69,9 @@ classdef ResponseServer < handle
         %> @param mesh_array    Cell array of mesh objects
         % ======================================================================
         function this = ResponseServer(input, mat, mesh_array)
+            
+            % Call base class
+            this = this@ResponseServerBase(input);
             
             % Verify input and materials have same group count.
             DBC.Require('get(input, ''number_groups'') == number_groups(mat)');
@@ -84,10 +95,10 @@ classdef ResponseServer < handle
             this.d_quadrature  = QuadrupleRange(qo);
             
             % Get the orders we'll use.
-            this.d_max_g_o = get(this.d_input, 'number_groups');
-            this.d_max_s_o = get(this.d_input, 'rf_order_space');
-            this.d_max_a_o = get(this.d_input, 'rf_order_azimuth');
-            this.d_max_p_o = get(this.d_input, 'rf_order_polar');            
+            this.d_number_groups = get(this.d_input, 'number_groups');
+            this.d_order_space   = get(this.d_input, 'rf_order_space');
+            this.d_order_azimuth = get(this.d_input, 'rf_order_azimuth');
+            this.d_order_polar   = get(this.d_input, 'rf_order_polar');            
             
             % I'm not sure how to generalize for MOC at the moment.  For meshes,
             % it's assumed all nodes have same spacing.  This could be a future
@@ -122,7 +133,7 @@ classdef ResponseServer < handle
             for i = 1:length(mesh_array)
                 
                 % Empty external source
-                q_e = Source(this.d_mesh_array{i}, this.d_max_g_o);
+                q_e = Source(this.d_mesh_array{i}, this.d_number_groups);
                 
                 % Create/initialize fission source.
                 this.d_fission_source{i} = ...
@@ -181,19 +192,28 @@ classdef ResponseServer < handle
             % Initial time
             t = toc;
             
-            
-            this.d_max_o = (this.d_max_s_o + 1) * ...
-                 (this.d_max_a_o + 1)*(this.d_max_p_o + 1);
-            mo = this.d_max_g_o * (this.d_max_s_o + 1) * ...
-                 (this.d_max_a_o + 1)*(this.d_max_p_o + 1);     
-             
+            % Number of (non energy) expansion orders
+            number_orders_space_angle = (this.d_order_space + 1) * ...
+                                        (this.d_order_azimuth + 1) * ...
+                                        (this.d_order_polar + 1);
+                        
+            % Degrees of freedom per surface                      
+            number_orders_total = this.d_number_groups * ...
+                                  (this.d_order_space + 1) * ...
+                                  (this.d_order_azimuth + 1) * ...
+                                  (this.d_order_polar + 1);
+                              
+            % Degrees of freedom per node, i.e. the size of its R-block.                  
+            block_size = 4 * number_orders_total;
+                              
+                              
             % assumes 2-d, i.e. 4 faces
-            this.d_R = zeros(4*mo, 4*mo, this.d_number_nodes);
-            this.d_F = zeros(4*mo,       this.d_number_nodes);
-            this.d_A = zeros(4*mo,       this.d_number_nodes);
-            this.d_L = zeros(4*mo, 4,    this.d_number_nodes);      
+            this.d_R = zeros(block_size, block_size, this.d_number_nodes);
+            this.d_F = zeros(block_size, this.d_number_nodes);
+            this.d_A = zeros(block_size, this.d_number_nodes);
+            this.d_L = zeros(block_size, 4, this.d_number_nodes);      
             
-            number_responses = mo * this.d_number_nodes;
+            number_responses = number_orders_total * this.d_number_nodes;
             count = 0;
             
             for i = 1:this.d_number_nodes 
@@ -202,20 +222,20 @@ classdef ResponseServer < handle
                 
                 % Temporary storage of response
                 this.d_coef    = cell(4, 1);
-                this.d_coef{1} = zeros(this.d_max_o);
-                this.d_coef{2} = zeros(this.d_max_o);
-                this.d_coef{3} = zeros(this.d_max_o);
-                this.d_coef{4} = zeros(this.d_max_o);
+                this.d_coef{1} = zeros(number_orders_space_angle);
+                this.d_coef{2} = zeros(number_orders_space_angle);
+                this.d_coef{3} = zeros(number_orders_space_angle);
+                this.d_coef{4} = zeros(number_orders_space_angle);
                 
-                this.d_fiss = zeros(mo, 1);
-                this.d_abso = zeros(mo, 1);
-                this.d_leak = zeros(mo, 4);
+                this.d_fiss = zeros(number_orders_total, 1);
+                this.d_abso = zeros(number_orders_total, 1);
+                this.d_leak = zeros(number_orders_total, 4);
                     
                 rf_index = 0;
-                for g_o = 1:this.d_max_g_o
-                    for s_o = 0:this.d_max_s_o
-                        for a_o = 0:this.d_max_a_o
-                            for p_o = 0:this.d_max_p_o
+                for g_o = 1:this.d_number_groups
+                    for s_o = 0:this.d_order_space
+                        for a_o = 0:this.d_order_azimuth
+                            for p_o = 0:this.d_order_polar
                                 
                                 rf_index = rf_index + 1;
                                 
@@ -241,7 +261,7 @@ classdef ResponseServer < handle
 
                 % Build the full response matrix.  In the future, this can be
                 % generalized to have incident conditions on all surfaces.
-                
+                mo = number_orders_total;
                 R( (0*mo)+1: 1*mo, (0*mo)+1: 1*mo) = this.d_coef{1}(:, :); % left -> left
                 R( (1*mo)+1: 2*mo, (0*mo)+1: 1*mo) = this.d_coef{2}(:, :); % left -> right
                 R( (2*mo)+1: 3*mo, (0*mo)+1: 1*mo) = this.d_coef{3}(:, :); % left -> top
@@ -284,7 +304,7 @@ classdef ResponseServer < handle
         function this = expand(this, index_in, node_idx)
             
             q_f = this.d_fission_source{node_idx};
-            num_ang        = this.d_number_polar*this.d_number_azimuth;
+            num_ang  = this.d_number_polar*this.d_number_azimuth;
             
             % Octants for incident left conditions
             octants = [ 3 2   % ref
@@ -295,7 +315,9 @@ classdef ResponseServer < handle
             % Expand the coefficients
             for side = 1:4
                 
-                for g = 1:this.d_max_g_o
+                f = zeros(this.d_number_space,num_ang,this.d_number_groups);
+              
+                for g = 1:this.d_number_groups
                     
                     for o = 1:2
                         o_in  = octants(side, o); % incident octant
@@ -323,14 +345,12 @@ classdef ResponseServer < handle
                             end
                         end
                         % populate the vectors we expand
-                        for s = 1:this.d_number_space
-                            ang = 1;
-                            for a = a1:a3:a2
-                                for p = 1:this.d_number_polar
-                                    f(s, (o-1)*num_ang+ang,g) = ...
-                                        ft(s, (a-1)*this.d_number_polar+p);
-                                    ang = ang + 1;
-                                end
+                        ang = 1;
+                        for a = a1:a3:a2
+                            for p = 1:this.d_number_polar
+                                f(:, (o-1)*num_ang+ang,g) =  ...
+                                    ft(:, (a-1)*this.d_number_polar+p);
+                                ang = ang + 1;
                             end
                         end
                     end
@@ -339,51 +359,33 @@ classdef ResponseServer < handle
                 
                 % Group->Space->Azimuth->Polar.  f(space, angle, group)
                 index_out = 1;
-                for g = 1:this.d_max_g_o
-                    for ord_s = 1:this.d_max_s_o+1
-                        for ord_a = 1:this.d_max_a_o+1
-                            for ord_p = 1:this.d_max_p_o+1
-                                psi_ap = zeros(this.d_number_azimuth, this.d_number_polar);
-                                angle = 0;
-                                az=0;
-                                for o = 1:2
-                                    if (1 == 1) % this makes angles symmetric
-                                        a1 = 1;
-                                        a2 = this.d_number_azimuth;
-                                        a3 = 1;
-                                    else
-                                        a1 = this.d_number_azimuth;
-                                        a2 = 1;
-                                        a3 = -1;
-                                    end
-                                    
-                                    for a = a1:a3:a2
-                                        az = az+1;
-                                        for p = 1:this.d_number_polar
-                                            angle = angle + 1;
-                                            psi_ap(az, p) = f(:, angle, g)'*this.d_basis_space(:, ord_s);
-                                        end
-                                    end
-                                end
-                                
-                                psi_p = zeros(this.d_number_polar, 1);
-                                b = this.d_basis_azimuth(:, ord_a);
-                                if side > 2
-                                    lb = length(b);
-                                    b(1:lb/2) = b(lb/2:-1:1);
-                                    b(lb/2+1:end) = b(end:-1:lb/2+1);
-                                end
-                                for p = 1:this.d_number_polar
-                                    psi_p(p) = psi_ap(:, p)'*b;
-                                end
+                for g = 1:this.d_number_groups
+                    for ord_s = 1:this.d_order_space+1
+                        for ord_a = 1:this.d_order_azimuth+1
+                            
+                            
+                            b = this.d_basis_azimuth(:, ord_a);
+                            % Reorder if it's a horizontal surface, since
+                            % [mu,eta] are always in that order
+                            if side > 2
+                                lb = length(b);
+                                b(1:lb/2) = b(lb/2:-1:1);
+                                b(lb/2+1:end) = b(end:-1:lb/2+1);
+                            end
+                            
+                            for ord_p = 1:this.d_order_polar+1
+                                tmp = f(:, :, g)'*this.d_basis_space(:, ord_s);                        
+                                psi_ap = reshape(tmp,this.d_number_polar,2*this.d_number_azimuth);
+                                psi_p = psi_ap*b;
                                 this.d_coef{side}(index_out, index_in) = ...
                                     psi_p'*this.d_basis_polar(:, ord_p); % i <- k
                                 index_out = index_out + 1;
-                                
                             end % out p
+                            
                         end % out a
                     end % out s
                 end % out g
+                
             end % side loop
             
             % Fission and Absorption rates

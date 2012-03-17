@@ -59,7 +59,11 @@ classdef ResponseDB < ResponseServerBase
         %> @return Instance of the ResponseDB class.
         % ======================================================================
         function this = ResponseDB(input) 
+            
+            % Call base class
             this = this@ResponseServerBase(input);
+            
+            % HDF5 file
             file = get(input, 'rf_db_name');
             if (~file)
                 file = 'default.h5';

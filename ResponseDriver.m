@@ -303,23 +303,20 @@ classdef ResponseDriver < handle
                         end
                         
                         % populate the vectors we expand
-                        %for s = 1:this.d_number_space
-                            ang = 1;
-                            for a = a1:a3:a2
-                                for p = 1:this.d_number_polar
-                                    f(:, (o-1)*num_ang+ang,g) =  ...
-                                        ft(:, (a-1)*this.d_number_polar+p);
-                                    ang = ang + 1;
-                                end
+                        ang = 1;
+                        for a = a1:a3:a2
+                            for p = 1:this.d_number_polar
+                                f(:, (o-1)*num_ang+ang,g) =  ...
+                                    ft(:, (a-1)*this.d_number_polar+p);
+                                ang = ang + 1;
                             end
-                        %end
+                        end
                     end
                     
                 end
                 
                 % Group->Space->Azimuth->Polar.  f(space, angle, group)
-                
-                
+
                 index_out = 1;
                 for g = 1:this.d_max_g_o
                     for ord_s = 1:this.d_max_s_o+1
@@ -333,44 +330,14 @@ classdef ResponseDriver < handle
                             end
                             
                             for ord_p = 1:this.d_max_p_o+1
-                               % psi_ap = zeros(2*this.d_number_azimuth, this.d_number_polar);
-                               % angle = 0;
-                                tmp = f(:, :, g)'*this.d_basis_space(:, ord_s);
-                                %az=0;
-%                                 for o = 1:2
-%                                     a1 = 1;
-%                                     a2 = this.d_number_azimuth;
-%                                     a3 = 1;
-%                                     for a = a1:a3:a2
-%                                         az = az+1;
-%                                         for p = 1:this.d_number_polar
-%                                             angle = angle + 1;
-%                                             psi_ap(az, p) = tmp(angle);%f(:, angle, g)'*this.d_basis_space(:, ord_s);
-%                                         end
-%                                     end
-%                                 end
-                                
-%                                 tmp2 = reshape(tmp(1:end/2),this.d_number_polar,[]);
-%                                 psi_ap(1:this.d_number_azimuth,1:this.d_number_polar) = tmp2';
-%                                 tmp2 = reshape(tmp(end/2+1:end),this.d_number_polar,[]);
-%                                 psi_ap(this.d_number_azimuth+1:end,1:this.d_number_polar) = tmp2';
-%                                 
-                               % psi_ap2 = psi_ap;
+                                tmp = f(:, :, g)'*this.d_basis_space(:, ord_s);                        
                                 psi_ap = reshape(tmp,this.d_number_polar,2*this.d_number_azimuth);
-                                %psi_ap = tmp2';
-                                
-                                
-                                
-                                
-%                                 psi_p = zeros(this.d_number_polar, 1);
-%                                 for p = 1:this.d_number_polar
-%                                     psi_p(p) = psi_ap(:, p)*b; % [np,1]=[np,na][na,1]
-%                                 end
                                 psi_p = psi_ap*b;
                                 this.d_coef{side}(index_out, index_in) = ...
                                     psi_p'*this.d_basis_polar(:, ord_p); % i <- k
                                 index_out = index_out + 1;
                             end % out p
+                            
                         end % out a
                     end % out s
                 end % out g
