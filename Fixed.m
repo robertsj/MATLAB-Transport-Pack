@@ -164,6 +164,15 @@ classdef Fixed < handle
             
         end
         
+        %> @name Getters
+        %> @{
+        
+        function n = number_sweeps(this)
+            n = number_sweeps(this.d_inner_solver);
+        end
+        
+        %> @}        
+        
         function print_iteration(this, iteration, flux_error, total_inners)
             if (get(this.d_input, 'print_out'))
                 fprintf(...

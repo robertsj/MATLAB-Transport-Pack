@@ -2,8 +2,6 @@
 %> @brief Mesh class definition.
 % ==============================================================================
 %> @brief Base Cartesian mesh.
-%
-%> Finish me.
 % ==============================================================================
 classdef Mesh < handle
     
@@ -58,9 +56,9 @@ classdef Mesh < handle
         %> @brief Class constructor
         %> @return Instance of the Mesh class.
         % ======================================================================
-        function obj = Mesh()
-
-        end
+%         function obj = Mesh()
+% 
+%         end
        
         
         % **********************************************************************

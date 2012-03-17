@@ -159,9 +159,16 @@ classdef Boundary < handle
         function this = reset(this)
             for g = 1:get(this.d_input, 'number_groups')
                 set_group(this, g);
-                for o = 1:4
-                    set_psi_v_octant(this, o, 0.0, Boundary.IN);
-                    set_psi_h_octant(this, o, 0.0, Boundary.IN);
+                if this.d_mesh.DIM == 1
+                    set_psi_v_octant(this, 1, 0.0, Boundary.IN);
+                    set_psi_v_octant(this, 2, 0.0, Boundary.IN);
+                elseif this.d_mesh.DIM == 2
+                    for o = 1:4
+                        set_psi_v_octant(this, o, 0.0, Boundary.IN);
+                        set_psi_h_octant(this, o, 0.0, Boundary.IN);
+                    end 
+                else
+                    error('3d not ready.')
                 end
             end
             set_group(this, 0);

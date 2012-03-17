@@ -85,6 +85,8 @@ classdef InnerIteration < handle
         d_g
         %> Moments to discrete operator.
         d_M
+        %> Numer of sweeps
+        d_number_sweeps = 0;
     end
     
     methods (Access = public)    
@@ -135,6 +137,16 @@ classdef InnerIteration < handle
         function display_me(this)
             disp(' inner! ') 
         end
+        
+        %> @name Getters
+        %> @{
+        
+        function n = number_sweeps(this)
+            n = number_sweeps(this.d_sweeper);
+        end
+        
+        %> @}
+        
     end
     
     methods (Access = protected)
@@ -410,6 +422,7 @@ classdef InnerIteration < handle
             end 
         end
         
+
         % ======================================================================
         %> @brief Check convergence and warn if iteration limit reached.
         % ======================================================================        
@@ -424,7 +437,7 @@ classdef InnerIteration < handle
         %> @brief Print some diagnostic output.
         % ======================================================================
         function print_iteration(this, it, e0, e1, e2)
-            if (get(this.d_input, 'print_out'))
+            if (get(this.d_input, 'inner_print_out'))
                 fprintf('           Iter: %5i, Error: %12.8f\n', it, e0);
                 if it > 2
                     fprintf('                         Rate: %12.8f\n', ...

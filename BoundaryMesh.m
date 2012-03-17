@@ -36,18 +36,31 @@ classdef BoundaryMesh < Boundary
             
             % Initialize boundary flux vectors.
             ng = get(input, 'number_groups');
-            this.d_boundary_flux = cell(2*mesh.DIM, 1);
-            % Left and right
-            this.d_boundary_flux{mesh.LEFT} = zeros(dim(mesh, 2), ...
-                number_angles(quadrature), ng);
-            this.d_boundary_flux{mesh.RIGHT} = zeros(dim(mesh, 2), ...
-                number_angles(quadrature), ng);     
-            
-            % Top and bottom
-            this.d_boundary_flux{mesh.TOP} = zeros(dim(mesh, 1), ...
-                number_angles(quadrature), ng);
-            this.d_boundary_flux{mesh.BOTTOM} = zeros(dim(mesh, 1), ...
-                number_angles(quadrature), ng);  
+            d  = get(input, 'dimension');
+            na = number_angles(quadrature);
+            this.d_boundary_flux = cell(2*d, 1);
+                        
+            % Initialize boundary fluxes.
+            if (d == 1)
+                this.d_boundary_flux{mesh.LEFT}   = zeros(1, na, ng);
+                this.d_boundary_flux{mesh.RIGHT}  = zeros(1, na, ng);
+            elseif (d == 2)
+                this.d_boundary_flux{mesh.LEFT}   = zeros(dim(mesh, 2), na, ng);
+                this.d_boundary_flux{mesh.RIGHT}  = zeros(dim(mesh, 2), na, ng);
+                this.d_boundary_flux{mesh.TOP}    = zeros(dim(mesh, 1), na, ng);
+                this.d_boundary_flux{mesh.BOTTOM} = zeros(dim(mesh, 1), na, ng);
+            elseif (d == 3)
+                this.d_boundary_flux{mesh.LEFT}   = ...
+                    zeros(dim(mesh, 2)*dim(mesh, 3), na, ng);
+                this.d_boundary_flux{mesh.RIGHT}  = ...
+                    zeros(dim(mesh, 2)*dim(mesh, 3), na, ng);
+                this.d_boundary_flux{mesh.TOP}    = ...
+                    zeros(dim(mesh, 1)*dim(mesh, 3), na, ng);
+                this.d_boundary_flux{mesh.BOTTOM} = ... 
+                    zeros(dim(mesh, 2)*dim(mesh, 3), na, ng);
+            else
+                error('user:input', 'Invalid dimension');
+            end
             
             % Build octant indices
             this.d_octant_indices = ...
@@ -61,7 +74,7 @@ classdef BoundaryMesh < Boundary
             end
             
             % Initialize the boundary conditions
-            for side = 1:2*this.d_mesh.DIM;
+            for side = 1:2*d;
                 initialize(this.d_bc{side});
             end
 
@@ -251,9 +264,13 @@ classdef BoundaryMesh < Boundary
             else
                 side = this.d_mesh.RIGHT;    % We are exiting the right.
             end
+            try
             this.d_boundary_flux{side}(:, ...
                 this.d_octant_indices(o, 1):this.d_octant_indices(o, 2), ...
-                this.d_g) = f(:, :);      
+                this.d_g) = f(:, :);   
+            catch ME
+                disp('lala')
+            end
         end
         
         % ======================================================================

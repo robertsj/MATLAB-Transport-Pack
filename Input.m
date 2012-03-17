@@ -100,18 +100,22 @@ classdef Input < handle
             put(obj, 'quadrature_order',    8);
             
             % Eigensolver
+            put(obj, 'eigen_solver',        'PI');
             put(obj, 'eigen_tolerance',     1e-6); 
             put(obj, 'eigen_max_iters',     100); 
+            put(obj, 'eigen_acceleration',  'none');
             
             % Outer Solver 
-            put(obj, 'problem_type',        'Fixed');  
+            put(obj, 'outer_solver',        'GS'); 
             put(obj, 'outer_tolerance',     1e-6); 
             put(obj, 'outer_max_iters',     1000); 
+            put(obj, 'outer_acceleration',  'none');
             
             % Inner solver
             put(obj, 'inner_solver',        'SI'); 
             put(obj, 'inner_tolerance',     1e-6); 
             put(obj, 'inner_max_iters',     1000); 
+            put(obj, 'inner_acceleration',  'none');
             
         end
         

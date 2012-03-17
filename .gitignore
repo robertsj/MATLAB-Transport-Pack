@@ -2,3 +2,6 @@
 *.m~
 *.png
 *.vtk
+*.mat
+*.jpg
+*h5

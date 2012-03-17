@@ -36,18 +36,18 @@ classdef Eigensolver < handle
         % ======================================================================
         %> @brief Class constructor
         %
-        %> @param input             Number of fine mesh per x coarse mesh.
-        %> @param state             Number of fine mesh per x coarse mesh.
-        %> @param boundary          Number of fine mesh per x coarse mesh.
-        %> @param mesh              Number of fine mesh per y coarse mesh.
-        %> @param mat               Coarse mesh edges along x axis.
-        %> @param quadrature        Coarse mesh edges along y axis.
-        %> @param external_source 	Coarse mesh material map.
-        %> @param fission_source 	Coarse mesh material map.
+        %> @param input             User input.
+        %> @param state             State vectors.
+        %> @param boundary          Boundary flux container.
+        %> @param mesh              Geometry.
+        %> @param mat               Material database.
+        %> @param quadrature        Angular mesh.
+        %> @param external_source 	Fixed source.
+        %> @param fission_source 	Fission source.
         %>
         %> @return Instance of the Eigensolver class.
         % ======================================================================
-        function this = Eigensolver(  input,            ...
+        function this = Eigensolver( input,            ...
                                      state,            ...
                                      boundary,         ...
                                      mesh,             ...
@@ -69,15 +69,33 @@ classdef Eigensolver < handle
            this.d_max_iters = get(input, 'eigen_max_iters');
            
            % Setup the multigroup solver.
-           this.d_solver = ...
-               Fixed(  input,            ...
-                       state,            ...
-                       boundary,         ...
-                       mesh,             ...
-                       mat,              ...
-                       quadrature,       ...
-                       external_source,  ...
-                       fission_source );
+           outer = get(input, 'outer_solver'); 
+           if strcmp(outer, 'GS')
+               this.d_solver = ...
+                   Fixed(  input,            ...
+                           state,            ...
+                           boundary,         ...
+                           mesh,             ...
+                           mat,              ...
+                           quadrature,       ...
+                           external_source,  ...
+                           fission_source );
+           elseif strcmp(outer, 'GMRES')
+               this.d_solver = ...
+                   KrylovMG(input,            ...
+                            state,            ...
+                            boundary,         ...
+                            mesh,             ...
+                            mat,              ...
+                            quadrature,       ...
+                            external_source,  ...
+                            fission_source,   ...
+                            0); % 0 indicates an eigenproblem
+           else
+               error('user:input', 'Invalid outer solver selected.')
+           end
+               
+
         end
         
         function output = solve(this)
@@ -120,7 +138,7 @@ classdef Eigensolver < handle
                 setup_outer(this.d_fission_source, 1/k_eff);
                
                 % Solve the multigroup equations.
-                out     = solve(this.d_solver);
+                out     = this.d_solver.solve();
                 
                 % Track number of sweeps.
                 sweeps  = sweeps + out.total_inners;
@@ -142,15 +160,31 @@ classdef Eigensolver < handle
                 k_eff   = k_eff_1 * norm(fd) / norm(fd_old);
                 set_eigenvalue(this.d_state, k_eff);
                 iteration = iteration + 1;
-                print_iteration(this, iteration, sweeps, ...
-                    flux_error, flux_error_1, flux_error_2, k_eff)
+                
+                if (get(this.d_input, 'eigen_print_out') && ...
+                    mod(iteration, 10) == 0)
+                
+                    print_iteration(this, iteration, sweeps, ...
+                        flux_error, flux_error_1, flux_error_2, k_eff)
+                end
+                
             end
-            set_eigenvalue(this.d_state, k_eff);
             output.flux_error = flux_error;
             output.sweeps = sweeps;
             
         end
         
+        %> @name Getters
+        %> @{
+        
+        function n = number_sweeps(this)
+            n = number_sweeps(this.d_solver);
+        end
+        
+        %> @}
+        
+        %> @name Diagnostics
+        %> @{
         
         function print_iteration(this, it, sweeps, e0, e1, e2, k)
             fprintf('=========================================================================\n')
@@ -162,6 +196,8 @@ classdef Eigensolver < handle
             end
             fprintf('=========================================================================\n')
         end
+        
+        %> @}
         
     end
 end

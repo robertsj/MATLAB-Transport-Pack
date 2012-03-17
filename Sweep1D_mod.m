@@ -16,27 +16,9 @@
 %> the angular flux, but rather add its contribution to the scalar flux 
 %> directly since storing the angular flux is too expensive.
 % ==============================================================================
-classdef Sweep1D_mod < handle
+classdef Sweep1D_mod < SweepBase
 
-    properties
-        
-        %> User input.
-        d_input      
-        %> 1-D Cartesian mesh.
-        d_mesh                  
-        %> Materials.
-        d_mat                   
-        %> Angular mesh.
-        d_quadrature            
-        %> Spatial discretization
-        d_equation                      
-        %
-        %d_psi_horizontal        % place holder horizontal flux [num_x]
-        %> Boundary fluxes
-        d_boundary
-        %
-        d_nx
-        %d_ny
+    properties (Access = private)
         
     end
     
@@ -45,31 +27,20 @@ classdef Sweep1D_mod < handle
         % ======================================================================
         %> @brief Class constructor
         %
-        %> @param input        	Input database.
-        %> @param mesh         	Cartesian mesh.
-        %> @param mat           Material definitions.
-        %> @param quadrature   	Angular mesh.
-        %> @param boundary      Boundary flux container.
-        %> @param equation      Discretization
+        %> @param   input       Input database.
+        %> @param   mesh      	Cartesian mesh.
+        %> @param   mat       	Material definitions.
+        %> @param   quadrature  Angular mesh.
+        %> @param   boundary    Boundary flux container.
+        %> @param   equation    Discretization
         %>
-        %> @return Instance of the Mesh class.
+        %> @return              Instance of the Sweep1D class.
         % ======================================================================
-        function obj = Sweep1D_mod(input, mesh, mat, quadrature, ...
-                                   boundary, equation)
-            
-            obj.d_input      = input;
-            obj.d_mesh       = mesh;
-            obj.d_mat        = mat;
-            obj.d_quadrature = quadrature;
-            obj.d_boundary   = boundary;
-            obj.d_equation   = equation;
-            
-            % Store some things from the mesh.
-            obj.d_nx = number_cells_x(mesh);
-            
-            % Initialize place holders.  Currently, we sweep first along x and
-            % then y.  Hence, we need to store a row of horizontal edge fluxes.
-            %obj.d_psi_horizontal = zeros(number_cells_x(obj.d_mesh), 1);       
+        function obj = Sweep1D_mod(input, mesh, mat, quadrature, boundary, ...
+                                   equation)
+            % Call base class.
+            obj = obj@SweepBase(input, mesh, mat, quadrature, boundary, ...
+                                equation);
             
         end
         
@@ -137,6 +108,8 @@ classdef Sweep1D_mod < handle
                 
             end
 
+            obj.d_number_sweeps = obj.d_number_sweeps + 1;
+            
         end
         
     end

@@ -43,7 +43,7 @@ classdef GMRESIteration < InnerIteration
         %
         %> @return  Instance of the GMRESIteration class.
         % ======================================================================
-        function obj = GMRESIteration()
+        function this = GMRESIteration()
             % Nothing here for now.
         end
         
@@ -59,7 +59,7 @@ classdef GMRESIteration < InnerIteration
         %> @param external_source 	User-defined external source.
         %> @param fission_source 	Fission source.
         % ======================================================================
-        function obj = setup(obj,              ...
+        function this = setup(this,              ...
                              input,            ...
                              state,            ...
                              boundary,         ...
@@ -70,7 +70,7 @@ classdef GMRESIteration < InnerIteration
                              fission_source    )
                          
             % First do base class setup.
-            setup_base( obj,              ...
+            setup_base( this,              ...
                         input,            ...
                         state,            ...
                         boundary,         ...
@@ -82,9 +82,9 @@ classdef GMRESIteration < InnerIteration
                     
             % Set user parameters or use defaults
             if contains(input, 'krylov_solver')
-                obj.d_krylov = get(input, 'krylov_solver');
+                this.d_krylov = get(input, 'krylov_solver');
             else
-                obj.d_krylov = 'gmres';
+                this.d_krylov = 'gmres';
             end
 
             
@@ -98,44 +98,52 @@ classdef GMRESIteration < InnerIteration
         %>
         %> @return Flux residual (L-inf norm) and iteration count.
         % ======================================================================
-        function [flux_error, iteration] = solve(obj, g)% phi, source)
+        function [flux_error, iteration] = solve(this, g)% phi, source)
 
             % Setup the boundary fluxes for this solve.
-            set(obj.d_boundary);          % Update the conditions.
-            set_group(obj.d_boundary, g); % Set the group
+            set(this.d_boundary);          % Update the conditions.
+            set_group(this.d_boundary, g); % Set the group
 
             % Setup the equations for this group.
-            setup_group(obj.d_equation, g);
+            setup_group(this.d_equation, g);
             
             % Build the fixed source.
-            build_fixed_source(obj, g);
+            build_fixed_source(this, g);
             
             % Compute the uncollided flux, i.e. phi_uc = D*inv(T)*Q_fixed.
             % This is the right hand side.
-            B = sweep(obj.d_sweeper, obj.d_fixed_source, g); 
+            B = sweep(this.d_sweeper, this.d_fixed_source, g); 
             
             % Unset the boundary.
-            reset(obj.d_boundary);       % Conditions now homogeneous
+            reset(this.d_boundary);       % Conditions now homogeneous
+            
+            print_out = get(this.d_input, 'inner_print_out');
             
             % Call the Krylov solver
-            if strcmp(obj.d_krylov, 'gmres')
+            if strcmp(this.d_krylov, 'gmres')
                 [phi, flag, flux_error, iter] = ...
-                    gmres(@(x)apply(x, obj), B, 30, obj.d_tolerance, ...
+                    gmres(@(x)apply(x, this), B, 30, this.d_tolerance, ...
                     40, [], [], B);
-                fprintf('           GMRES Outers: %5i,  Inners: %5i\n', ...
-                    iter(1), iter(2));
+                if print_out
+                    fprintf('           GMRES Outers: %5i,  Inners: %5i\n', ...
+                        iter(1), iter(2));
+                end
                 iteration = iter(1) * iter(2);
-            elseif strcmp(obj.d_krylov, 'bicgstab')
+            elseif strcmp(this.d_krylov, 'bicgstab')
                 [phi, flag, flux_error, iter] = ...
-                    bicgstab(@(x)apply(x, obj), B, obj.d_tolerance, ...
+                    bicgstab(@(x)apply(x, this), B, this.d_tolerance, ...
                     40, [], [], B);
-                fprintf('         BiCGStab Iters: %5i \n', iter);
+                if print_out
+                    fprintf('         BiCGStab Iters: %5i \n', iter);
+                end
                 iteration = iter;
-            elseif strcmp(obj.d_krylov, 'bicgstabl')
+            elseif strcmp(this.d_krylov, 'bicgstabl')
                 [phi, flag, flux_error, iter] = ...
-                    bicgstabl(@(x)apply(x, obj), B, obj.d_tolerance, ...
+                    bicgstabl(@(x)apply(x, this), B, this.d_tolerance, ...
                     40, [], [], B);
-                fprintf('      BiCGStab(l) Iters: %5i \n', iter);
+                if print_out
+                    fprintf('      BiCGStab(l) Iters: %5i \n', iter);
+                end
                 iteration = iter;
             else
                 error('Invalid Krylov solver selected for inners.')
@@ -158,10 +166,10 @@ classdef GMRESIteration < InnerIteration
             end
 
             % Did we converge?
-            check_convergence(obj, iteration, flux_error);
+            check_convergence(this, iteration, flux_error);
             
             % Update the state.
-            set_phi(obj.d_state, phi, g);
+            set_phi(this.d_state, phi, g);
 
             % Update the boundary fluxes.
 
@@ -170,20 +178,22 @@ classdef GMRESIteration < InnerIteration
     end
 end
 
-function y = apply(x, obj)
+function y = apply(x, this)
 
     % Build the within-group source.  This is equivalent to
     %   x <-- M*S*x
-    build_scatter_source(obj, obj.d_g, x); 
+    build_scatter_source(this, this.d_g, x); 
         
-    sweep_source = obj.d_scatter_source;
+    sweep_source = this.d_scatter_source;
     
-    % Set incident boundary fluxes.
-    set(obj.d_boundary);
+    % Set incident boundary fluxes.  Note, the set command loops through all
+    % groups, and hence we must explicitly set the group after.
+    set(this.d_boundary);
+    set_group(this.d_boundary, this.d_g); 
     
     % Sweep over all angles and meshes.  This is equivalent to
     %   y <-- D*inv(L)*M*S*x
-    y = sweep(obj.d_sweeper, sweep_source, obj.d_g);
+    y = sweep(this.d_sweeper, sweep_source, this.d_g);
     
     
     % Now, return the following

@@ -61,6 +61,8 @@ classdef KrylovMG < InnerIteration
     properties
         %> Scaling factor for fixed source multiplication problems.
         d_keff = 1.0;
+        %> Is this a straight fixed source problem *or* within eigensolve?
+        d_fixed = 1;
     end
     
     methods
@@ -80,13 +82,14 @@ classdef KrylovMG < InnerIteration
         %> @return Instance of the KrylovMG class.
         % ======================================================================
         function this = KrylovMG(input,            ...
-                                state,            ...
-                                boundary,         ...
-                                mesh,             ...
-                                mat,              ...
-                                quadrature,       ...
-                                external_source,  ...
-                                fission_source )
+                                 state,            ...
+                                 boundary,         ...
+                                 mesh,             ...
+                                 mat,              ...
+                                 quadrature,       ...
+                                 external_source,  ...
+                                 fission_source,   ...
+                                 fixed)
 
             % First do base class setup.  This builds the scattering
             % matrices, etc.
@@ -99,12 +102,20 @@ classdef KrylovMG < InnerIteration
                         quadrature,       ...
                         external_source,  ...
                         fission_source);
+                    
+            % Is this a fixed source problem or within an eigensolve?
+            if exist('fixed', 'var')
+                this.d_fixed = fixed;
+            end
             
+            % Reflection not incorporated for Krylov yet...
             if (strcmp(get(input, 'bc_left'),   'reflect')) || ...
                (strcmp(get(input, 'bc_right'),  'reflect')) || ...
+               (strcmp(get(input, 'bc_bottom'), 'reflect')) || ...
                (strcmp(get(input, 'bc_top'),    'reflect')) || ...
-               (strcmp(get(input, 'bc_bottom'), 'reflect')) 
-               warning('user:input','Krylov not ready for his reflection!')
+               (strcmp(get(input, 'bc_south'),  'reflect')) || ...
+               (strcmp(get(input, 'bc_north'),  'reflect')) 
+               error('user:input','Krylov not ready for reflection!')
             end
            
                 
@@ -169,7 +180,7 @@ classdef KrylovMG < InnerIteration
             
             % Final sweep to update boundaries... a HACK!
             for g = 1:ng
-                set_group(this.d_boundary, g); % Set the group
+                %set_group(this.d_boundary, g); % Set the group
                 set(this.d_boundary);
                 set_group(this.d_boundary, g); % Set the group
                 setup_group(this.d_equation, g);
@@ -270,8 +281,10 @@ function y = apply(x, this)
     % where T = D*inv(L), D is the discrete to moments operator, and inv(L)
     % is the space-angle sweep.
     
-    % Update fission source with this Krylov vector.
-    if (initialized(this.d_fission_source))
+    % Update fission source with this Krylov vector if this is a fixed 
+    % source problem
+    if (this.d_fixed && initialized(this.d_fission_source))
+        error('lala')
         for g = 1:ng
             set_phi(this.d_state, phi(:, g), g);
         end
@@ -295,7 +308,10 @@ function y = apply(x, this)
         % Add scatter from all groups.  
         sweep_source = this.d_scatter_source;
 
-        if (initialized(this.d_fission_source))
+        % Only add fission if this is a multiplying fixed source problem.
+        % Otherwise, this is an eigenproblem for which the fission is an
+        % *external* source.
+        if (this.d_fixed && initialized(this.d_fission_source))
             
             % Get the group gp fission source.
             f = source(this.d_fission_source, g);
@@ -316,10 +332,7 @@ function y = apply(x, this)
 
     end
     
-
-    
+    % Restore to 1-d form
     y = reshape(y, n*ng, 1);
-   % hold on
-    %plot(y)
-   % fprintf(' %12.8f \n', y(1))
+  
 end

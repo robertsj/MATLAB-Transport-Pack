@@ -44,12 +44,15 @@ classdef TestDriver < handle
             this.d_number_tests = this.d_number_tests + nt;
             this.d_number_fails = this.d_number_fails + nf;
         end
+
+    end
+    
+    methods (Static)
         
         %> @brief  Are two floats close enough?
         function bool = almost_equal(x, y)
             bool = abs(x-y) <= TestDriver.tolerance;
         end
-
+        
     end
-
 end
