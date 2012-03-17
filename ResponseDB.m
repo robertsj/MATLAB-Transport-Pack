@@ -31,7 +31,7 @@
 % ==============================================================================
 classdef ResponseDB < ResponseServerBase
 
-    properties (Access = private)
+    properties (Access = protected)
         
         %> DB file name and id
         d_file
@@ -286,6 +286,10 @@ classdef ResponseDB < ResponseServerBase
             this.d_L = L;
 
         end        
+        
+        function set_interp_method(this, method)
+            this.d_interp_method = method; 
+        end
         
     end
     

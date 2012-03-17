@@ -44,6 +44,15 @@ classdef TestDriver < handle
             this.d_number_tests = this.d_number_tests + nt;
             this.d_number_fails = this.d_number_fails + nf;
         end
+        
+        function results(this)
+            disp('*****************************************')
+            disp(['*** TOTAL NUMBER PASSED: ', ...
+                  num2str(this.d_number_tests-this.d_number_fails)])
+            disp(['*** TOTAL NUMBER FAILED: ', ...
+                  num2str(this.d_number_fails )])
+            disp('*****************************************')            
+        end
 
     end
     

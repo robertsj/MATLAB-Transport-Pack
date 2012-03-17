@@ -16,7 +16,7 @@
 % ==============================================================================
 classdef ResponseServerBase < handle
 
-    properties (Access = protected)
+    properties (Access = public)
         %> User input database.
         d_input
         %> Time spent in the server.
@@ -65,6 +65,7 @@ classdef ResponseServerBase < handle
             this.d_order_space      = get(this.d_input, 'rf_order_space');
             this.d_order_azimuth    = get(this.d_input, 'rf_order_azimuth');
             this.d_order_polar      = get(this.d_input, 'rf_order_polar');    
+            this.d_number_nodes     = get(this.d_input, 'rf_number_nodes');
             
             % By default, the maximum order *is* the working order.  In cases
             % where operators are already computed to high order, the client
@@ -89,12 +90,51 @@ classdef ResponseServerBase < handle
         [R, F, A, L] = get_responses(this, keff)   
 
         
+        %> @name Getters
+        %> @{
+
+        function n = number_nodes(this)
+            n = this.d_number_nodes;
+        end    
+
+        function t = time(this)
+            t = this.d_time;
+        end
+        
+        %> @}
+        
+        %> @name Setters
+        %> @{
+        
+        function set_orders(this, orders)
+           
+            if isfield(orders, 'mso')
+                this.d_max_order_space = orders.mso;
+            end
+            if isfield(orders, 'so')
+                this.d_order_space = orders.so;
+            end
+            if isfield(orders, 'mao')
+                this.d_max_order_azimuth = orders.mao;
+            end
+            if isfield(orders, 'ao')
+                this.d_order_azimuth = orders.ao;
+            end
+            if isfield(orders, 'mpo')
+                this.d_max_order_polar = orders.mpo;
+            end
+            if isfield(orders, 'po')
+                this.d_order_polar = orders.po;
+            end            
+            
+        end
+        
+        %> @}        
+        
     end
     
     methods (Access = protected)
-        
-        
-        
+                
         % ======================================================================
         %> @brief  Extract low order operators from higher order operators.
         %

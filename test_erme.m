@@ -36,7 +36,8 @@ put(inputrf, 'rf_order_azimuth',     ao);
 put(inputrf, 'rf_order_polar',        0);
 put(inputrf, 'rf_number_nodes', 4);
 put(inputrf, 'owner',           'rf');
-
+put(inputrf, 'rf_keff_vector',  [0.9; 1.0]);
+put(inputrf, 'rf_db_name', 'blah.h5');
 mat = test_materials(2);
 %Pins
 [pin1, pin2, pin3, pin4] = test_pins();
@@ -51,9 +52,14 @@ assem3   = Assembly(pins, pin_map3); meshify(assem3);
 pin_map4 = [4 4 4 ; 4 4 4 ; 4 4 4]; % Homogeneous Gd type I fuel
 assem4   = Assembly(pins, pin_map4); meshify(assem4);
 assemblies = {assem1,assem2,assem3,assem4};
-server = ResponseServer(inputrf,mat,assemblies);
+%server = ResponseServer(inputrf,mat,assemblies);
 % %[R, F, A, L] = get_responses(server, 0.04496724385);
 
+driver = ResponseDriver(inputrf,mat,assemblies);
+driver.run();
+
+
+return
 
 % ==============================================================================
 % ERME setup

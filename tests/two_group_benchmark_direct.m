@@ -9,6 +9,7 @@ clear all
 % Common input
 input = Input();
 put(input, 'number_groups',         2);
+put(input, 'dimension',             2);
 put(input, 'eigen_tolerance',       1e-9);
 put(input, 'eigen_max_iters',       2000);
 put(input, 'inner_tolerance',       1e-9);
@@ -16,7 +17,7 @@ put(input, 'inner_max_iters',       100);
 put(input, 'outer_tolerance',       1e-9);
 put(input, 'outer_max_iters',       10);
 put(input, 'inner_solver',          'SI');
-put(input, 'print_out',             0);
+put(input, 'eigen_print_out',           1);
 % Quadrature (2nd order Quadruple Range = 2 angles/quadrant)
 quadrature  = QuadrupleRange(2);
 % Materials

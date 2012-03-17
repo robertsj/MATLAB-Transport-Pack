@@ -169,9 +169,9 @@ classdef ResponseServer < ResponseServerBase
             t = toc;
             
             % Return stored responses if keff was used one or two times ago.
-            if keff ~= this.d_keff_last
-                update(this, keff);
-            end
+%             if keff ~= this.d_keff_last
+                 update(this, keff);
+%             end
             
             R = this.d_R;
             F = this.d_F;
