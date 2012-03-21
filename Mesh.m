@@ -165,7 +165,7 @@ classdef Mesh < handle
                   (j - 1)*obj.d_number_cells_x + ...
                   (k - 1)*obj.d_number_cells_x*obj.d_number_cells_y;   
             % Postcondition.
-            DBC.Ensure('idx > 0 && idx <= number_cells(obj)')
+            %DBC.Ensure('idx > 0 && idx <= number_cells(obj)')
         end
         
         % ======================================================================

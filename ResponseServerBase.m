@@ -170,10 +170,10 @@ classdef ResponseServerBase < handle
                     end
                 end
             end
-            R2(1:n,1:n,:,:) = R(idx, idx, :, :);
-            L2(1:n,:,:,:)   = L(idx, :, :, :);
-            F2(1:n,:,:)     = F(idx, :, :);
-            A2(1:n,:,:)     = A(idx, :, :);
+            R2(1:n,1:n,:) = R(idx, idx, :);
+            L2(1:n,:,:)   = L(idx, :, :);
+            F2(1:n,:)     = F(idx, :);
+            A2(1:n,:)     = A(idx, :);
         end
         
     end

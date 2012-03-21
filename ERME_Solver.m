@@ -28,8 +28,6 @@ classdef ERME_Solver < handle
         function this = ERME_Solver(input, problem)
             this.d_input   = input;
             this.d_problem = problem;
-            
-           
         end
         
         % ======================================================================
@@ -37,6 +35,30 @@ classdef ERME_Solver < handle
         % ======================================================================        
         this = solve(this);
         
+        % ======================================================================
+        %> @brief  Initialize unknowns
+        % ====================================================================== 
+        function [J, k, lambda] = init(this)
+            J = zeros(size_J(this.d_problem), 1);
+            ng = get(this.d_input, 'number_groups');
+            % Degrees of freedom within a group on a surface
+            dof_surface = size_J(this.d_problem)             / ...
+                          number_elements(this.d_problem)    / ...
+                          ng / ...
+                          number_faces(this.d_problem); 
+            % This assumes that the group is the outer variable
+            for g = 1:ng;
+                J(g:(dof_surface)*ng:end, 1) = 1.0;
+            end 
+            J = J / norm(J);
+            % Initialize k-eigenvalue and lambda-eigenvalue
+            k =  get(this.d_input, 'erme_initial_keff'); 
+            if ~k
+                k = 1.0;
+            end
+            lambda = 1.0;
+        end
+
         % ======================================================================
         %> @brief  Initialize current (normalized uniform zeroth order)
         % ====================================================================== 
@@ -84,6 +106,10 @@ classdef ERME_Solver < handle
             f_k = F*J - k*(A*J + leak*(L*J));
             f_lambda = 0.5 - 0.5*(J'*J);
             f = [f_J; f_k; f_lambda];
+        end
+
+        function p = problem(this)
+            p = this.d_problem; 
         end
         
     end

@@ -50,6 +50,7 @@ classdef ERME_Picard < ERME_Solver
             inner_max_iters = get(this.d_input, 'inner_max_iters');
             outer_tolerance = get(this.d_input, 'outer_tolerance');
             outer_max_iters = get(this.d_input, 'outer_max_iters'); 
+            steffensen      = get(this.d_input, 'erme_steffensen'); 
             
             % Initialize current.
             J = init_J(this);
@@ -59,6 +60,8 @@ classdef ERME_Picard < ERME_Solver
             if ~k
                 k = 1.0;
             end
+            k_1 = 0; % keff one iteration ago
+            k_2 = 0; % keff two iterations ago
             lambda = 1.0;
             
             % Get response matrices for initial k
@@ -78,10 +81,10 @@ classdef ERME_Picard < ERME_Solver
             % ==================================================================
             
             iteration = 0;
-            
+
             while iteration < outer_max_iters && norm_residual > outer_tolerance
                 
-                fprintf(1,'it = %d, keff = %12.10f, lambda = %12.10f, norm = %12.10e\n', ...
+                fprintf(1, 'it = %d, keff = %12.10f, lambda = %12.10f, norm = %12.10e\n', ...
                     iteration, k, lambda, norm_residual);
                 
                 iteration = iteration + 1;
@@ -99,14 +102,18 @@ classdef ERME_Picard < ERME_Solver
                 % ==============================================================
                 % Eigenvalue update
                 % ==============================================================
-                %k_old       = k;                              % store keff
-                %J_old       = J;                              % store currents
-                %lambda_old  = lambda;                         % store current eigenvalue
+                k_2         = k_1;                            % Keep the last
+                k_1         = k;                              %   two keffs
                 gain        = F*J;                            % compute gains
                 absorb      = A*J;                            % absorption
                 leak        = leak*(L*J);                     % leakage
                 loss        = leak + absorb;                  % total loss
                 k           = gain / loss;                    
+
+                % Steffensen update if required
+                if steffensen && iteration > 2
+                  k = k_2 - (k_1 - k_2)^2 / (k - 2.0 * k_1 + k_2);
+                end
 
                 % Get response matrices for initial k
                 update(this.d_problem, k);

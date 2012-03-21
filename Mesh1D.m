@@ -136,12 +136,12 @@ classdef Mesh1D < Mesh
             end
         end
         
-        function k = index(obj, i, j)
-        % function y = index(i, j)
-        %   Returns the cardinal index for i and j
-            k = i + (j - 1)*obj.d_number_cells_x;
-        %    DBC.Ensure('k > 0 && k <= number_cells(obj)')
-        end
+%         function k = index(obj, i, j, k)
+%         % function y = index(i, j)
+%         %   Returns the cardinal index for i and j
+%             k = i + (j - 1)*obj.d_number_cells_x;
+%         %    DBC.Ensure('k > 0 && k <= number_cells(obj)')
+%         end
         
         function m = mesh_map(obj, map_key)
             m = obj.d_mesh_map(map_key);

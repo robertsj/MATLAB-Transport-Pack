@@ -28,7 +28,7 @@ classdef ResponseServer < ResponseServerBase
         
         
         d_keff_current = -1;
-        d_keff_last = -1;
+        d_keff_last    = -1;
 
         %> Working array for fission rates
         d_fiss
@@ -56,8 +56,19 @@ classdef ResponseServer < ResponseServerBase
         %> Number of polar angles   
         d_number_polar
         %> Number of azimuthal angles
-        d_number_azimuth        
+        d_number_azimuth       
 
+        %> Response matrix from last update
+        d_R_last
+        %> Fission operator from last update
+        d_F_last
+        %> Absorption operator from last update
+        d_A_last
+        %> Leakage operator from last update
+        d_L_last 
+
+        %> Number of updates
+        d_number_updates = 0;
     end
     
     methods
@@ -159,7 +170,7 @@ classdef ResponseServer < ResponseServerBase
         
 
         % ======================================================================
-        %> @brief Compure and return responses for new keff.
+        %> @brief Compute and return all responses for new keff.
         %> @param   keff            Value of keff to interpolate responses.
         %> @return                  Responses    
         % ======================================================================    
@@ -169,28 +180,70 @@ classdef ResponseServer < ResponseServerBase
             t = toc;
             
             % Return stored responses if keff was used one or two times ago.
-%             if keff ~= this.d_keff_last
-                 update(this, keff);
-%             end
-            
+            if keff == this.d_keff_last
+                R = this.d_R_last;
+                F = this.d_F_last;
+                A = this.d_A_last;
+                L = this.d_L_last; 
+            elseif keff == this.d_keff_current
+
+            else
+                this.d_R_last = this.d_R;
+                this.d_F_last = this.d_F;
+                this.d_A_last = this.d_A;
+                this.d_L_last = this.d_L; 
+                update(this, keff);
+                % Keep this keff.
+                this.d_keff_last    = this.d_keff_current;
+                this.d_keff_current = keff;
+                this.d_number_updates = this.d_number_updates + 1;
+            end
             R = this.d_R;
             F = this.d_F;
             A = this.d_A;
-            L = this.d_L;
-            
-            % Keep this keff.
-            this.d_keff_last = keff;
-            
+            L = this.d_L;  
+
             % Add to timer
             this.d_time = this.d_time + (toc - t);
             
         end
         
-        
-        function this = update(this, keff)
+        % ======================================================================
+        %> @brief Compute and return all responses for new keff.
+        %
+        %> Note, this is primarily for use with the DB driver, and so
+        %> checks against old keffs are omitted.
+        %>
+        %> @param   node_index	Index of node for which response is needed.
+        %> @param   keff    	Value of keff to interpolate responses.
+        %> @return            	Responses    
+        % ======================================================================    
+        function [R, F, A, L] = get_node_responses(this, node_index, keff)   
             
-            % Initial time
+            % Log initial time
             t = toc;
+
+            [R, F, A, L] = update_node(this, node_index, keff);
+
+            % Add to timer
+            this.d_time = this.d_time + (toc - t);
+            
+        end
+        
+        function n = number_updates(this)
+            n = this.d_number_updates;
+        end
+        
+    end
+    
+    methods (Access = private)
+        
+        % ======================================================================
+        %> @brief Compute and return all responses for new keff.
+        %> @param   keff            Value of keff to interpolate responses.
+        %> @return                  Responses    
+        % ======================================================================  
+        function this = update(this, keff)
             
             % Number of (non energy) expansion orders
             number_orders_space_angle = (this.d_order_space + 1) * ...
@@ -297,8 +350,119 @@ classdef ResponseServer < ResponseServerBase
                 this.d_A(:,    i) = [this.d_abso; this.d_abso; this.d_abso; this.d_abso;];
                 
             end % node loop
-            t_final = toc-t;
-            fprintf(' ResponseDriver total time (seconds): %12.8f\n', t_final);
+
+        end
+        
+        
+        % ======================================================================
+        %> @brief Compure and return all responses for new keff.
+        %> @param   keff            Value of keff to interpolate responses.
+        %> @return                  Responses    
+        % ====================================================================== 
+        function [R, F, A, L] = update_node(this, node_index, keff)
+            
+            t = toc;
+            
+            % Number of (non energy) expansion orders
+            number_orders_space_angle = (this.d_order_space + 1) * ...
+                (this.d_order_azimuth + 1) * ...
+                (this.d_order_polar + 1);
+            
+            % Degrees of freedom per surface
+            number_orders_total = this.d_number_groups * ...
+                (this.d_order_space + 1) * ...
+                (this.d_order_azimuth + 1) * ...
+                (this.d_order_polar + 1);
+            
+            % Degrees of freedom per node, i.e. the size of its R-block.
+            block_size = 4 * number_orders_total;
+            
+            % assumes 2-d, i.e. 4 faces
+            R = zeros(block_size, block_size);
+            F = zeros(block_size, 1);
+            A = zeros(block_size, 1);
+            L = zeros(block_size, 4);  
+            
+            set_keff(this.d_solver{node_index},  keff);
+            
+            % Temporary storage of response
+            this.d_coef    = cell(4, 1);
+            this.d_coef{1} = zeros(number_orders_space_angle);
+            this.d_coef{2} = zeros(number_orders_space_angle);
+            this.d_coef{3} = zeros(number_orders_space_angle);
+            this.d_coef{4} = zeros(number_orders_space_angle);
+            
+            this.d_fiss = zeros(number_orders_total, 1);
+            this.d_abso = zeros(number_orders_total, 1);
+            this.d_leak = zeros(number_orders_total, 4);
+            
+            number_responses = number_orders_total;
+            count = 0;
+            rf_index = 0;
+            for g_o = 1:this.d_number_groups
+                for s_o = 0:this.d_order_space
+                    for a_o = 0:this.d_order_azimuth
+                        for p_o = 0:this.d_order_polar
+                            
+                            rf_index = rf_index + 1;
+                            
+                            % Setup and solve.  Reset fission after.
+                            set_orders(this.d_bc, g_o, s_o, a_o, p_o);
+                            reset(this.d_fission_source{node_index});
+                            out = solve(this.d_solver{node_index});
+                            
+                            % Expand the coefficients
+                            expand(this, rf_index, node_index);
+                            count = count + 1;
+                            
+                            time_remaining = (toc-t)/count * ...
+                                (number_responses-count);
+                            
+                            if (get(this.d_input, 'rf_print_out'))
+                                fprintf(' ResponseServer.update_node: i=%2i g_o=%2i s_o=%2i a_o=%2i p_o=%2i trem=%12.8f\n', ...
+                                    node_index, g_o, s_o, a_o, p_o, time_remaining );
+                            end
+                            
+                        end % azimuth loop
+                    end % polar loop
+                end % space loop
+            end % group loop
+            
+            % Build the full response matrix.  In the future, this can be
+            % generalized to have incident conditions on all surfaces.
+            mo = number_orders_total;
+            R( (0*mo)+1: 1*mo, (0*mo)+1: 1*mo) = this.d_coef{1}(:, :); % left -> left
+            R( (1*mo)+1: 2*mo, (0*mo)+1: 1*mo) = this.d_coef{2}(:, :); % left -> right
+            R( (2*mo)+1: 3*mo, (0*mo)+1: 1*mo) = this.d_coef{3}(:, :); % left -> top
+            R( (3*mo)+1: 4*mo, (0*mo)+1: 1*mo) = this.d_coef{4}(:, :); % left -> bottom
+            
+            R( (0*mo)+1: 1*mo, (1*mo)+1: 2*mo) = this.d_coef{2}(:, :); % right -> lef
+            R( (1*mo)+1: 2*mo, (1*mo)+1: 2*mo) = this.d_coef{1}(:, :); % right -> right
+            R( (2*mo)+1: 3*mo, (1*mo)+1: 2*mo) = this.d_coef{4}(:, :); % right -> top
+            R( (3*mo)+1: 4*mo, (1*mo)+1: 2*mo) = this.d_coef{3}(:, :); % right -> bottom
+            
+            R( (0*mo)+1: 1*mo, (2*mo)+1: 3*mo) = this.d_coef{4}(:, :); % bottom -> left
+            R( (1*mo)+1: 2*mo, (2*mo)+1: 3*mo) = this.d_coef{3}(:, :); % bottom -> right
+            R( (2*mo)+1: 3*mo, (2*mo)+1: 3*mo) = this.d_coef{1}(:, :); % bottom -> bottom
+            R( (3*mo)+1: 4*mo, (2*mo)+1: 3*mo) = this.d_coef{2}(:, :); % bottom -> top
+            
+            R( (0*mo)+1: 1*mo, (3*mo)+1: 4*mo) = this.d_coef{3}(:, :); % top -> left
+            R( (1*mo)+1: 2*mo, (3*mo)+1: 4*mo) = this.d_coef{4}(:, :); % top -> right
+            R( (2*mo)+1: 3*mo, (3*mo)+1: 4*mo) = this.d_coef{2}(:, :); % top -> bottom
+            R( (3*mo)+1: 4*mo, (3*mo)+1: 4*mo) = this.d_coef{1}(:, :); % top -> top
+            
+            L1 = this.d_leak(:, 1)'; % into 1 ->  leak from 1
+            L2 = this.d_leak(:, 2)'; % into 1 ->  leak from 2
+            L3 = this.d_leak(:, 3)'; % etc. Repeat for assumed sym.
+            L4 = this.d_leak(:, 4)';
+            
+            L(:, 1) = [L1 L2 L4 L3]'; %   |J1|   leak from side 1
+            L(:, 2) = [L2 L1 L3 L4]'; % * |J2| = leak from side 2
+            L(:, 3) = [L3 L4 L1 L2]'; %   |J3|   etc.
+            L(:, 4) = [L4 L3 L2 L1]'; %   |J4|
+            
+            F(:) = [this.d_fiss; this.d_fiss; this.d_fiss; this.d_fiss];
+            A(:) = [this.d_abso; this.d_abso; this.d_abso; this.d_abso;];
         end
         
         function this = expand(this, index_in, node_idx)
@@ -410,10 +574,8 @@ classdef ResponseServer < ResponseServerBase
             
         end
         
-    end
-    
-    methods (Access = private)
-        
+        %> @todo Potentially add one and two group parameters for CMFD
+        %>       acceleration
         function this = build_vectors(this, mesh) 
             
             idx = length(this.d_fission)+1;
@@ -449,6 +611,7 @@ classdef ResponseServer < ResponseServerBase
             this.d_volume{idx} = volume;
 
         end
+        
         
         
     end

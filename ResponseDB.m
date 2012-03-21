@@ -37,14 +37,20 @@ classdef ResponseDB < ResponseServerBase
         d_file
         d_file_id
         
-        %> Length and values of keffs
-        d_number_keffs
+        %> Cell array of vectors of node keffs.
         d_keff_vector
+        
+        %> Array of the number of keffs for each node.
+        d_number_keffs
+        
+        %> Cell array of string descriptions fo reach node.
+        d_node_descriptions
         
         %> Interpolation method
         d_interp_method
         
-        %> Responses for all elements and all keffs
+        %> Responses for all elements and all keffs.  These are cell arrays
+        %> of each set of responses per node.
         d_R_all
         d_F_all
         d_A_all
@@ -87,9 +93,18 @@ classdef ResponseDB < ResponseServerBase
             this.d_file_id = h5filecreate(this.d_file, 'truncate', true);
             H5F.close(this.d_file_id);
             
-            this.d_keff_vector = get(this.d_input, 'rf_keff_vector');
+            keffs  = get(this.d_input, 'rf_keff_vector');
+            this.d_number_nodes = get(this.d_input, 'rf_number_nodes');
+            DBC.Require('length(keffs)==this.d_number_nodes');
+            this.d_keff_vector = keffs;
             
-            create(this, '/keffs', [length(this.d_keff_vector) 1]);
+            db_description = get(this.d_input, 'rf_db_description');
+            if ~db_description
+                db_description = 'just another database.';
+            end
+            
+            h5writeatt(this.d_file, '/', 'db_description',          ...
+                get(this.d_input, 'rf_db_description'));
             h5writeatt(this.d_file, '/', 'dimension',          ...
                 get(this.d_input, 'dimension'));
             h5writeatt(this.d_file, '/', 'solver',             ...
@@ -105,8 +120,8 @@ classdef ResponseDB < ResponseServerBase
             h5writeatt(this.d_file, '/', 'number_keffs',       ...
                 length(this.d_keff_vector));
             h5writeatt(this.d_file, '/', 'number_nodes',       ...
-                get(this.d_input, 'rf_number_nodes'));
-            h5write(this.d_file, '/keffs', this.d_keff_vector);
+                this.d_number_nodes);
+           
 
         end
         
@@ -117,16 +132,23 @@ classdef ResponseDB < ResponseServerBase
         % ======================================================================        
         function this = write_response(this, node_index, node_description, ...
                 R, F, A, L)
-          	if length(this.d_keff_vector) == 1
-                warning('user:input','Did you mean to produce a db with one k?')
-            end
+
             % convert node index to string
             nidx = ['/n',num2str(node_index)];
             size_R = size(R(:, :, 1));
             size_F = size(F(:, 1));
             size_A = size(A(:, 1));
             size_L = size(L(:, :, 1));
-            for k_index = 1:length(this.d_keff_vector)
+            
+            % Get this node's number of keffs and write them.
+            keffs  = this.d_keff_vector{node_index};
+            size_k = length(this.d_keff_vector{node_index});
+            create(this, [nidx,'/keffs'], size_k);
+            h5write(this.d_file, [nidx,'/keffs'], keffs);
+            h5writeatt(this.d_file, nidx, 'number_keffs', size_k);
+            
+            % Write the responses for each keff.
+            for k_index = 1:size_k
                 location = [nidx,'/k',num2str(k_index)];
                 create(this, [location,'/R'], size_R);
                 create(this, [location,'/F'], size_F);
@@ -137,9 +159,12 @@ classdef ResponseDB < ResponseServerBase
                 h5write(this.d_file, [location,'/A'], A(:, k_index));
                 h5write(this.d_file, [location,'/L'], L(:, :, k_index));
             end
+            
+            % Other attributes.
             h5writeatt(this.d_file, nidx, 'description', node_description);
             h5writeatt(this.d_file, nidx, 'width_x', 1.0);
             h5writeatt(this.d_file, nidx, 'width_y', 1.0);
+
         end
         
         % ======================================================================
@@ -154,10 +179,7 @@ classdef ResponseDB < ResponseServerBase
             if this.d_number_nodes == 0
                 error('Read zero nodes!')
             end
-            this.d_number_keffs = h5readatt(f, '/', 'number_keffs');
-            if this.d_number_keffs == 0
-                error('Read zeros keffs!')
-            end
+
             this.d_dimension         = h5readatt(f, '/', 'dimension');
             this.d_number_groups     = h5readatt(f, '/', 'number_groups');
             this.d_max_order_space   = h5readatt(f, '/', 'max_order_space');
@@ -178,33 +200,40 @@ classdef ResponseDB < ResponseServerBase
                 error('user:input', 'Requested polar order > max');
                 %this.d_order_polar = this.d_max_order_polar;
             end            
-            
-            % Read vector of keffs
-            this.d_keff_vector = h5read(f, '/keffs');            
-            
+
             % Block size
             len_R = 4 * this.d_number_groups * (1+this.d_max_order_space) * ...
                 (1+this.d_max_order_azimuth) * (1+this.d_max_order_polar);
-            this.d_R_all = ...
-                zeros(len_R, len_R, this.d_number_keffs, this.d_number_nodes);
-            this.d_F_all = ...
-                zeros(len_R, this.d_number_keffs, this.d_number_nodes);
-            this.d_A_all = ...
-                zeros(len_R, this.d_number_keffs, this.d_number_nodes);
-            this.d_L_all = ...
-                zeros(len_R, 2*this.d_dimension, this.d_number_keffs, ...
-                      this.d_number_nodes);            
             
-            % convert node index to string
+            this.d_R_all = cell(this.d_number_nodes, 1);
+            this.d_F_all = cell(this.d_number_nodes, 1);
+            this.d_A_all = cell(this.d_number_nodes, 1);
+            this.d_L_all = cell(this.d_number_nodes, 1);
+            this.d_keff_vector = cell(this.d_number_nodes, 1);
+            this.d_number_keffs = zeros(this.d_number_nodes, 1);
             for ni = 1:this.d_number_nodes
+                
                 nidx = ['/n',num2str(ni)];
-                for ki = 1:this.d_number_keffs
+                
+                % Read node description.
+                this.d_node_descriptions{ni} = h5readatt(f, nidx, 'description');
+                
+                % Read keffs.
+                this.d_number_keffs(ni) = h5readatt(f, nidx, 'number_keffs');
+                this.d_keff_vector{ni} = h5read(f, [nidx, '/keffs']);
+                
+                this.d_R_all{ni} = zeros(len_R, len_R, this.d_number_keffs(ni));
+                this.d_F_all{ni} = zeros(len_R,        this.d_number_keffs(ni));
+                this.d_A_all{ni} = zeros(len_R,        this.d_number_keffs(ni));
+                this.d_L_all{ni} = zeros(len_R,     4, this.d_number_keffs(ni));
+                
+                for ki = 1:this.d_number_keffs(ni)
                     kidx = ['/k',num2str(ki)];
                     loc = [nidx, kidx];
-                    this.d_R_all(:, :, ki, ni) = h5read(f, [loc, '/R']);
-                    this.d_F_all(:,    ki, ni) = h5read(f, [loc, '/F']);
-                    this.d_A_all(:,    ki, ni) = h5read(f, [loc, '/A']);
-                    this.d_L_all(:, :, ki, ni) = h5read(f, [loc, '/L']);
+                    this.d_R_all{ni}(:, :, ki) = h5read(f, [loc, '/R']);
+                    this.d_F_all{ni}(:,    ki) = h5read(f, [loc, '/F']);
+                    this.d_A_all{ni}(:,    ki) = h5read(f, [loc, '/A']);
+                    this.d_L_all{ni}(:, :, ki) = h5read(f, [loc, '/L']);
                 end
             end
 
@@ -233,8 +262,11 @@ classdef ResponseDB < ResponseServerBase
                     (1+this.d_max_order_space) * ...
                     (1+this.d_max_order_azimuth) * ...
                     (1+this.d_max_order_polar);
-            nk = this.d_number_keffs;    
-            
+              
+            R_all = cell(this.d_number_nodes, 1);
+            F_all = cell(this.d_number_nodes, 1);
+            A_all = cell(this.d_number_nodes, 1);
+            L_all = cell(this.d_number_nodes, 1);
             % I'm being a bit lazy: if we need low orders, just reduce the full
             % set and interpolate that.  A better way might be to store only the
             % low order k-dependent values, but this depends on purpose.
@@ -242,9 +274,11 @@ classdef ResponseDB < ResponseServerBase
                 this.d_order_azimuth < this.d_max_order_azimuth || ...
                 this.d_order_polar   < this.d_max_order_polar   )    
                 
-                [R_all, F_all, A_all, L_all] = ...
-                    reduce(this, this.d_R_all, this.d_F_all, ...
-                           this.d_A_all, this.d_L_all);
+                for ni = 1:this.d_number_nodes
+                    [R_all{ni}, F_all{ni}, A_all{ni}, L_all{ni}] = ...
+                        reduce(this, this.d_R_all{ni}, this.d_F_all{ni}, ...
+                               this.d_A_all{ni}, this.d_L_all{ni});
+                end
                 
             else
                 R_all = this.d_R_all; 
@@ -253,28 +287,30 @@ classdef ResponseDB < ResponseServerBase
                 L_all = this.d_L_all;
     
             end
-            len_R = length(R_all(:, 1));
+            len_R = length(R_all{1}(:, 1));
             % Interpolated values
             R = zeros(len_R, len_R, this.d_number_nodes);
             F = zeros(len_R,        this.d_number_nodes);
             A = zeros(len_R,        this.d_number_nodes);
             L = zeros(len_R, 2*dim, this.d_number_nodes);
             
-            keffv = this.d_keff_vector;
             int = this.d_interp_method;
-            for ni = 1:this.d_number_nodes;
+            
+            for ni = 1:this.d_number_nodes
+                keffv = this.d_keff_vector{ni};
+                nk    = length(keffv);
                 %
-                tmpR = reshape(R_all(:, :, :, ni), len_R^2, nk);
+                tmpR = reshape(R_all{ni}(:, :, :), len_R^2, nk);
                 R(:, :, ni) = reshape( ...
                     interp1(keffv, tmpR', keff, int, 'extrap'), len_R, len_R);
                 %
-                tmpF(:, :) = F_all(:, :, ni)';
+                tmpF(:, :) = F_all{ni}(:, :)';
                 F(:, ni) = interp1(keffv, tmpF, keff, int, 'extrap')';
                 %
-                tmpA(:, :) = A_all(:, :, ni)';
+                tmpA(:, :) = A_all{ni}(:, :)';
                 A(:, ni) = interp1(keffv, tmpA, keff, int, 'extrap')';     
                 %
-                tmpL = reshape(L_all(:, :, :, ni), len_R*2*dim, nk);
+                tmpL = reshape(L_all{ni}(:, :, :), len_R*2*dim, nk);
                 L(:, :, ni) = reshape( ...
                     interp1(keffv, tmpL', keff, int, 'extrap'), len_R, 2*dim);
             end
@@ -289,6 +325,61 @@ classdef ResponseDB < ResponseServerBase
         
         function set_interp_method(this, method)
             this.d_interp_method = method; 
+        end
+        
+        % ======================================================================
+        %> @brief Append a DB to another.
+        %>
+        %> This assumes that the main header information is the same.
+        %> Also, this is for joing HDF5's.  Also, only new assemblies can
+        %> be joined, i.e. db's with different orders aren't allowed.
+        %>
+        %> @param   new_db	ResponseDB object to add to this.
+        % ======================================================================            
+        function append(this, new_db)
+            % Read the new db if not read.
+            new_db.read_response();
+
+            new_number_nodes = new_db.number_nodes();
+            
+            % Append the keff vectors and node descriptions.
+            keffs = new_db.keff_vector();
+            descs = new_db.node_descriptions();            
+            for i = 1: new_number_nodes
+                this.d_keff_vector{this.d_number_nodes+i} = keffs{i};
+                this.d_node_descriptions{this.d_number_nodes+i} = descs{i};
+            end
+         
+            % Get the responseses.
+            [R, F, A, L] = new_db.get_all_responses();
+            
+            for i = 1:new_number_nodes
+                node_index = i + this.d_number_nodes;
+                write_response(this, ...
+                               node_index, ...
+                               this.d_node_descriptions{node_index}, ...
+                               R{i}(:,:,:), ...
+                               F{i}(:,:), ...
+                               A{i}(:,:), ...
+                               L{i}(:,:,:));
+                this.d_R_all{node_index} = R{i};
+                this.d_F_all{node_index} = F{i};
+                this.d_A_all{node_index} = A{i};
+                this.d_L_all{node_index} = L{i};
+            end
+            
+            % Update number of nodes
+            this.d_number_nodes = this.d_number_nodes + new_number_nodes;
+            h5writeatt(this.d_file, '/', 'number_nodes', this.d_number_nodes);
+            
+        end
+        
+        function k = keff_vector(this)
+            k = this.d_keff_vector;
+        end
+        
+        function n = node_descriptions(this)
+            n = this.d_node_descriptions;
         end
         
     end
