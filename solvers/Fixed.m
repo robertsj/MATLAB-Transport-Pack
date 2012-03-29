@@ -109,6 +109,8 @@ classdef Fixed < handle
             % solves the problem.
             for g = 1:number_groups(this.d_mat)
                 
+                set_group(this.d_boundary, g); % Set the group
+                
                 [flux_g_error(g), inners] = ...
                     solve(this.d_inner_solver, g);
                 
@@ -140,6 +142,8 @@ classdef Fixed < handle
                     % Iterate only on those groups for which upscattering
                     % occurs.
                     for g = upscatter_cutoff(this.d_mat):number_groups(this.d_mat)
+                        
+                        set_group(this.d_boundary, g); % Set the group
                         
                         [flux_g_error(g), inners] = ...
                             solve(this.d_inner_solver, g);%, this.d_source);

@@ -133,7 +133,7 @@ classdef Livolant < InnerIteration
         %
         %> @return  Instance of the SourceIteration class.
         % ======================================================================
-        function obj = Livolant()
+        function this = Livolant()
             % Nothing here for now.
         end
         
@@ -149,7 +149,7 @@ classdef Livolant < InnerIteration
         %> @param external_source 	User-defined external source.
         %> @param fission_source 	Fission source.
         % ======================================================================
-        function obj = setup(obj,              ...
+        function this = setup(this,              ...
                              input,            ...
                              state,            ...
                              boundary,         ...
@@ -160,7 +160,7 @@ classdef Livolant < InnerIteration
                              fission_source    )
                          
             % First do base class setup.
-            setup_base( obj,              ...
+            setup_base( this,              ...
                         input,            ...
                         state,            ...
                         boundary,         ...
@@ -171,13 +171,13 @@ classdef Livolant < InnerIteration
                         fission_source);
                                  
             % Size the working flux vector.                     
-            obj.d_phi = zeros(number_cells(mesh), 3);    
+            this.d_phi = zeros(number_cells(mesh), 3);    
             
             % Set user parameters or use defaults
             if contains(input, 'livolant_free_iters')
                 tmp = get(input, 'livolant_free_iters');
                 if tmp > 2
-                    obj.d_free_iters = tmp;
+                    this.d_free_iters = tmp;
                 else
                     warning('user:input',...
                         ['At least 3 free iters required to update mu.', ...
@@ -185,7 +185,7 @@ classdef Livolant < InnerIteration
                 end
             end
             if contains(input, 'livolant_accel_iters')
-                obj.d_accel_iters = get(input, 'livolant_accel_iters');
+                this.d_accel_iters = get(input, 'livolant_accel_iters');
             end
             
         end
@@ -197,7 +197,7 @@ classdef Livolant < InnerIteration
         %>
         %> @return Flux residual (L-inf norm) and iteration (sweep) count.
         % ======================================================================
-        function [flux_error, iteration] = solve(obj, g)% phi, source)
+        function [flux_error, iteration] = solve(this, g)% phi, source)
             
             % Flux error currently, one time ago, and two times ago.
             flux_error    = 1.0; 
@@ -206,39 +206,39 @@ classdef Livolant < InnerIteration
             iteration     = 0;
             
             % Get flux estimate for this group and put it in the current slot.
-            obj.d_phi(:, obj.d_2) = flux(obj.d_state, g);
+            this.d_phi(:, this.d_2) = flux(this.d_state, g);
             
             % Setup the boundary fluxes for this solve.
-            initialize(obj.d_boundary, g);
+            set_group(this.d_boundary, g); 
             
             % Setup the equations for this group.
-            setup_group(obj.d_equation, g);
+            setup_group(this.d_equation, g);
             
             % Build M*Q, the source that is "fixed" for this solve.
-            build_fixed_source(obj, g);
+            build_fixed_source(this, g);
                  
             % Set the boundary fluxes for this sweep.
-            %set(obj.d_boundary);
+            %set(this.d_boundary);
             
-            while flux_error > obj.d_tolerance ...
-                && iteration < obj.d_max_iters
+            while flux_error > this.d_tolerance ...
+                && iteration < this.d_max_iters
             
                 % Update boundary
-                set(obj.d_boundary);
+                update(this.d_boundary);
             
                 % Perform a sequence of source ("free") iterations.
-                [err, mu] = source_iterations(obj, g);
+                [err, mu] = source_iterations(this, g);
                 
                 %fprintf('       SI Error: %12.8f,  mu: %12.8f\n', err, mu);
-                iteration = iteration + obj.d_free_iters;
+                iteration = iteration + this.d_free_iters;
                 
                 % Perform a sequence of accelerated iterations, but only if the 
                 % relaxation parameter is positive (otherwise divergence lurks)
                 % and we aren't already converged.
-                if mu > 0 && err > obj.d_tolerance
-                    err = accelerated_iterations(obj, g, mu);
+                if mu > 0 && err > this.d_tolerance
+                    err = accelerated_iterations(this, g, mu);
                     %fprintf(' Livolant Error: %12.8f \n', err);
-                    iteration = iteration + obj.d_accel_iters;
+                    iteration = iteration + this.d_accel_iters;
                 else
                     warning('solver:convergence', ...
                         'Negative relaxation parameter; skipping Livolant')
@@ -248,16 +248,16 @@ classdef Livolant < InnerIteration
                 flux_error_1 = flux_error;
                 flux_error   = abs(err);  
                                 
-                print_iteration(obj, iteration, flux_error, ...
+                print_iteration(this, iteration, flux_error, ...
                     flux_error_1, flux_error_2)
 
             end
            
             % Did we converge?
-            check_convergence(obj, iteration, flux_error);
+            check_convergence(this, iteration, flux_error);
             
             % Update the state.
-            set_phi(obj.d_state, obj.d_phi(:, obj.d_2), g);
+            set_phi(this.d_state, this.d_phi(:, this.d_2), g);
 
             % Update the boundary fluxes.
 
@@ -274,48 +274,48 @@ classdef Livolant < InnerIteration
         %> @param   mu  Current value of relaxation parameter.
         %> @return      Norm of current flux residual. 
         % ======================================================================
-        function err = accelerated_iterations(obj, g, mu)
+        function err = accelerated_iterations(this, g, mu)
 
             iteration = 0;        
-            while iteration < obj.d_accel_iters
+            while iteration < this.d_accel_iters
                 
                 % First accelerated iterate.  This follows Hebert Eq. C.52.
                 % We have the free iterations phi_0, phi_1, and phi_2 stored,
                 % where 0 to 2 is old to new.  We overwrite the oldest flux,
                 %  phi_0 = mu*phi_1 + (1-mu)*phi_0.
-                obj.d_phi(:, obj.d_0) = mu*obj.d_phi(:, obj.d_1) + ...
-                    (1 - mu)*obj.d_phi(:, obj.d_0);
+                this.d_phi(:, this.d_0) = mu*this.d_phi(:, this.d_1) + ...
+                    (1 - mu)*this.d_phi(:, this.d_0);
                 
                 % Second accelerated iterate.  This follows Hebert Eq. C.53.  
                 % Again, we need only previous fluxes and mu.
-                obj.d_phi(:, obj.d_1) = mu*obj.d_phi(:, obj.d_2) + ...
-                    (1 - mu)*obj.d_phi(:, obj.d_1);
+                this.d_phi(:, this.d_1) = mu*this.d_phi(:, this.d_2) + ...
+                    (1 - mu)*this.d_phi(:, this.d_1);
                 
                 % Compute the first residual.
-                e0 = obj.d_phi(:, obj.d_1) - obj.d_phi(:, obj.d_0);
+                e0 = this.d_phi(:, this.d_1) - this.d_phi(:, this.d_0);
                 
                 % **Now** we need to do a sweep for the third flux.
                 
                 % Build the within-group source (using phi_1!)
-                build_scatter_source(obj, g, obj.d_phi(:, obj.d_1));
+                build_scatter_source(this, g, this.d_phi(:, this.d_1));
                 
                 % Construct total sweep source.
-                sweep_source = (obj.d_fixed_source + obj.d_scatter_source); 
+                sweep_source = (this.d_fixed_source + this.d_scatter_source); 
                 
                 % Set incident boundary fluxes.
-                %set(obj.d_boundary);
+                %set(this.d_boundary);
                 
                 % Sweep over all angles and meshes.            
-                obj.d_phi(:, obj.d_2) = sweep(obj.d_sweeper, sweep_source, g);      
+                this.d_phi(:, this.d_2) = sweep(this.d_sweeper, sweep_source, g);      
                 
                 % Compute the second residual
-                e1 = obj.d_phi(:, obj.d_2) - obj.d_phi(:, obj.d_1);
+                e1 = this.d_phi(:, this.d_2) - this.d_phi(:, this.d_1);
                 
-                % err = max( abs(e1)./obj.d_phi(:, obj.d_2) );
+                % err = max( abs(e1)./this.d_phi(:, this.d_2) );
                 err = norm(e1);
                 
                 % Update the relaxation factor.
-                mu = relaxation_factor(obj, e0, e1);
+                mu = relaxation_factor(this, e0, e1);
                 
                 iteration = iteration + 1;
                    
@@ -330,40 +330,40 @@ classdef Livolant < InnerIteration
         %>
         %> @return      Relaxation parameter and norm of flux residual. 
         % ======================================================================
-        function [err, mu] = source_iterations(obj, g)
+        function [err, mu] = source_iterations(this, g)
 
             iteration = 0; 
-            while iteration < obj.d_free_iters
+            while iteration < this.d_free_iters
             
                 % Build the within-group source
-                build_scatter_source(obj, g, obj.d_phi(:, obj.d_2));
+                build_scatter_source(this, g, this.d_phi(:, this.d_2));
                 
                 % Construct total sweep source.
-                sweep_source = (obj.d_fixed_source + obj.d_scatter_source); 
+                sweep_source = (this.d_fixed_source + this.d_scatter_source); 
                 
                 % Set incident boundary fluxes.
-                % set(obj.d_boundary);
+                % set(this.d_boundary);
                 
                 % Shuffle indices so new flux is put in right storage.
-                shuffle_index(obj);
+                shuffle_index(this);
                 
                 % Sweep over all angles and meshes.            
-                obj.d_phi(:, obj.d_2) = sweep(obj.d_sweeper, sweep_source, g);            
+                this.d_phi(:, this.d_2) = sweep(this.d_sweeper, sweep_source, g);            
                 
                 iteration = iteration + 1;   
                 % Compute residuals following the last two iterations
-                if iteration == obj.d_free_iters - 1
-                    e0 = obj.d_phi(:, obj.d_2) - obj.d_phi(:, obj.d_1);
-                elseif iteration == obj.d_free_iters 
-                    e1 = obj.d_phi(:, obj.d_2) - obj.d_phi(:, obj.d_1);
-                    % err = max( abs(e1)./obj.d_phi(:, obj.d_2) );
+                if iteration == this.d_free_iters - 1
+                    e0 = this.d_phi(:, this.d_2) - this.d_phi(:, this.d_1);
+                elseif iteration == this.d_free_iters 
+                    e1 = this.d_phi(:, this.d_2) - this.d_phi(:, this.d_1);
+                    % err = max( abs(e1)./this.d_phi(:, this.d_2) );
                     err = norm(e1);
                 end
                       
             end
 
             % Compute relaxation factor
-            mu = relaxation_factor(obj, e0, e1);
+            mu = relaxation_factor(this, e0, e1);
             
         end % end function source_iterations
         
@@ -373,11 +373,11 @@ classdef Livolant < InnerIteration
         %> This is performed \em before and iteration so that the "2" flux can
         %> be written into.
         % ======================================================================
-        function obj = shuffle_index(obj)
-            temp    = obj.d_0;
-            obj.d_0 = obj.d_1;
-            obj.d_1 = obj.d_2;
-            obj.d_2 = temp;
+        function this = shuffle_index(this)
+            temp    = this.d_0;
+            this.d_0 = this.d_1;
+            this.d_1 = this.d_2;
+            this.d_2 = temp;
         end % end function shuffle_index
         
         % ======================================================================
@@ -387,7 +387,7 @@ classdef Livolant < InnerIteration
         %> @param   e1      Current residual.
         %> @return          Relaxation factor, \f$ \mu \f$.
         % ======================================================================
-        function mu = relaxation_factor(obj, e0, e1)
+        function mu = relaxation_factor(this, e0, e1)
             del_e       = e1 - e0;
             del_e_sq    = del_e'*del_e;
             mu          = -(e0' * del_e) / del_e_sq;  

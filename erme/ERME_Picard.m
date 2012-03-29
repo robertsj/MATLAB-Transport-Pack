@@ -21,6 +21,7 @@ classdef ERME_Picard < ERME_Solver
         d_k
         %> Final current eigenvalue
         d_lambda
+        d_number_iterations
     end
     
     methods (Access = public)
@@ -138,6 +139,8 @@ classdef ERME_Picard < ERME_Solver
             this.d_k = k;
             this.d_lambda = lambda;
 
+            this.d_problem.update_state(J, k, lambda);
+            this.d_number_iterations = iteration;
         end
         
     end

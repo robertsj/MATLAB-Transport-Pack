@@ -297,14 +297,18 @@ classdef InnerIteration < handle
         %> @param   g       Group for this problem.
         %> @param   phi     Current group flux.
         % ======================================================================
-        function this = build_scatter_source(this, g, phi)
+        function this = build_scatter_source(this, g, phi, flag)
 
             % Build the source.
             this.d_scatter_source = ...
                 phi .* this.d_sigma_s{g}(:, g);
             
+            if nargin == 3
+                
             % Apply moments-to-discrete operator.
             this.d_scatter_source = apply(this.d_M, this.d_scatter_source); 
+            
+            end
             
         end % end function build_scatter_source
         
@@ -317,15 +321,17 @@ classdef InnerIteration < handle
         %> @param   g       Group for this problem.  (I.e. row in MG).
         %> @param   phi     Current MG flux.
         % ======================================================================
-        function this = build_all_scatter_source(this, g, phi)
+        function this = build_all_scatter_source(this, g, phi, flag)
             % Reset
             this.d_scatter_source(:) = 0.0;
             for gp = lower(this.d_mat, g):upper(this.d_mat, g)
                 this.d_scatter_source = this.d_scatter_source + ...
                     phi(:, gp) .* this.d_sigma_s{g}(:, gp);
             end
+            if nargin == 3
             % Apply moments-to-discrete operator.
             this.d_scatter_source = apply(this.d_M, this.d_scatter_source); 
+            end
             
         end % end function build_scatter_source   
         

@@ -299,6 +299,7 @@ classdef ResponseDB < ResponseServerBase
             for ni = 1:this.d_number_nodes
                 keffv = this.d_keff_vector{ni};
                 nk    = length(keffv);
+                if nk > 1
                 %
                 tmpR = reshape(R_all{ni}(:, :, :), len_R^2, nk);
                 R(:, :, ni) = reshape( ...
@@ -313,6 +314,12 @@ classdef ResponseDB < ResponseServerBase
                 tmpL = reshape(L_all{ni}(:, :, :), len_R*2*dim, nk);
                 L(:, :, ni) = reshape( ...
                     interp1(keffv, tmpL', keff, int, 'extrap'), len_R, 2*dim);
+                else
+                    R(:, :, ni) = R_all{ni}(:, :, 1);
+                    F(:,    ni) = F_all{ni}(:,    1);
+                    A(:,    ni) = A_all{ni}(:,    1);
+                    L(:, :, ni) = L_all{ni}(:, :, 1);
+                end
             end
             
             % Save this latest evaluation.

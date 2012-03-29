@@ -10,14 +10,18 @@ classdef MomentsToDiscrete
     
     methods (Access = public)
         
-        function obj = MomentsToDiscrete(dim)
+        function this = MomentsToDiscrete(dim)
             if dim == 1
-                obj.d_scale = 0.5;
+                this.d_scale = 0.5;
             end
         end
 
-        function q = apply(obj, v)
-            q = v * obj.d_scale;
+        function q = apply(this, v)
+            q = v * this.d_scale;
+        end
+        
+        function s = scale(this)
+            s = 1/this.d_scale; 
         end
         
     end

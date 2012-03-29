@@ -22,6 +22,10 @@ classdef ERME_Newton < ERME_Solver
         %> Final current eigenvalue
         d_lambda
         d_built = 0
+        %> Solution PETSc vector.
+        d_x
+        %> Type of approximate Jacobian for PC.
+        d_approximate_jacobian
     end
     
     methods (Access = public)
@@ -45,8 +49,9 @@ classdef ERME_Newton < ERME_Solver
         %> @brief  Solve the problem.
         % ======================================================================
         function this = solve(this)
-            path(path,'/home/robertsj/opt/petsc/petsc-3.2-p5/bin/matlab/classes/')
-            PetscInitialize({'-snes_monitor','-snes_ls', 'basic','-pc_type','none'});
+
+            petsc_options = get(this.d_input, 'petsc_options');
+            PetscInitialize(petsc_options);
             
             inner_tolerance = get(this.d_input, 'inner_tolerance');
             inner_max_iters = get(this.d_input, 'inner_max_iters');
@@ -66,10 +71,10 @@ classdef ERME_Newton < ERME_Solver
             norm_residual_hist = zeros(outer_max_iters + 1, 1);
             norm_residual_hist(1) = norm_residual;
             
-            % Seed with one inner.
+            % Seed with one crude inner.
             MR = M*R;                     
             opts.disp  = 0;
-            opts.tol   = inner_tolerance;
+            opts.tol   = 1e-5;
             opts.maxit = inner_max_iters;
             [J, lambda] = eigs(MR, 1, 'LM', opts);                    
             J = J*sign(sum(J)); % We want the positive direction  
@@ -80,7 +85,7 @@ classdef ERME_Newton < ERME_Solver
             k           = gain / loss;                    
 
             % Set the unknown
-            x = [J;k;lambda];
+            x = [J; k; lambda];
 
             % ==================================================================
             % PETSc SNES
@@ -89,20 +94,23 @@ classdef ERME_Newton < ERME_Solver
             n = length(x);
 
             % Create work vector for nonlinear solver and location for solution
-            v = PetscVec();
-            v.SetType('seq');
-            v.SetSizes(n);
-            z = v.Duplicate();
-            disp('lala')
-            z = PetscVec(x);
-           % z.SetValues(1:n);
-           % sum(z(1:10))
+            w = PetscVec();
+            w.SetType('seq');
+            w.SetSizes(n);
+            this.d_x = PetscVec(x);
 
             % Create a matrix for the Jacobian for Newton method
             Jac = PetscMat();
-            Jac.SetType('seqaij');
             Jac.SetSizes(n, n);
-            Pre = PetscMat(speye(n));
+            Jac.SetType('shell');
+            % Setup the shell, setting 'this' as the PETSc context.
+            Jac.ShellSetup(this, 'jacobian_matvec');
+
+            % Set the preconditioner.
+            
+            
+            
+%            Pre = PetscMat(speye(n));
 %            Pre.SetType('seqaij');
 %            Pre.SetSizes(n, n);
             
@@ -111,10 +119,10 @@ classdef ERME_Newton < ERME_Solver
             snes.SetType('ls');
             
             %  Provide a function 
-            snes.SetFunction(v, 'nonlinear_residual_petsc', this);
+            snes.SetFunction(v, 'nonlinear_residual', this);
 
             %  Provide a function that evaluates the Jacobian
-            snes.SetJacobian(Jac, Jac, 'jacobian_petsc', this);
+            snes.SetJacobian(Jac, Jac, 'jacobian_update', this);
 
             %  Solve the nonlinear system
             snes.SetFromOptions();

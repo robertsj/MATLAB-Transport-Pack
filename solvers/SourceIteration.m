@@ -91,7 +91,7 @@ classdef SourceIteration < InnerIteration
             iteration  = 0;
               
             % Setup the boundary fluxes for this solve.
-            initialize(this.d_boundary, g);
+            set_group(this.d_boundary, g);
             
             % Setup the equations for this group.
             setup_group(this.d_equation, g);
@@ -121,7 +121,6 @@ classdef SourceIteration < InnerIteration
                 
                 % Update incident boundary fluxes.
                 update(this.d_boundary);
-                %set_group(this.d_boundary, g); % Set the group
 
                 % Sweep over all angles and meshes.            
                 phi = sweep(this.d_sweeper, sweep_source, g);            

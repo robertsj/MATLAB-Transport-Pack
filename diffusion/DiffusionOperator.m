@@ -62,7 +62,9 @@ classdef DiffusionOperator < handle
         
         function M = get_1g_operator(this, g)
             if ~this.d_built
+                t = toc;
                 build_1g_operators(this);
+                disp([' diff op build time = ', num2str(toc-t), ' seconds'])
             end
             M = this.d_1g_operators{g};
         end
@@ -91,6 +93,8 @@ classdef DiffusionOperator < handle
         
         function this = build_1g_operators(this)
             
+            this.d_built = 1;
+            
             % Initialize cell array of 1g operators.
             this.d_1g_operators = cell(number_groups(this.d_mat), 1);
             
@@ -102,7 +106,7 @@ classdef DiffusionOperator < handle
             mat  = this.d_mat;        
             mesh = this.d_mesh; 
             
-            count = 0;
+            
             
             nxyz = [1 this.d_nx
                     1 this.d_ny
@@ -111,9 +115,11 @@ classdef DiffusionOperator < handle
             for g = 1:number_groups(mat)
                 
                 % Presize the operator arrays.  Do it better later.
-                value   = zeros(this.d_n*(1+1*mesh.DIM), 1);
+                value   = zeros(this.d_n*(1+2*mesh.DIM), 1);
                 index_i = value+1;
                 index_j = value+1;
+                
+                count = 0;
                 
                 for row = 1:this.d_n
                     
@@ -122,7 +128,7 @@ classdef DiffusionOperator < handle
                     cell_sigr = mat.sigma_t(map(row), g) - ...
                                 mat.sigma_s(map(row), g, g);                   
                     [i, j, k] = matrix_to_indices(this, row);          
-                    cell_hxyz = mesh.dx(i)*mesh.dy(j)*mesh.dz(k);
+                    cell_hxyz = [mesh.dx(i) mesh.dy(j) mesh.dz(k)];
                     
                     bound = [i i j j k k];
                     
@@ -144,31 +150,29 @@ classdef DiffusionOperator < handle
                             neig_idx(1), neig_idx(2), neig_idx(3));
                         [ii, jj, kk] = matrix_to_indices(this, neig_row);
 
-                        
+                        % -2*dc(mT,g)*dc(mC,g)*dx(i)/(dy(j+1)*dc(mC,g)+dy(j)*dc(mT,g));
                         % Compute coupling coefficient
                         if (bound(leak) == nxyz(xyz_idx,dir_idx))
                             
                             dtilde = (2*cell_dc*(1-this.d_albedo(leak))) / ...
                                      (4*cell_dc*(1+this.d_albedo(leak)) + ...
-                                      (1-this.d_albedo(leak))*cell_hxyz);
-                            
+                                      (1-this.d_albedo(leak))*cell_hxyz(xyz_idx));
+                        
                         else  % not a boundary
                             
                             % Neighbor volume and diffusion coefficient.
-                            try
-                            neig_hxyz = mesh.dx(ii)*mesh.dy(jj)*mesh.dz(kk);
-                            catch
-                               a=1; 
-                            end
+                            neig_hxyz = [mesh.dx(ii) mesh.dy(jj) mesh.dz(kk)];
+
                             neig_dc   = 1 / (3*mat.sigma_t(map(neig_row), g));
                             
                             % Compute dtilde.
                             dtilde = (2*cell_dc*neig_dc) / ...
-                                     (neig_hxyz*cell_dc + cell_hxyz*neig_dc);
+                                     (neig_hxyz(xyz_idx)*cell_dc + ...
+                                      cell_hxyz(xyz_idx)*neig_dc);
                             
                             % Add to matrix arrays.
                             count = count + 1;
-                            value(count)   = -dtilde / cell_hxyz;
+                            value(count)   = -dtilde / cell_hxyz(xyz_idx);
                             index_i(count) = row;
                             index_j(count) = neig_row;
                             

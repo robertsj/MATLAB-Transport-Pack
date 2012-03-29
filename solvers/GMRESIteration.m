@@ -34,6 +34,11 @@ classdef GMRESIteration < InnerIteration
     properties
         %> Krylov solver type.
         d_krylov 
+        %>
+        d_diffop
+        %>
+        d_pc = 0
+        d_apply_m = []
     end
     
     methods
@@ -81,13 +86,17 @@ classdef GMRESIteration < InnerIteration
                         fission_source);
                     
             % Set user parameters or use defaults
-            if contains(input, 'krylov_solver')
-                this.d_krylov = get(input, 'krylov_solver');
+            if input.get('inner_krylov_solver')
+                this.d_krylov = input.get('inner_krylov_solver');
             else
                 this.d_krylov = 'gmres';
             end
-
-            
+            if input.get('inner_precondition')
+                this.d_pc = 1;
+                this.d_diffop = ...
+                    DiffusionOperator(input, mat, mesh);
+                this.d_apply_m = @(x)apply_m(x, this);
+            end
             % Nothing else here for now.
         end
         
@@ -110,8 +119,7 @@ classdef GMRESIteration < InnerIteration
             % Build the fixed source.
             build_fixed_source(this, g);
             
-            % Compute the uncollided flux, i.e. phi_uc = D*inv(T)*Q_fixed.
-            % This is the right hand side.
+            % B = D*inv(L)*Q
             B = sweep(this.d_sweeper, this.d_fixed_source, g); 
             
             % Unset the boundary.
@@ -123,7 +131,7 @@ classdef GMRESIteration < InnerIteration
             if strcmp(this.d_krylov, 'gmres')
                 [phi, flag, flux_error, iter] = ...
                     gmres(@(x)apply(x, this), B, 30, this.d_tolerance, ...
-                    40, [], [], B);
+                    40, this.d_apply_m, [], B);
                 if print_out
                     fprintf('           GMRES Outers: %5i,  Inners: %5i\n', ...
                         iter(1), iter(2));
@@ -132,7 +140,7 @@ classdef GMRESIteration < InnerIteration
             elseif strcmp(this.d_krylov, 'bicgstab')
                 [phi, flag, flux_error, iter] = ...
                     bicgstab(@(x)apply(x, this), B, this.d_tolerance, ...
-                    40, [], [], B);
+                    40, this.d_apply_m, [], B);
                 if print_out
                     fprintf('         BiCGStab Iters: %5i \n', iter);
                 end
@@ -140,7 +148,7 @@ classdef GMRESIteration < InnerIteration
             elseif strcmp(this.d_krylov, 'bicgstabl')
                 [phi, flag, flux_error, iter] = ...
                     bicgstabl(@(x)apply(x, this), B, this.d_tolerance, ...
-                    40, [], [], B);
+                    40, this.d_apply_m, [], B);
                 if print_out
                     fprintf('      BiCGStab(l) Iters: %5i \n', iter);
                 end
@@ -193,11 +201,20 @@ function y = apply(x, this)
     
     % Sweep over all angles and meshes.  This is equivalent to
     %   y <-- D*inv(L)*M*S*x
-    y = sweep(this.d_sweeper, sweep_source, this.d_g);
-    
+    y = sweep(this.d_sweeper, sweep_source, this.d_g);  
     
     % Now, return the following
     % y <-- x - D*inv(L)*M*S*x = (I - D*inv(L)*M*S)*x 
     y = x - y;
-%    fprintf(' %12.8f \n', y(1))
+
+end
+
+%> @brief Apply one-group diffusion preconditioner.
+function y = apply_m(x, this)
+
+    M = this.d_diffop.get_1g_operator(this.d_g);
+    % y <-  (I + inv(C)*S)x 
+    build_scatter_source(this, this.d_g, x, 0); % undo mom-to-dis
+    y = x + M\this.d_scatter_source;
+
 end

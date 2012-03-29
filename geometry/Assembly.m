@@ -62,7 +62,8 @@ classdef Assembly < Mesh2D
             obj.d_number_cells_x = xfm * obj.d_number_pins_row;
             obj.d_number_cells_y = yfm * obj.d_number_pins_row;
             obj.d_number_cells = obj.number_cells_x * obj.number_cells_y;
-            
+            obj.d_xfm = ones(obj.d_number_cells_x, 1);
+            obj.d_yfm = ones(obj.d_number_cells_x, 1);
             % Compute the widths.
             obj.d_dx = zeros(obj.number_cells_x, 1);
             obj.d_dy = zeros(obj.number_cells_y, 1);

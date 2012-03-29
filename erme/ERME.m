@@ -209,7 +209,14 @@ classdef ERME < handle
         % ======================================================================    
         function n = size_J(this)
             n = this.d_size; 
-        end            
+        end
+        
+        function k = get_keff(this)
+            k = this.d_keff;
+        end
+        function l = get_lambda(this)
+            l = this.d_lambda;
+        end
         
     end
     

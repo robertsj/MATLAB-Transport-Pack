@@ -160,6 +160,9 @@ classdef PinCell < Mesh2D
             obj.d_number_cells_y = number_meshes;
             obj.d_number_cells   = number_meshes^2;
             
+            obj.d_xfm = ones(obj.d_number_cells_x, 1);
+            obj.d_yfm = ones(obj.d_number_cells_x, 1);
+            
             tmp_material_map = zeros(number_meshes); 
             tmp_region_map   = zeros(number_meshes);
             

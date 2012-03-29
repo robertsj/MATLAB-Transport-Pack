@@ -63,6 +63,12 @@ classdef KrylovMG < InnerIteration
         d_keff = 1.0;
         %> Is this a straight fixed source problem *or* within eigensolve?
         d_fixed = 1;
+        %>
+        d_diffop
+        %>
+        d_pc = 0
+        %>
+        d_apply_m = []        
     end
     
     methods
@@ -118,6 +124,12 @@ classdef KrylovMG < InnerIteration
                error('user:input','Krylov not ready for reflection!')
             end
            
+            if input.get('outer_precondition')
+                this.d_pc = 1;
+                this.d_diffop = ...
+                    DiffusionOperator(input, mat, mesh);
+                this.d_apply_m = @(x)apply_m(x, this);
+            end
                 
         end
         
@@ -169,7 +181,7 @@ classdef KrylovMG < InnerIteration
                 20,                         ... % restart
                 this.d_tolerance,           ... % tolerance
                 40,                         ... % maxit (maxit*restart = total # applications)
-                [],                         ... % left pc
+                this.d_apply_m,             ... % left pc
                 [],                         ... % right pc
                 B                           );  % initial guess
             
@@ -334,4 +346,74 @@ function y = apply(x, this)
     % Restore to 1-d form
     y = reshape(y, n*ng, 1);
   
+end
+
+%> @brief Apply one-group diffusion preconditioner.
+function y = apply_m(x, this)
+
+flag = get(this.d_input, 'pc_switch');
+
+
+% Setup.
+% Number of unknowns per group
+n   = number_cells(this.d_mesh);
+ng  = number_groups(this.d_mat);
+
+% Store the incoming Krylov vector
+y  = reshape(x,n,ng);
+y2 = 0*y;
+
+if flag
+    % Update fission source with this Krylov vector if this is a fixed
+    % source problem
+    if (this.d_fixed && initialized(this.d_fission_source))
+        for g = 1:ng
+            set_phi(this.d_state, y(:, g), g);
+        end
+        update(this.d_fission_source);
+        setup_outer(this.d_fission_source, 1/this.d_keff);
+    end
+end
+
+%load prec.mat;
+for g = 1:ng
+
+    M = this.d_diffop.get_1g_operator(g);
+    
+    %----
+    if flag == 1
+    % Build all scattering sources.  This included all scatter from any
+    % group g' into any group g ( within-group scatter is included).
+    build_all_scatter_source(this, g, y, 0);
+    
+    % Add scatter from all groups.
+    sweep_source = this.d_scatter_source;
+    
+    % Only add fission if this is a multiplying fixed source problem.
+    % Otherwise, this is an eigenproblem for which the fission is an
+    % *external* source.
+    if (this.d_fixed && initialized(this.d_fission_source))
+        
+        % Get the group gp fission source.
+        f = source(this.d_fission_source, g);
+        
+        % Add it.  This *assumes* the fission source returns a
+        % vector prescaled to serve as a discrete source.
+        sweep_source = sweep_source + f*4*pi;
+        
+    end
+    
+    else
+    %----
+    
+    % y <-  (I + inv(C)*S)x
+    build_scatter_source(this, g, y(:, g), 0); % undo mom-to-dis
+    sweep_source = this.d_scatter_source;
+    
+    end
+    y2(:, g) = y(:, g) + M \ sweep_source;
+    
+end
+y = reshape(y2, n*ng, 1);
+
 end
