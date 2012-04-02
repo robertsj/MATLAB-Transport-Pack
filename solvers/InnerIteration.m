@@ -68,6 +68,8 @@ classdef InnerIteration < handle
         d_equation
         %> Sweeper over the space-angle domain.
         d_sweeper
+        %> Sweep source
+        d_sweep_source
         %> User-defined external source
         d_external_source
         %> Fission source, if used
@@ -78,8 +80,9 @@ classdef InnerIteration < handle
         d_scatter_source
         %> Scattering cross-section vector for faster source computation
         d_sigma_s
-        % 
+        %> Maximum iterations
         d_max_iters
+        %> Convergence tolerance
         d_tolerance
         %
         d_g
@@ -106,7 +109,7 @@ classdef InnerIteration < handle
         %> @return Instance of the InnerIteration class.
         % ======================================================================
     	function this = InnerIteration()
-            % Nothing here for now.
+            
         end
         
         % ======================================================================
@@ -191,21 +194,18 @@ classdef InnerIteration < handle
             this.d_tolerance = get(input, 'inner_tolerance');
             this.d_max_iters = get(input, 'inner_max_iters');
             
-            % Add external source
+            % Add external source object
             this.d_external_source = external_source;
       
-            % Add fission source
+            % Add fission source object
             this.d_fission_source = fission_source;
-              
-            % Initialize the group source
+            
+            % Add the scattering source
+            this.d_scatter_source = ScatterSource(mesh, mat, state);
+            
+            % Initialize the fixed source
             this.d_fixed_source = zeros(number_cells(mesh), 1);
-            
-            % Initialize the within-group source
-            this.d_scatter_source = zeros(number_cells(mesh), 1);
-            
-            % Initialize scatter data.
-            initialize_scatter(this);
-            
+                 
             % Initialize moment to discrete.
             this.d_M = MomentsToDiscrete(mesh.DIM);
             
@@ -223,9 +223,6 @@ classdef InnerIteration < handle
                    error('unsupported 1D discretization') 
                 end
 
-                % Sweeper
-%                 this.d_sweeper = Sweep1D(input, mesh, mat, quadrature, ...
-%                     this.d_boundary, this.d_equation); 
                 this.d_sweeper = Sweep1D_mod(input, mesh, mat, quadrature, ...
                     this.d_boundary, this.d_equation);                 
                 
@@ -239,6 +236,8 @@ classdef InnerIteration < handle
                     this.d_boundary, this.d_equation); 
                 
             elseif mesh.DIM == 3
+                
+                error('3D coming soon.')
                 
             elseif mesh.DIM == 2 && tracked(mesh)
 
@@ -255,179 +254,6 @@ classdef InnerIteration < handle
             
                   
         end
-        
-        
-        % ======================================================================
-        %> @brief Prebuild scattering matrix for each cell.
-        %
-        %> While not the most *memory* efficient, this saves *time* by
-        %> eliminate lots of loops.
-        % ======================================================================
-        function this = initialize_scatter(this)
-
-            for g = 1:number_groups(this.d_mat)
-            	this.d_sigma_s{g} = zeros(number_cells(this.d_mesh), ...
-                                         number_groups(this.d_mat));
-            end
-            
-            % Get the fine mesh material map or the region material map.
-            if meshed(this.d_mesh)
-                mat = reshape(mesh_map(this.d_mesh, 'MATERIAL'), ...
-                    number_cells(this.d_mesh), 1);
-            else                
-                mat = region_mat_map(this.d_mesh);
-            end
-            
-            % Build the local scattering matrix.
-            for i = 1:number_cells(this.d_mesh)
-                for g = 1:number_groups(this.d_mat)
-                    for gp = lower(this.d_mat, g):upper(this.d_mat, g)
-                        this.d_sigma_s{g}(i, gp) = ...
-                            sigma_s(this.d_mat, mat(i), g, gp);
-                    end
-                end
-            end
-
-  
-        end % end function initialize_scatter
-        
-        % ======================================================================
-        %> @brief Build the within-group scattering source.
-        %
-        %> @param   g       Group for this problem.
-        %> @param   phi     Current group flux.
-        % ======================================================================
-        function this = build_scatter_source(this, g, phi, flag)
-
-            % Build the source.
-            this.d_scatter_source = ...
-                phi .* this.d_sigma_s{g}(:, g);
-            
-            if nargin == 3
-                
-            % Apply moments-to-discrete operator.
-            this.d_scatter_source = apply(this.d_M, this.d_scatter_source); 
-            
-            end
-            
-        end % end function build_scatter_source
-        
-        % ======================================================================
-        %> @brief Build all the scattering sources.
-        %
-        %> In some cases, including all scattering is required, as is the case
-        %> when performing multigroup Krylov solves.  WHY IS THIS IN INNER?
-        %>
-        %> @param   g       Group for this problem.  (I.e. row in MG).
-        %> @param   phi     Current MG flux.
-        % ======================================================================
-        function this = build_all_scatter_source(this, g, phi, flag)
-            % Reset
-            this.d_scatter_source(:) = 0.0;
-            for gp = lower(this.d_mat, g):upper(this.d_mat, g)
-                this.d_scatter_source = this.d_scatter_source + ...
-                    phi(:, gp) .* this.d_sigma_s{g}(:, gp);
-            end
-            if nargin == 3
-            % Apply moments-to-discrete operator.
-            this.d_scatter_source = apply(this.d_M, this.d_scatter_source); 
-            end
-            
-        end % end function build_scatter_source   
-        
-        % ======================================================================
-        %> @brief Build source for this group excluding within-group scatter.
-        %
-        %> @param   g       Group for this problem.
-        % ======================================================================
-        function this = build_fixed_source(this, g)
-
-            this.d_g = g;
-            
-            if (get(this.d_input, 'print_out'))
-                fprintf('          Group: %5i\n', g);
-            end
-            
-            this.d_fixed_source(:) = 0;
-            
-            % Add downscatter source.
-            for gp = lower(this.d_mat, g) : g - 1
-                
-                % Get the group gp flux.
-                phi = flux(this.d_state, gp);
-
-                % Add group contribution.
-                this.d_fixed_source = this.d_fixed_source + ...
-                	 phi .* this.d_sigma_s{g}(:, gp);
-                 
-            end
-                
-            % Add upscatter source. 
-            for gp = g + 1 : upper(this.d_mat, g)
-                
-                % Get the group gp flux.
-                phi = flux(this.d_state, gp);
-                
-
-                % Add group contribution.
-                this.d_fixed_source = this.d_fixed_source + ...
-                	 phi .* this.d_sigma_s{g}(:, gp);
-                 
-            end
-            
-            % Apply the moments-to-discrete operator.
-            this.d_fixed_source = apply(this.d_M, this.d_fixed_source);
-            
-            % Add the fission source if required.
-            if (initialized(this.d_fission_source))
-
-                % Get the group gp fission source.
-                f = source(this.d_fission_source, g);
-                
-                % Add it.  This *assumes* the fission source returns a
-                % vector prescaled to serve as a discrete source.
-                this.d_fixed_source = this.d_fixed_source + f;
-                
-            end
-
-            
-            % External (if required)
-            if (initialized(this.d_external_source))
-                
-            	this.d_fixed_source = this.d_fixed_source + ...
-                    source(this.d_external_source, g);
-                
-            end
-            
-        end % end function build_fixed_source
-        
-        % ======================================================================
-        %> @brief Build fixed source from fission and/or external sources.
-        %
-        %> @param   g       Group for this problem.
-        % ======================================================================        
-        function build_external_source(this, g)
-            this.d_fixed_source = this.d_fixed_source*0;
-            % Add the fission source if required.
-            if (initialized(this.d_fission_source))
-
-                % Get the group gp fission source.
-                f = source(this.d_fission_source, g);
-                
-                % Add it.  This *assumes* the fission source returns a
-                % vector prescaled to serve as a discrete source.
-                this.d_fixed_source = this.d_fixed_source + f;
-                
-            end
-            % External (if required)
-            if (initialized(this.d_external_source))
-                
-            	this.d_fixed_source = this.d_fixed_source + ...
-                    source(this.d_external_source, g);
-                
-            end 
-        end
-        
 
         % ======================================================================
         %> @brief Check convergence and warn if iteration limit reached.
@@ -451,8 +277,7 @@ classdef InnerIteration < handle
                 end
             end
         end
-       
-        
+
     end
         
 end

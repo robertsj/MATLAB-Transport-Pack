@@ -147,7 +147,7 @@ classdef Sweep2D_mod < SweepBase
                 
                 
             end
-            
+            obj.d_number_sweeps = obj.d_number_sweeps + 1;
         end
         
     end

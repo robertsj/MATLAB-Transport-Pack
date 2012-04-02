@@ -36,7 +36,7 @@ classdef SourceIteration < InnerIteration
         %> @return  Instance of the SourceIteration class.
         % ======================================================================
         function this = SourceIteration()
-            % Nothing here for now.
+            
         end
         
         % ======================================================================
@@ -96,46 +96,38 @@ classdef SourceIteration < InnerIteration
             % Setup the equations for this group.
             setup_group(this.d_equation, g);
             
-            % Build the fixed source.
+            % Build the fixed source.  Since it's unchanging, do it once.
             build_fixed_source(this, g);
-            
-            % Compute the uncollided flux, i.e. phi_uc = D*inv(T)*Q_fixed.
-           % phi_uc = sweep(this.d_sweeper, this.d_fixed_source, g); 
-            
+
             % Set the initial flux
-            phi      = flux(this.d_state, g);% + phi_uc;
+            phi      = flux(this.d_state, g);
             phi_old  = phi;
             
-            while flux_error > this.d_tolerance ...
-                && iteration < this.d_max_iters
+            while flux_error > this.d_tolerance && iteration < this.d_max_iters
             
-                % Build the within-group source
-                build_scatter_source(this, g, phi); % = M*S*phi
-                
                 % Construct total sweep source.  This is just the sum of the
                 % within-group and other terms.  These are *discrete*
                 % values.  Note, in a more general implementation, the
                 % sweep source would be generated for each angle.  Here,
                 % since it's isotropic, we do it once before everything.
-                sweep_source = this.d_scatter_source + this.d_fixed_source; 
+                sweep_source = build_sweep_source(this);
                 
                 % Update incident boundary fluxes.
                 update(this.d_boundary);
 
-                % Sweep over all angles and meshes.            
+                % Sweep over all angles and meshes.
                 phi = sweep(this.d_sweeper, sweep_source, g);            
 
                 % Convergence criteria and diagnostics
                 flux_error_2 = flux_error_1;
                 flux_error_1 = flux_error;
-                
-                % flux_error   = max( abs( (phi-phi_old)./phi ) ); 
+
+                % Relative difference might be better.
                 flux_error   = norm(phi-phi_old);  
                 
                 phi_old      = phi;
                 iteration    = iteration + 1;   
-                
-               % fprintf('           Iter: %5i, Error: %12.8f\n', iteration, flux_error);
+
                 if (mod(iteration, 20)==0)
                     print_iteration(this, iteration, flux_error, ...
                         flux_error_1, flux_error_2)
@@ -149,9 +141,51 @@ classdef SourceIteration < InnerIteration
             % Update the state.
             set_phi(this.d_state, phi, g);
 
-            % Update the boundary fluxes.
-
         end
         
     end
+    
+    methods (Access = protected)
+       
+        % ======================================================================
+        %> @brief Build the fixed source.
+        % ======================================================================
+        function this = build_fixed_source(this, g)
+            
+            % Add in-scatter source.
+            this.d_fixed_source = ...
+                build_in_scatter_source(this.d_scatter_source, g);
+        	
+            % Add the fission source if present.
+            if (initialized(this.d_fission_source))
+                this.d_fixed_source = this.d_fixed_source + ...
+                                      source(this.d_fission_source, g);
+            end
+     
+            % Add the external source if present.
+            if (initialized(this.d_external_source))
+            	this.d_fixed_source = this.d_fixed_source + ...
+                                      source(this.d_external_source, g);   
+            end
+            
+        end  
+        
+        % ======================================================================
+        %> @brief Build and return the sweep source.
+        % ======================================================================
+        function q = build_sweep_source(this, g, phi)
+           
+        	% Build the within-group source, S_gg * phi_g
+            q = build_within_group_source(this.d_scatter_source, g, phi);
+            
+            % Add fixed source component.
+            q = q + this.d_fixed_source;
+            
+            % Apply moments-to-discrete operator
+            q = apply(this.d_M, q);
+            
+        end
+ 
+    end
+    
 end

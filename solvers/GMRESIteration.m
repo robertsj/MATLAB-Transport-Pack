@@ -31,17 +31,18 @@
 % ==============================================================================
 classdef GMRESIteration < InnerIteration
     
-    properties
+    properties (Access = private)
         %> Krylov solver type.
         d_krylov 
-        %>
+        %> Diffusion operator
         d_diffop
-        %>
+        %> Preconditioner flag
         d_pc = 0
+        %> Preconditioner function handle
         d_apply_m = []
     end
     
-    methods
+    methods (Access = public)
        
         % ======================================================================
         %> @brief Class constructor
@@ -116,14 +117,15 @@ classdef GMRESIteration < InnerIteration
             % Setup the equations for this group.
             setup_group(this.d_equation, g);
             
-            % Build the fixed source.
-            build_fixed_source(this, g);
+            % Build the fixed source (in-scatter, fission, and external)
+            % and apply moments to discrete.
+            sweep_source = build_fixed_sweep_source(this, g);
             
-            % B = D*inv(L)*Q
-            B = sweep(this.d_sweeper, this.d_fixed_source, g); 
+            % Build the right hand side (i.e. the uncollided flux).
+            B = sweep(this.d_sweeper, sweep_source, g); 
             
-            % Unset the boundary.
-            reset(this.d_boundary);       % Conditions now homogeneous
+            % Unset the boundary.  This sets all boundaries to zero.
+            reset(this.d_boundary);
             
             print_out = get(this.d_input, 'inner_print_out');
             
@@ -184,15 +186,52 @@ classdef GMRESIteration < InnerIteration
         end
         
     end
+    
+    methods (Access = private)
+       
+        % ======================================================================
+        %> @brief Build the fixed sweep source.
+        % ======================================================================
+        function q = build_fixed_sweep_source(this, g)
+            
+            % Add in-scatter source.
+            q =  build_in_scatter_source(this.d_scatter_source, g);
+        	
+            % Add the fission source if present.
+            if (initialized(this.d_fission_source))
+                q = q + source(this.d_fission_source, g);
+            end
+     
+            % Add the external source if present.
+            if (initialized(this.d_external_source))
+            	q = q + source(this.d_external_source, g);   
+            end
+            q = apply(this.d_M, q);
+            
+        end
+        
+        % ======================================================================
+        %> @brief Build the within group scattering sweep source.
+        % ======================================================================
+        function q = build_within_group_sweep_source(this, g, phi)
+            q = build_within_group_source(this.d_scatter_source, g, phi);
+            q = apply(this.d_M, q);
+        end
+        
+    end
+    
+    
 end
 
+
+% ======================================================================
+%> @brief Apply the one group transport operator.
+% ======================================================================
 function y = apply(x, this)
 
     % Build the within-group source.  This is equivalent to
     %   x <-- M*S*x
-    build_scatter_source(this, this.d_g, x); 
-        
-    sweep_source = this.d_scatter_source;
+    sweep_source = build_within_group_sweep_source(this, this.d_g, x);
     
     % Set incident boundary fluxes.  Note, the set command loops through all
     % groups, and hence we must explicitly set the group after.
@@ -209,12 +248,12 @@ function y = apply(x, this)
 
 end
 
+% ======================================================================
 %> @brief Apply one-group diffusion preconditioner.
+% ======================================================================
 function y = apply_m(x, this)
-
-    M = this.d_diffop.get_1g_operator(this.d_g);
-    % y <-  (I + inv(C)*S)x 
-    build_scatter_source(this, this.d_g, x, 0); % undo mom-to-dis
-    y = x + M\this.d_scatter_source;
-
+    C = this.d_diffop.get_1g_operator(this.d_g);
+    % y <-  (I + inv(C)*S)x;  q <- S*x
+    q = build_within_group_source(this.d_sweep_souce, this.d_g, x); 
+    y = x + C\q;
 end

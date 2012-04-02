@@ -151,12 +151,15 @@ classdef FissionSource < handle
         %> @brief Setup the fission source for an outer iteration.
         %
         %> This sets a new scaling factor \f$ k \f$ and precomputes the 
-        %> quantity \f$ v = (4\pi k)^{-1} \f$.
+        %> quantity \f$ v = fd(k)^{-1} \f$.
+        %> 
+        %> Optionally (by having a flag present), the angular normalization
+        %> is skipped.  This would be useful for use in diffusion solves.
         %>
         %> @param   scale   Scaling factor (typically 1/keff)
         % ======================================================================  
         function obj = setup_outer(obj, scale)
-            obj.d_scale = scale * obj.d_angular_norm;
+            obj.d_scale = scale;
             obj.d_fission_source = obj.d_fission_density(:) * obj.d_scale;
         end
         
@@ -174,8 +177,8 @@ classdef FissionSource < handle
         %> is \f$ 4\pi \f$, possibly with the eigenvalue \f$ k \f$.  The client
         %> sets this in \ref update.  
         %>
-        %> Note also that this returns a \em discrete source, ready for use in
-        %> sweeping.
+        %> Note also that this returns a moments source, so the client must
+        %> apply the moments-to-discrete operator.
         %>
         %> @param   g   Group of the source
         %> @return      Source vector

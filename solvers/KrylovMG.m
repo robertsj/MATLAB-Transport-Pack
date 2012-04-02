@@ -142,12 +142,6 @@ classdef KrylovMG < InnerIteration
 
         % ======================================================================
         %> @brief Solve the multigroup fixed source problem.
-        %>
-        %> Currently, I'm not adding much flexibility.  In the future, it would
-        %> be great to add a multigroup preconditioner, other solvers, etc.  Of 
-        %> course, reflective conditions are still on the to-do list; but
-        %> response functions don't need them!
-        %>
         %> @return Output, including error and iteration count.
         % ======================================================================
         function output = solve(this)
@@ -167,10 +161,9 @@ classdef KrylovMG < InnerIteration
                 % Setup the equations for this group.
                 setup_group(this.d_equation, g);
                 % Build the fixed source.
-                build_external_source(this, g);
+                sweep_source = build_fixed_sweep_source(this, g);
                 % Compute the uncollided flux (i.e. RHS)
-                B((g-1)*n+1:g*n, 1) = ...
-                    sweep(this.d_sweeper, this.d_fixed_source, g);
+                B((g-1)*n+1:g*n, 1) = sweep(this.d_sweeper, sweep_source, g);
             end 
             % Set the boundaries to zero for the sweeps.
             reset(this.d_boundary);
@@ -196,15 +189,16 @@ classdef KrylovMG < InnerIteration
                 set(this.d_boundary);
                 set_group(this.d_boundary, g); % Set the group
                 setup_group(this.d_equation, g);
-                build_scatter_source(this, g, phi(:,g)); % within group
-                build_fixed_source(this, g); % everything else
-                phi(:,g) = sweep(this.d_sweeper, this.d_fixed_source+this.d_scatter_source, g);
+                
+                % Add all scattering and then fixed.
+                q = build_total_scatter_source(this.d_scatter_source, g, phi);
+                sweep_source = this.d_M.apply(q);
+                sweep_source = sweep_source + build_fixed_sweep_source(this, g);
+                    
+                % Update.
+                phi(:,g) = sweep(this.d_sweeper, sweep_source, g);
             end 
             
-%             phi = reshape(phi, n, ng);
-%             for g = 1:ng
-%                 set_phi(this.d_state, phi(:, g), g);
-%             end
             switch flag
                 case 0
                     % Okay.
@@ -231,6 +225,39 @@ classdef KrylovMG < InnerIteration
             output.total_inners = iteration;
         end
         
+        % ======================================================================
+        %> @brief Build fixed source from fission and/or external sources.
+        %
+        %> @param   g       Group for this problem.
+        % ======================================================================        
+        function q = build_fixed_sweep_source(this, g)           
+            q = 0;
+            % Add the fission source if required and if we won't be pulling
+            % it to the left hand side in a fixed source problem.
+            if (this.d_fixed && initialized(this.d_fission_source))
+                q = q + source(this.d_fission_source, g);
+            end   
+            % Add the external source if present.
+            if (initialized(this.d_external_source))
+            	q = q + source(this.d_external_source, g);   
+            end   
+            q = this.d_M.apply(q);
+        end
+        
+        % ======================================================================
+        %> @brief Build all scatter sweep source.
+        %>
+        %> This is intended for fixed source problems with multiplication.
+        %>
+        %> @param   g       Group for this problem.  (I.e. row in MG).
+        %> @param   phi     Current MG flux.
+        % ======================================================================
+        function q = build_all_scatter_sweep_source(this, g, phi)
+            q = build_total_scatter_source(this.d_scatter_source, g, phi);
+            q = this.d_M.apply(q); 
+        end % build_fission_source   
+  
+        
     end
 
     methods (Access = protected)
@@ -245,26 +272,6 @@ classdef KrylovMG < InnerIteration
                     '-------------------------------------------------------\n')
             end
         end
-        
-        % ======================================================================
-        %> @brief Build the fission source.
-        %>
-        %> This is intended for fixed source problems with multiplication.
-        %>
-        %> @param   g       Group for this problem.  (I.e. row in MG).
-        %> @param   phi     Current MG flux.
-        % ======================================================================
-        function this = build_fission_source(this, g, phi)
-            % Reset
-            this.d_scatter_source(:) = 0.0;
-            for gp = lower(this.d_mat, g):upper(this.d_mat, g)
-                this.d_scatter_source = this.d_scatter_source + ...
-                    phi(:, gp) .* this.d_sigma_s{g}(:, gp);
-            end
-            % Apply moments-to-discrete operator.
-            this.d_scatter_source = apply(this.d_M, this.d_scatter_source); 
-            
-        end % build_fission_source             
         
     end
 
@@ -314,23 +321,17 @@ function y = apply(x, this)
         
         % Build all scattering sources.  This included all scatter from any
         % group g' into any group g ( within-group scatter is included).
-        build_all_scatter_source(this, g, phi);
+        sweep_source = build_all_scatter_sweep_source(this, g, phi);
         
-        % Add scatter from all groups.  
-        sweep_source = this.d_scatter_source;
-
         % Only add fission if this is a multiplying fixed source problem.
         % Otherwise, this is an eigenproblem for which the fission is an
         % *external* source.
         if (this.d_fixed && initialized(this.d_fission_source))
-            
             % Get the group gp fission source.
-            f = source(this.d_fission_source, g);
-            
+            f = this.d_M.apply(source(this.d_fission_source, g));
             % Add it.  This *assumes* the fission source returns a
             % vector prescaled to serve as a discrete source.
             sweep_source = sweep_source + f;
-            
         end
         
         % Sweep over all angles and meshes.  This is equivalent to
@@ -351,9 +352,6 @@ end
 %> @brief Apply one-group diffusion preconditioner.
 function y = apply_m(x, this)
 
-flag = get(this.d_input, 'pc_switch');
-
-
 % Setup.
 % Number of unknowns per group
 n   = number_cells(this.d_mesh);
@@ -363,57 +361,29 @@ ng  = number_groups(this.d_mat);
 y  = reshape(x,n,ng);
 y2 = 0*y;
 
-if flag
-    % Update fission source with this Krylov vector if this is a fixed
-    % source problem
-    if (this.d_fixed && initialized(this.d_fission_source))
-        for g = 1:ng
-            set_phi(this.d_state, y(:, g), g);
-        end
-        update(this.d_fission_source);
-        setup_outer(this.d_fission_source, 1/this.d_keff);
+
+% Update fission source if this is a fixed source problem.
+if (this.d_fixed && initialized(this.d_fission_source))
+    for g = 1:ng
+        set_phi(this.d_state, y(:, g), g);
     end
+    update(this.d_fission_source);
+    setup_outer(this.d_fission_source, 1/this.d_keff);
 end
 
-%load prec.mat;
 for g = 1:ng
-
+    % Get one group diffusion operator.
     M = this.d_diffop.get_1g_operator(g);
-    
-    %----
-    if flag == 1
-    % Build all scattering sources.  This included all scatter from any
-    % group g' into any group g ( within-group scatter is included).
-    build_all_scatter_source(this, g, y, 0);
-    
-    % Add scatter from all groups.
-    sweep_source = this.d_scatter_source;
-    
-    % Only add fission if this is a multiplying fixed source problem.
-    % Otherwise, this is an eigenproblem for which the fission is an
-    % *external* source.
+    % Build all scattering sources.  
+    q = build_all_scatter_source(this.d_scatter_source, g, y);
+    % Add fission if this is a multiplying fixed source problem.
     if (this.d_fixed && initialized(this.d_fission_source))
-        
-        % Get the group gp fission source.
-        f = source(this.d_fission_source, g);
-        
-        % Add it.  This *assumes* the fission source returns a
-        % vector prescaled to serve as a discrete source.
-        sweep_source = sweep_source + f*4*pi;
-        
+        q = q + source(this.d_fission_source, g);
     end
-    
-    else
-    %----
-    
-    % y <-  (I + inv(C)*S)x
-    build_scatter_source(this, g, y(:, g), 0); % undo mom-to-dis
-    sweep_source = this.d_scatter_source;
-    
-    end
-    y2(:, g) = y(:, g) + M \ sweep_source;
-    
+    % Solve.
+    y2(:, g) = y(:, g) + M \ q;
 end
+
 y = reshape(y2, n*ng, 1);
 
 end

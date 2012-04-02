@@ -2,8 +2,6 @@
 %> @brief Source class definition.
 % ==============================================================================
 %> @brief External isotropic volume source.
-%
-%> More here...
 % ==============================================================================
 classdef Source < handle
 
@@ -21,16 +19,13 @@ classdef Source < handle
         % ======================================================================
         %> @brief Class constructor
         %>
-        %> All boundary flux arrays are sized, and the boundary conditions are
-        %> constructed for each surface.
-        %>
-        %> @param mesh              Mesh.
-        %> @param number_groups     Number of energy groups.
-        %> @return Instance of the Source class.
+        %> @param   mesh            Mesh.
+        %> @param   number_groups   Number of energy groups.
+        %> @return                  Instance of the Source class.
         % ======================================================================
-        function obj = Source(mesh, number_groups)
-            obj.d_mesh = mesh;
-            obj.d_number_groups = number_groups;
+        function this = Source(mesh, number_groups)
+            this.d_mesh = mesh;
+            this.d_number_groups = number_groups;
         end
         
         % ----------------------------------------------------------------------
@@ -49,89 +44,90 @@ classdef Source < handle
         %> @param sources    	Unique source spectrum * strength
         %> @param source_map 	Coarse mesh or region map of sources.  
         % ======================================================================
-        function obj = set_sources(obj, sources, source_map)
+        function this = set_sources(this, sources, source_map)
 
-            DBC.Require('length(sources(:, 1)) == obj.d_number_groups');
-            % DBC.Require('length(material_map(1, :))==length(xfm)')
-            % DBC.Require('length(material_map(:, 1))==length(yfm)')
+            DBC.Require('length(sources(:, 1)) == this.d_number_groups');
 
             % Scale strengths to isotropic using appropriate angular norm.
-            obj.d_sources = sources * Quadrature.angular_norm(obj.d_mesh.DIM);
+            this.d_sources = sources * Quadrature.angular_norm(this.d_mesh.DIM);
             
             % ==================================================================
             % MESH
-            if meshed(obj.d_mesh)
+            if meshed(this.d_mesh)
                 
                 % Add the source map.
-                add_mesh_map(obj.d_mesh, source_map, 'EXTERNALSOURCE');
-                obj.d_source_map = mesh_map(obj.d_mesh, 'EXTERNALSOURCE');
+                add_mesh_map(this.d_mesh, source_map, 'EXTERNALSOURCE');
+                this.d_source_map = mesh_map(this.d_mesh, 'EXTERNALSOURCE');
 
                 % Reshape the source map to a vector.
-                src = reshape(obj.d_source_map, number_cells(obj.d_mesh), 1);
+                src = reshape(this.d_source_map, number_cells(this.d_mesh), 1);
 
-                obj.d_source_vec = zeros(number_cells(obj.d_mesh),...
-                                         obj.d_number_groups);
+                this.d_source_vec = zeros(number_cells(this.d_mesh),...
+                                         this.d_number_groups);
 
-                for cell = 1:number_cells(obj.d_mesh)
-                    for group = 1:obj.d_number_groups
-                        obj.d_source_vec(cell, group) = ...
-                            obj.d_sources(group, src(cell));            
+                for cell = 1:number_cells(this.d_mesh)
+                    for group = 1:this.d_number_groups
+                        this.d_source_vec(cell, group) = ...
+                            this.d_sources(group, src(cell));            
                     end
                 end
                 
             % ==================================================================
             % MOC
-            elseif tracked(obj.d_mesh)
+            elseif tracked(this.d_mesh)
                 
-                obj.d_source_map = source_map;
-                obj.d_source_vec = obj.d_sources;
+                this.d_source_map = source_map;
+                this.d_source_vec = this.d_sources;
                 
             else
                 error('Invalid spatial mesh! Neither meshed nor tracked.')
             end
             
-            obj.d_initialized = 1;
+            this.d_initialized = 1;
             
         end
         
         % ======================================================================
         %> @brief Set external sources on a fine mesh.
-        %
+        %>
+        %> Note, this is a source in terms of *moments*.  The client is 
+        %> responsible for applying the moments-to-discrete operator.
+        %>
         %> @param sources       Unique sources.
         %> @param source_map 	Fine mesh map of sources.  
         % ======================================================================
-        function obj = set_sources_mesh(obj, sources, source_map)
-            obj.d_sources = sources * Quadrature.angular_norm(obj.d_mesh.DIM);
-            obj.d_source_map = source_map;
-            obj.d_source_vec = zeros(number_cells(obj.d_mesh),...
-                                     obj.d_number_groups);
-            for cell = 1:number_cells(obj.d_mesh)
-                for group = 1:obj.d_number_groups
-                    obj.d_source_vec(cell, group) = ...
-                        obj.d_sources(group, source_map(cell));
+        function this = set_sources_mesh(this, sources, source_map)
+            this.d_sources    = sources;
+            this.d_source_map = source_map;
+            this.d_source_vec = zeros(number_cells(this.d_mesh),...
+                                     this.d_number_groups);
+            for cell = 1:number_cells(this.d_mesh)
+                for group = 1:this.d_number_groups
+                    this.d_source_vec(cell, group) = ...
+                        this.d_sources(group, source_map(cell));
                 end
             end
-            obj.d_initialized = 1;
+            this.d_initialized = 1;
         end
         
         
         % Getters.
         
-        function q = cell_source(obj, i, j, g)
-            DBC.Require('g > 0 && g <= obj.d_number_groups');
-            q = obj.d_sources(g, obj.d_source_map(i, j));
+        function q = cell_source(this, i, j, g)
+            DBC.Require('g > 0 && g <= this.d_number_groups');
+            q = this.d_sources(g, this.d_source_map(i, j));
         end
         
-        function q = region_source(obj, r, g)
-            q = obj.d_sources(g, obj.d_source_map(r));
+        function q = region_source(this, r, g)
+            q = this.d_sources(g, this.d_source_map(r));
         end
         
-        function q = source(obj, g)
-            q = obj.d_source_vec(:, g);
+        function q = source(this, g)
+            q = this.d_source_vec(:, g);
         end
         
-        function y = initialized(obj)
-            y = obj.d_initialized;
+        function y = initialized(this)
+            y = this.d_initialized;
         end
         
     end

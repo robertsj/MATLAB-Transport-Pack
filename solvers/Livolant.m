@@ -109,7 +109,7 @@
 %> \sa SourceIteration
 %>
 % ==============================================================================
-classdef Livolant < InnerIteration
+classdef Livolant < SourceIteration
     
     properties (Access = private)
         %> A three column vector of current, last, and penultimate fluxes.
@@ -216,10 +216,7 @@ classdef Livolant < InnerIteration
             
             % Build M*Q, the source that is "fixed" for this solve.
             build_fixed_source(this, g);
-                 
-            % Set the boundary fluxes for this sweep.
-            %set(this.d_boundary);
-            
+        
             while flux_error > this.d_tolerance ...
                 && iteration < this.d_max_iters
             
@@ -229,7 +226,6 @@ classdef Livolant < InnerIteration
                 % Perform a sequence of source ("free") iterations.
                 [err, mu] = source_iterations(this, g);
                 
-                %fprintf('       SI Error: %12.8f,  mu: %12.8f\n', err, mu);
                 iteration = iteration + this.d_free_iters;
                 
                 % Perform a sequence of accelerated iterations, but only if the 
@@ -258,8 +254,6 @@ classdef Livolant < InnerIteration
             
             % Update the state.
             set_phi(this.d_state, this.d_phi(:, this.d_2), g);
-
-            % Update the boundary fluxes.
 
         end
         
@@ -294,13 +288,8 @@ classdef Livolant < InnerIteration
                 % Compute the first residual.
                 e0 = this.d_phi(:, this.d_1) - this.d_phi(:, this.d_0);
                 
-                % **Now** we need to do a sweep for the third flux.
-                
-                % Build the within-group source (using phi_1!)
-                build_scatter_source(this, g, this.d_phi(:, this.d_1));
-                
                 % Construct total sweep source.
-                sweep_source = (this.d_fixed_source + this.d_scatter_source); 
+                sweep_source = build_sweep_source(this);
                 
                 % Set incident boundary fluxes.
                 %set(this.d_boundary);
@@ -335,15 +324,9 @@ classdef Livolant < InnerIteration
             iteration = 0; 
             while iteration < this.d_free_iters
             
-                % Build the within-group source
-                build_scatter_source(this, g, this.d_phi(:, this.d_2));
-                
-                % Construct total sweep source.
-                sweep_source = (this.d_fixed_source + this.d_scatter_source); 
-                
-                % Set incident boundary fluxes.
-                % set(this.d_boundary);
-                
+                % Build the sweep source
+                sweep_source = build_sweep_source(this);
+
                 % Shuffle indices so new flux is put in right storage.
                 shuffle_index(this);
                 
@@ -374,7 +357,7 @@ classdef Livolant < InnerIteration
         %> be written into.
         % ======================================================================
         function this = shuffle_index(this)
-            temp    = this.d_0;
+            temp     = this.d_0;
             this.d_0 = this.d_1;
             this.d_1 = this.d_2;
             this.d_2 = temp;
