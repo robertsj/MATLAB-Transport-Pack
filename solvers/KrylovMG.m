@@ -352,7 +352,10 @@ end
 %> @brief Apply one-group diffusion preconditioner.
 function y = apply_m(x, this)
 
-% Setup.
+% Our preconditioner is
+% (I + inv(C)S)
+
+
 % Number of unknowns per group
 n   = number_cells(this.d_mesh);
 ng  = number_groups(this.d_mat);
@@ -375,7 +378,7 @@ for g = 1:ng
     % Get one group diffusion operator.
     M = this.d_diffop.get_1g_operator(g);
     % Build all scattering sources.  
-    q = build_all_scatter_source(this.d_scatter_source, g, y);
+    q = build_total_scatter_source(this.d_scatter_source, g, y);
     % Add fission if this is a multiplying fixed source problem.
     if (this.d_fixed && initialized(this.d_fission_source))
         q = q + source(this.d_fission_source, g);

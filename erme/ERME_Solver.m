@@ -10,6 +10,21 @@ classdef ERME_Solver < handle
         d_input
         %> ERME problem
         d_problem  
+        %> Inner tolerance
+        d_inner_tolerance
+        %> Maximum inner iterations
+        d_inner_max_iters
+        %> Outer tolerance
+        d_outer_tolerance
+        %> Maximum outer iterations
+        d_outer_max_iters
+        
+        %> Final expansion coefficients
+        d_J
+        %> Final eigenvalue
+        d_k
+        %> Final current eigenvalue
+        d_lambda
     end
     
     methods (Access = public)
@@ -28,12 +43,37 @@ classdef ERME_Solver < handle
         function this = ERME_Solver(input, problem)
             this.d_input   = input;
             this.d_problem = problem;
+            % Set convergence criteria
+            this.d_inner_tolerance = get(this.d_input, 'inner_tolerance');
+            if ~this.d_inner_tolerance
+                this.d_inner_tolerance = 1e-8;
+            end
+            this.d_inner_max_iters = get(this.d_input, 'inner_max_iters');
+            if ~this.d_inner_max_iters
+                this.d_inner_max_iters = 100;
+            end
+            this.d_outer_tolerance = get(this.d_input, 'outer_tolerance');
+            if ~this.d_outer_tolerance
+                this.d_outer_tolerance = 1e-8;
+            end
+            this.d_outer_max_iters = get(this.d_input, 'outer_max_iters'); 
+            if ~this.d_outer_max_iters
+                this.d_outer_max_iters = 20;
+            end
         end
         
         % ======================================================================
         %> @brief  Solve the problem.
         % ======================================================================        
         this = solve(this);
+        
+        function k = get_keff(this)
+            k = this.d_k;
+        end
+        
+        function l = get_lambda(this)
+            l = this.d_lambda; 
+        end
         
         % ======================================================================
         %> @brief  Initialize unknowns

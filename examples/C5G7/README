@@ -1,0 +1,11 @@
+README
+======
+
+C5G7_direct.m            -- solve C5G7 directly via discrete ordinates
+C5G7_erme.m              -- solve C5G7 using response matrix approach (on-the-fly or database)
+C5G7_materials.m         -- C5G7 material definitions
+C5G7_pins.m              -- C5G7 pin definitions
+C5G7_assemblies.m        -- C5G7 assembly definitions
+C5G7_pins_rf_db.m        -- generates C5G7 response database for pin cells
+C5G7_assemblies_rf_db.m  -- generates C5G7 response database for assemblies
+

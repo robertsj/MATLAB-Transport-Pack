@@ -244,7 +244,7 @@ classdef ResponseServer < ResponseServerBase
         %> @return                  Responses    
         % ======================================================================  
         function this = update(this, keff)
-            
+            t = toc;
             % Number of (non energy) expansion orders
             number_orders_space_angle = (this.d_order_space + 1) * ...
                                         (this.d_order_azimuth + 1) * ...

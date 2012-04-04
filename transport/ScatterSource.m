@@ -79,6 +79,11 @@ classdef ScatterSource < handle
             q = phi .* this.d_sigma_s{g}(:, g);
         end % end function build_scatter_source
         
+        function q = fuckyou(this, g, phi)
+           q=0; 
+        end
+        
+        
         % ======================================================================
         %> @brief Build the in-scatter source.
         %>
@@ -95,6 +100,8 @@ classdef ScatterSource < handle
         %> @return          Within-group catter source.
         % ======================================================================
         function q = build_in_scatter_source(this, g)
+            
+            q = 0;
             
             % Add downscatter source.
             for gp = lower(this.d_mat, g) : g - 1        

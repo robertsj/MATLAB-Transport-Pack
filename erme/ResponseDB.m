@@ -5,7 +5,9 @@
 %
 %> This class reads and writes response data to/from an HDF5 file.  It 
 %> populates response operators as functions of keff for each node type and
-%> provides vectorized interpolation.
+%> provides vectorized interpolation.  Note, response data can also be
+%> saved and loaded as .mat files, largely a fix for using older MATLAB
+%> version.
 %>
 %> Relevant input database entries include thos of @ref ResponseServerBase
 %> and the following
@@ -33,9 +35,12 @@ classdef ResponseDB < ResponseServerBase
 
     properties (Access = protected)
         
-        %> DB file name and id
+        %> DB hdf5 file name
         d_file
+        %> DB hdf5 file id
         d_file_id
+        %> DB mat name
+        d_file_mat
         
         %> Cell array of vectors of node keffs.
         d_keff_vector
@@ -55,6 +60,9 @@ classdef ResponseDB < ResponseServerBase
         d_F_all
         d_A_all
         d_L_all
+        
+        %> Do we have the high level HDF5 interface?
+        d_have_hdf5 = 0;
     end
     
     methods (Access = public)
@@ -75,6 +83,14 @@ classdef ResponseDB < ResponseServerBase
                 file = 'default.h5';
             end
             this.d_file = file;
+            
+            % MAT file
+            file = get(input, 'rf_db_name_mat');
+            if (~file)
+                file = 'default.mat';
+            end
+            this.d_file_mat = file;
+            
             % Default the interpolation to cubic, which seems to be a lot better
             % than linear and much, much faster than cubic (even though the
             % documentation says they should cost the same).
@@ -82,12 +98,20 @@ classdef ResponseDB < ResponseServerBase
             if ~this.d_interp_method 
                 this.d_interp_method = 'spline';
             end
+ 
+            if exist('h5writeatt')
+                this.d_have_hdf5 = 1;
+            end
+            
+            
         end
         
         % ======================================================================
         %> @brief  Initialize HDF5 file for writing.
         % ======================================================================
         function this = initialize_write(this)
+            
+            DBC.Require('this.have_hdf5()');
             
             % Open file id.  Overwrite the file if it exists.
             this.d_file_id = h5filecreate(this.d_file, 'truncate', true);
@@ -126,12 +150,40 @@ classdef ResponseDB < ResponseServerBase
         end
         
         % ======================================================================
+        %> @brief  Initialize mat file for writing.
+        % ======================================================================
+        function this = initialize_write_mat(this)
+            
+            % New empty struct
+            %response = struct([]);
+            
+            % Fill basic attributes
+            db_description = get(this.d_input, 'rf_db_description');
+            if ~db_description
+                db_description = 'just another database.';
+            end
+            response.db_description     = db_description;
+            response.dimension          = this.d_dimension;
+            response.solver             = 'mtp';
+            response.number_groups      = this.d_number_groups;
+            response.max_order_space    = this.d_max_order_space;
+            response.max_order_azimuth  = this.d_max_order_azimuth;
+            response.max_order_polar    = this.d_max_order_polar;
+            response.number_nodes       = this.d_number_nodes;
+
+            save(this.d_file_mat, 'response');
+        end
+                
+        
+        % ======================================================================
         %> @brief Write responses
         %
         %> @param R     Cell array of response blocks for all keffs.
         % ======================================================================        
         function this = write_response(this, node_index, node_description, ...
                 R, F, A, L)
+            
+            DBC.Require('this.have_hdf5()');
 
             % convert node index to string
             nidx = ['/n',num2str(node_index)];
@@ -168,9 +220,34 @@ classdef ResponseDB < ResponseServerBase
         end
         
         % ======================================================================
+        %> @brief Write responses to mat file.
+        % ======================================================================        
+        function this = write_response_mat(this, node_index, node_description, ...
+                R, F, A, L)
+
+            load(this.d_file_mat, 'response')
+            
+            % New object
+
+            response.description{node_index} = node_description;
+            response.keffs{node_index} = this.d_keff_vector{node_index};
+            
+            % Write the responses for each keff.
+            response.R{node_index} = R;
+            response.F{node_index} = F;
+            response.A{node_index} = A;
+            response.L{node_index} = L;
+            
+            save(this.d_file_mat, 'response');
+            
+        end
+        
+        % ======================================================================
         %> @brief Read responses.
         % ======================================================================        
         function this = read_response(this)
+            
+            DBC.Require('this.have_hdf5()');
             
             f = this.d_file;
             
@@ -237,7 +314,65 @@ classdef ResponseDB < ResponseServerBase
                 end
             end
 
-        end        
+        end  
+        
+        % ======================================================================
+        %> @brief Read responses from a mat file.
+        % ======================================================================        
+        function this = read_response_mat(this)
+            
+            load(this.d_file_mat, 'response');
+            
+            % Read attributes
+            this.d_number_nodes = response.number_nodes;
+            if this.d_number_nodes == 0
+                error('Read zero nodes!')
+            end
+
+            this.d_dimension         = response.dimension;
+            this.d_number_groups     = response.number_groups;
+            this.d_max_order_space   = response.max_order_space;
+            this.d_max_order_azimuth = response.max_order_azimuth;
+            this.d_max_order_polar   = response.max_order_polar;
+            
+            % Check whether these maximum orders are less than the requested
+            % orders.  If they are, reset the requested orders to match.
+            if this.d_max_order_space < this.d_order_space
+                error('user:input', 'Requested spatial order > max');
+                %this.d_order_space = this.d_max_order_space;
+            end
+            if this.d_max_order_azimuth < this.d_order_azimuth
+                error('user:input', 'Requested azimuth order > max');
+                %this.d_order_azimuth = this.d_max_order_azimuth;
+            end
+            if this.d_max_order_polar < this.d_order_polar
+                error('user:input', 'Requested polar order > max');
+                %this.d_order_polar = this.d_max_order_polar;
+            end            
+
+            this.d_R_all = cell(this.d_number_nodes, 1);
+            this.d_F_all = cell(this.d_number_nodes, 1);
+            this.d_A_all = cell(this.d_number_nodes, 1);
+            this.d_L_all = cell(this.d_number_nodes, 1);
+            this.d_keff_vector = cell(this.d_number_nodes, 1);
+            this.d_number_keffs = zeros(this.d_number_nodes, 1);
+            for ni = 1:this.d_number_nodes
+
+                % Read node description.
+                this.d_node_descriptions{ni} = response.description{ni};
+                
+                % Read keffs.
+                this.d_number_keffs(ni) = length(response.keffs{ni});
+                this.d_keff_vector{ni}  = response.keffs{ni};
+                
+                % Read responses.
+                this.d_R_all{ni} = response.R{ni};
+                this.d_F_all{ni} = response.F{ni};
+                this.d_A_all{ni} = response.A{ni};
+                this.d_L_all{ni} = response.L{ni};                
+            end
+            clear response
+        end
         
         % ======================================================================
         %> @brief Return all responses (for all keffs and nodes).
@@ -300,20 +435,20 @@ classdef ResponseDB < ResponseServerBase
                 keffv = this.d_keff_vector{ni};
                 nk    = length(keffv);
                 if nk > 1
-                %
-                tmpR = reshape(R_all{ni}(:, :, :), len_R^2, nk);
-                R(:, :, ni) = reshape( ...
-                    interp1(keffv, tmpR', keff, int, 'extrap'), len_R, len_R);
-                %
-                tmpF(:, :) = F_all{ni}(:, :)';
-                F(:, ni) = interp1(keffv, tmpF, keff, int, 'extrap')';
-                %
-                tmpA(:, :) = A_all{ni}(:, :)';
-                A(:, ni) = interp1(keffv, tmpA, keff, int, 'extrap')';     
-                %
-                tmpL = reshape(L_all{ni}(:, :, :), len_R*2*dim, nk);
-                L(:, :, ni) = reshape( ...
-                    interp1(keffv, tmpL', keff, int, 'extrap'), len_R, 2*dim);
+                    %
+                    tmpR = reshape(R_all{ni}(:, :, :), len_R^2, nk);
+                    R(:, :, ni) = reshape( ...
+                        interp1(keffv, tmpR', keff, int, 'extrap'), len_R, len_R);
+                    %
+                    tmpF(:, :) = F_all{ni}(:, :)';
+                    F(:, ni) = interp1(keffv, tmpF, keff, int, 'extrap')';
+                    %
+                    tmpA(:, :) = A_all{ni}(:, :)';
+                    A(:, ni) = interp1(keffv, tmpA, keff, int, 'extrap')';
+                    %
+                    tmpL = reshape(L_all{ni}(:, :, :), len_R*2*dim, nk);
+                    L(:, :, ni) = reshape( ...
+                        interp1(keffv, tmpL', keff, int, 'extrap'), len_R, 2*dim);
                 else
                     R(:, :, ni) = R_all{ni}(:, :, 1);
                     F(:,    ni) = F_all{ni}(:,    1);
@@ -387,6 +522,10 @@ classdef ResponseDB < ResponseServerBase
         
         function n = node_descriptions(this)
             n = this.d_node_descriptions;
+        end
+        
+        function b = have_hdf5(this)
+            b = this.d_have_hdf5;
         end
         
     end

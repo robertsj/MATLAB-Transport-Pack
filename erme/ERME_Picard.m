@@ -7,7 +7,10 @@
 %> Other ideas being investigated are k updated via a Rayleigh quotient, 
 %> CMFD/p-CMFD, and low order response
 %>
-%> @todo Add Steffensen extrapolation and possible PETSc/SLEPc extension.
+%> Input database options of relevance include
+%>   - erme_steffensen   (1 turns it on)
+%>   - erme_picard_inner (One of 'eigs', 'krylovschur', 'arnoldi', 'power')
+%> plus possibly others general to @ref ERME_Solver.
 %>
 % ==============================================================================
 classdef ERME_Picard < ERME_Solver
@@ -15,13 +18,18 @@ classdef ERME_Picard < ERME_Solver
     properties
         %> Residual history
         d_norm_residual_hist
-        %> Final expansion coefficients
-        d_J
-        %> Final eigenvalue
-        d_k
-        %> Final current eigenvalue
-        d_lambda
+        %> 
         d_number_iterations
+        %> Inner solver (eigs, krylovschur, arnoldi, power)
+        d_inner_solver
+        %> SLEPc EPS object
+        d_eps
+        %> PETSc shell matrix for MR
+        d_MR
+        %> PETSc Vec for J
+        d_pJ
+        %> Do we use Steffensen acceleration?
+        d_steffensen
     end
     
     methods (Access = public)
@@ -34,7 +42,7 @@ classdef ERME_Picard < ERME_Solver
         %> during parsing.
         %>
         %> @param  input        Input database.
-        %> @param  elements     Element map.
+        %> @param  problem      ERME object.
         %> @return              Instance of the ERME_Picard class.
         % ======================================================================
         function this = ERME_Picard(input, problem)
@@ -47,12 +55,13 @@ classdef ERME_Picard < ERME_Solver
         function this = solve(this)
             
             % Set convergence criteria.
-            inner_tolerance = get(this.d_input, 'inner_tolerance');
-            inner_max_iters = get(this.d_input, 'inner_max_iters');
-            outer_tolerance = get(this.d_input, 'outer_tolerance');
-            outer_max_iters = get(this.d_input, 'outer_max_iters'); 
-            steffensen      = get(this.d_input, 'erme_steffensen'); 
+            this.d_steffensen      = get(this.d_input, 'erme_steffensen'); 
+            this.d_inner_solver    = get(this.d_input, 'erme_picard_inner');
             
+            if ~this.d_inner_solver
+                this.d_inner_solver = 'eigs';
+            end    
+
             % Initialize current.
             J = init_J(this);
             
@@ -72,10 +81,16 @@ classdef ERME_Picard < ERME_Solver
             % Get initial nonlinear residual norm.
             norm_residual = norm(residual(this, [J; k; lambda]));
             % and start a residual history.
-            norm_residual_hist = zeros(outer_max_iters + 1, 1);
+            norm_residual_hist = zeros(this.d_outer_max_iters + 1, 1);
             norm_residual_hist(1) = norm_residual;
             
-           
+            % If using SLEPc, initialize
+            use_slepc = 0;
+            if ~strcmp(this.d_inner_solver, 'eigs')
+                use_slepc = 1;
+                % Setup SLEPc solver.
+                this.setup_slepc();
+            end
             
             % ==================================================================
             % Outer iterations
@@ -83,23 +98,41 @@ classdef ERME_Picard < ERME_Solver
             
             iteration = 0;
 
-            while iteration < outer_max_iters && norm_residual > outer_tolerance
+            while iteration < this.d_outer_max_iters && ...
+                  norm_residual > this.d_outer_tolerance
                 
-                fprintf(1, 'it = %d, keff = %12.10f, lambda = %12.10f, norm = %12.10e\n', ...
-                    iteration, k, lambda, norm_residual);
+                fprintf(1, ['it = %d, keff = %12.10f, lambda = %12.10f,', ...
+                    ' norm = %12.10e\n'], iteration, k, lambda, norm_residual);
                 
                 iteration = iteration + 1;
                 
                 % ==============================================================
                 % Inner iterations
                 % ==============================================================
-                MR = M*R; % Set a single operator.                         
-                opts.disp  = 0;
-                opts.tol   = inner_tolerance;
-                opts.maxit = inner_max_iters;
-                [J, lambda] = eigs(MR, 1, 'LM', opts);                    
-                J = J*sign(sum(J)); % We want the positive direction                           
-
+       
+                
+                if ~use_slepc
+                    % Using eigs
+                    opts.disp  = 0;
+                    opts.tol   = this.d_inner_tolerance;
+                    opts.maxit = this.d_inner_max_iters;
+                    MR = M*R; % Set a single operator.  
+                    [J, lambda] = eigs(MR, 1, 'LM', opts);     
+                    
+                else
+                    % Using SLEPc
+                    % Remake operator.
+                    this.d_MR(:, :) = M*R; 
+                    % Solve and extract solution.
+                    this.d_eps.Solve();
+                    lambda = this.d_eps.GetEigenpair(1, this.d_pJ);
+                    J = this.d_pJ(:);
+                    % Destroy operator and solver.
+                    %this.d_eps.Destroy();
+                    %this.d_MR.Destroy();
+                end
+                J = J*sign(sum(J)); % We want the positive direction  
+                
                 % ==============================================================
                 % Eigenvalue update
                 % ==============================================================
@@ -111,9 +144,9 @@ classdef ERME_Picard < ERME_Solver
                 loss        = leak + absorb;                  % total loss
                 k           = gain / loss;                    
 
-                % Steffensen update if required
-                if steffensen && iteration > 2
-                  k = k_2 - (k_1 - k_2)^2 / (k - 2.0 * k_1 + k_2);
+                % Steffensen update if required.
+                if this.d_steffensen && iteration > 2
+                   k = this.extrapolate(k, k_1, k_2);
                 end
 
                 % Get response matrices for initial k
@@ -141,16 +174,66 @@ classdef ERME_Picard < ERME_Solver
 
             this.d_problem.update_state(J, k, lambda);
             this.d_number_iterations = iteration;
+            
+            % Destroy SLEPc stuff if applicable
+            if use_slepc
+                this.d_pJ.Destroy();
+                this.d_MR.Destroy();
+                this.d_eps.Destroy();
+                SlepcFinalize();
+            end
+            
+        end
+        
+    end
+    
+    methods (Access = private)
+        
+        % ======================================================================
+        %> @brief  Steffensen/Aitken extrapolation
+        %> @param   k       Computed eigenvalue
+        %> @param   k_1     Eigenvalue computed 1 time ago
+        %> @param   k_2     Eigenvalue computed 2 times ago
+        %> @return  k_ex    Extrapolated eigenvalue
+        % ======================================================================   
+        function k_ex = extrapolate(this, k, k_1, k_2)  
+            k_ex = k_2 - (k_1 - k_2)^2 / (k - 2.0 * k_1 + k_2);
+        end
+        
+        
+        % ======================================================================
+        %> @brief  Initialize SLEPc objects for inner eigensolve.
+        % ======================================================================   
+        function setup_slepc(this)        
+            disp('Setting up SLEPc')
+            % Initialize SLEPc
+            slepc_options = get(this.d_input, 'slepc_options');
+            SlepcInitialize(slepc_options);
+            % Initialize operator
+            [R, F, A, L, M, leak] = get_operators(this.d_problem);
+            this.d_MR = PetscMat(M*R);
+            % Make new solver.
+            this.d_eps = SlepcEPS();
+            % Non-hermitian.
+            this.d_eps.SetProblemType(SlepcEPS.NHEP);
+            % Number
+            this.d_eps.SetDimensions(1, 3);
+            % Largest magnitute.
+            this.d_eps.SetWhichEigenpairs(1);
+            % Set type.
+            this.d_eps.SetType(this.d_inner_solver);
+            % Set convergence criteria, operator, and any options.
+            this.d_eps.SetTolerances(this.d_inner_tolerance, ...
+                                     this.d_inner_max_iters);
+            this.d_eps.SetOperators(this.d_MR);
+            this.d_eps.SetFromOptions();
+            % Create vector for extracting eigenvector.
+            n = size_J(this.d_problem);
+            this.d_pJ = PetscVec(zeros(n, 1));
         end
         
     end
     
 end
-% 
-% template <class Inner>
-% scalar PowerIter<Inner>::Aitken(scalar k0, scalar k1, scalar k2)
-% {
-%   scalar kA = k0 - pow(k1 - k0, 2) / (k2 - 2.0 * k1 + k0);
-%   return kA;
-% }
+
 

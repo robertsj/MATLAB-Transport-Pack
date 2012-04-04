@@ -52,11 +52,6 @@ classdef ERME_Newton < ERME_Solver
 
             petsc_options = get(this.d_input, 'petsc_options');
             PetscInitialize(petsc_options);
-            
-            inner_tolerance = get(this.d_input, 'inner_tolerance');
-            inner_max_iters = get(this.d_input, 'inner_max_iters');
-            outer_tolerance = get(this.d_input, 'outer_tolerance');
-            outer_max_iters = get(this.d_input, 'outer_max_iters'); 
 
             % Initialize unknown.
             [J, k, lambda] = init(this);
@@ -135,7 +130,9 @@ classdef ERME_Newton < ERME_Solver
             disp('*** final results ***')
             fprintf(1,'it = %d, keff = %12.10f, lambda = %12.10f, norm = %12.10e\n', ...
                 1, k, lambda, norm_residual);
-snes.View;
+            snes.View;
+
+            % Cleanup PETSc
             v.Destroy();
             z.Destroy();
             Jac.Destroy();

@@ -162,8 +162,10 @@ classdef ERME < handle
         end
         
         % ======================================================================
-        %> @brief  Update the responses for a new eigenvalue.
-        %> @param  keff     Updated eigenvalue.
+        %> @brief  Update the state.
+        %> @param  J        Boundary coefficients.
+        %> @param  keff     Updated k-eigenvalue.
+        %> @param  lambda   Updated lambda-eigenvalue.
         % ======================================================================        
         function update_state(this, J, keff, lambda)
             this.d_J      = J;
@@ -211,9 +213,16 @@ classdef ERME < handle
             n = this.d_size; 
         end
         
+        % ======================================================================
+        %> @brief  Return the k-eigenvalue.
+        % ====================================================================== 
         function k = get_keff(this)
             k = this.d_keff;
         end
+        
+        % ======================================================================
+        %> @brief  Return the lambda-eigenvalue.
+        % ====================================================================== 
         function l = get_lambda(this)
             l = this.d_lambda;
         end

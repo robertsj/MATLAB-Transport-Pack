@@ -87,9 +87,10 @@ classdef ResponseDriver < ResponseDB
                  
                     keff = this.d_keff_vector{node_index}(k_index);
                     
+                    
                     [R, F, A, L] = ...
                         get_node_responses(this.d_server, node_index, keff); 
-
+                    
                     this.d_R_all{node_index}(:, :, k_index) = R(:, :);
                     this.d_L_all{node_index}(:, :, k_index) = L(:, :);
                     this.d_F_all{node_index}(:,    k_index) = F(:);

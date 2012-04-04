@@ -110,7 +110,7 @@ classdef SourceIteration < InnerIteration
                 % values.  Note, in a more general implementation, the
                 % sweep source would be generated for each angle.  Here,
                 % since it's isotropic, we do it once before everything.
-                sweep_source = build_sweep_source(this);
+                sweep_source = build_sweep_source(this, g, phi);
                 
                 % Update incident boundary fluxes.
                 update(this.d_boundary);
