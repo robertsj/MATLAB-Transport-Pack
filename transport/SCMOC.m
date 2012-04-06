@@ -59,7 +59,7 @@ classdef SCMOC < Equation
         % ======================================================================
         function obj = SCMOC(mesh, mat)
             % Call the base class.
-            obj = obj@Equation(mesh, mat); 
+            obj = obj@Equation(mesh, mat, []); 
         end
         
         % ======================================================================

@@ -6,7 +6,8 @@
 classdef Cruciform < Surface2D
     
     properties (Access = protected)
-
+        center
+        angle
     end
     
     methods (Access = public)
@@ -15,8 +16,9 @@ classdef Cruciform < Surface2D
         %> @brief Class constructor
         %> @return Instance of the Cruciform class.
         % ======================================================================
-        function self = Cruciform()
-            % nothing yet
+        function self = Cruciform(center, angle)
+            self.center = center;
+            self.angle = angle * pi / 180;
         end
         
         % ======================================================================
@@ -24,22 +26,58 @@ classdef Cruciform < Surface2D
         %> @return The sense (i.e. in or out)
         % ======================================================================
         function f = sense(self, r)
-            x = r.x;
-            y = r.y;
             
-            if (x <= 0.185850)
-                
-                yd = sqrt(.034540-x.^2) + 0.53340;
-                
-            elseif (x > 0.18570 && x <= 0.53340)
-                
-                yd = (0.53340 - sqrt(.1207560-(x-0.53340).^2));
-                
-            elseif  (x > 0.53340)
-                
-                yd = sqrt(.034540  - (x-0.53340).^2);
-                
-            end  
+            % Convert to local coordinates
+            x = r.x - self.center.x;
+            y = r.y - self.center.y;
+            
+%             xx=x;
+%             yy=y;
+%             
+%             b = find((xx<0).*(yy>0));
+%             y(b)=xx(b);
+%             x(b)=yy(b);
+%             
+%             b = find((xx>0).*(yy<0));
+%             y(b)=xx(b);
+%             x(b)=yy(b);         
+
+            
+            % Check only first quadrant
+
+            
+%             t = y;
+%             b = y < x;
+%             y(find(b))=x(find(b));
+%             x(find(b))=t(find(b));
+
+            
+            % Rotate
+            xd = x * cos(self.angle) - y * sin(self.angle);
+            y  = x * sin(self.angle) + y * cos(self.angle);
+            x  = xd;
+            x = abs(x);
+            y = abs(y);
+            yd = (x <= 0.185850) .* (sqrt(.034540-x.^2) + 0.53340) + ...
+                 ((x > 0.185850) .* (x <= 0.53340)) .* (0.53340 - sqrt(.1207560-(x-0.53340).^2)) + ...
+                 (x > 0.53340) .* (sqrt(.034540  - (x - 0.53340).^2));
+            yd = real(yd);
+            
+%             if (x <= 0.185850)
+%                 
+%                 yd = sqrt(.034540-x.^2) + 0.53340;
+%                 
+%             elseif (x > 0.18570 && x <= 0.53340)
+%                 
+%                 yd = (0.53340 - sqrt(.1207560-(x-0.53340).^2));
+%                 
+%             elseif  (x > 0.53340)
+%                 
+%                 yd = sqrt(.034540  - (x - 0.53340).^2);
+%                 
+%             end  
+            
+            f = abs(y) - abs(yd);
 
         end
         

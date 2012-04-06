@@ -22,14 +22,24 @@ classdef ReflectiveTrack < BoundaryConditionMOC
         %>
         %> @return Instance of the ReflectiveTrack class.
         % ======================================================================
-        function this = ReflectiveTrack(boundary, mesh, quadrature, side)
-            this = this@BoundaryConditionMOC(boundary, mesh, quadrature, side); 
+        function this = ReflectiveTrack(boundary, input, mesh, quadrature, side)
+            this = this@BoundaryConditionMOC(boundary, input, mesh, quadrature, side); 
             
             %this.d_index = boundary.d_side_index{side};
             this.d_number_tracks = length(boundary.d_side_index{side}(:,1));
             build_index(this);
         end
 
+        % ======================================================================
+        %> @brief Set the boundary flux.
+        %
+        %> Note, nothing needs to be done for reflective, since the initial
+        %> guess is zero.
+        % ======================================================================
+        function this = set(this)
+            % do nothing
+        end      
+        
         % ======================================================================
         %> @brief Update the boundary flux.
         % ======================================================================

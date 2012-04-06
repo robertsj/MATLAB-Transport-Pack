@@ -59,46 +59,46 @@ classdef BoundaryTrack < handle
             
             if strcmp(get(input, 'bc_left'), 'vacuum')
                 this.d_bc{track.LEFT}   = ...
-                    VacuumTrack(this, track, quadrature, track.LEFT);
+                    VacuumTrack(this, input, track, quadrature, track.LEFT);
             elseif strcmp(get(input, 'bc_left'), 'reflect')
                 this.d_bc{track.LEFT}   = ...
-                    ReflectiveTrack(this, track, quadrature, track.LEFT);
+                    ReflectiveTrack(this, input, track, quadrature, track.LEFT);
          	elseif strcmp(get(input, 'bc_left'), 'reflect_r')
                 this.d_bc{track.LEFT}   = ...
-                    AppxReflectiveTrack(this, track, quadrature, track.LEFT);
+                    AppxReflectiveTrack(this, input, track, quadrature, track.LEFT);
             end
             
             if strcmp(get(input, 'bc_right'), 'vacuum')
                 this.d_bc{track.RIGHT}   = ...
-                    VacuumTrack(this, track, quadrature, track.RIGHT);
+                    VacuumTrack(this, input, track, quadrature, track.RIGHT);
             elseif strcmp(get(input, 'bc_right'), 'reflect')
                 this.d_bc{track.RIGHT}   = ...
-                    ReflectiveTrack(this, track, quadrature, track.RIGHT);
+                    ReflectiveTrack(this, input, track, quadrature, track.RIGHT);
             elseif strcmp(get(input, 'bc_right'), 'reflect_r')
                 this.d_bc{track.RIGHT}   = ...
-                    AppxReflectiveTrack(this, track, quadrature, track.RIGHT);
+                    AppxReflectiveTrack(this, input, track, quadrature, track.RIGHT);
             end
             
             if strcmp(get(input, 'bc_bottom'), 'vacuum')
                 this.d_bc{track.BOTTOM}   = ...
-                    VacuumTrack(this, track, quadrature, track.BOTTOM);
+                    VacuumTrack(this, input, track, quadrature, track.BOTTOM);
             elseif strcmp(get(input, 'bc_bottom'), 'reflect')
                 this.d_bc{track.BOTTOM}   = ...
-                    ReflectiveTrack(this, track, quadrature, track.BOTTOM);
+                    ReflectiveTrack(this, input, track, quadrature, track.BOTTOM);
             elseif strcmp(get(input, 'bc_bottom'), 'reflect_r')
                 this.d_bc{track.BOTTOM}   = ...
-                    AppxReflectiveTrack(this, track, quadrature, track.BOTTOM);
+                    AppxReflectiveTrack(this, input, track, quadrature, track.BOTTOM);
             end
             
             if strcmp(get(input, 'bc_top'), 'vacuum')
                 this.d_bc{track.TOP}   = ...
-                    VacuumTrack(this, track, quadrature, track.TOP);
+                    VacuumTrack(this, input, track, quadrature, track.TOP);
             elseif strcmp(get(input, 'bc_top'), 'reflect')
                 this.d_bc{track.TOP}   = ...
-                    ReflectiveTrack(this, track, quadrature, track.TOP);
+                    ReflectiveTrack(this, input, track, quadrature, track.TOP);
             elseif strcmp(get(input, 'bc_top'), 'reflect_r')
                 this.d_bc{track.TOP}   = ...
-                    AppxReflectiveTrack(this, track, quadrature, track.TOP);
+                    AppxReflectiveTrack(this, input, track, quadrature, track.TOP);
             end
             
             % Number of groups
@@ -168,7 +168,9 @@ classdef BoundaryTrack < handle
         function this = initialize(this, g)
             this.d_g = g;
         end
-        
+        function this = set_group(this, g)
+            this.d_g = g;
+        end         
         % ======================================================================
         %> @brief Set the incident boundary fluxes.
         %>
@@ -184,9 +186,24 @@ classdef BoundaryTrack < handle
         % ======================================================================  
         function this = set(this)
             for side = 1:2*this.d_track.DIM;
-                update(this.d_bc{side});
+                set(this.d_bc{side});
             end
         end   
+        
+        % ======================================================================
+        %> @brief Update the incident boundary fluxes.
+        %>
+        %> This is called after every sweep.  The sweeper updates all the
+        %> outgoing angular fluxes.  This routine updates the incident fluxes
+        %> according to the boundary condition.  As an example, this update
+        %> would ask a reflecting condition to set the incident flux using an
+        %> updated outgoing flux.
+        % ======================================================================  
+        function this = update(this)
+            for side = 1:2*this.d_track.DIM;
+                update(this.d_bc{side});
+            end
+        end  
         
         % ======================================================================
         %> @brief Get incident or exiting flux for an angle.

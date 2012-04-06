@@ -1,11 +1,9 @@
-%> @file  Surface2D.m
-%> @brief Surface2D class definition.
+%> @file  Surface3D.m
+%> @brief Surface3D class definition.
 % ==============================================================================
-%> @brief Defines an implicit surface.
-%
-%> Nearly verbatim translation to MATLAB from P. Romano's Python code.
+%> @brief Defines an implicit surface in 3D.
 % ==============================================================================
-classdef Surface2D < handle
+classdef Surface3D < handle
     
     properties (Access = protected)
 
@@ -13,12 +11,13 @@ classdef Surface2D < handle
     
     methods (Access = public)
         
+        
         % ======================================================================
-        %> @brief Evaluate F(x, y) at a given point.
+        %> @brief Evaluate F(x, y, z) at a given point.
         %> @return The sense (i.e. in or out)
         % ======================================================================
         f = sense(self, r)
-
+        
         % ======================================================================
         %> @brief Determine if location r is 'above' or 'below' the surface
         %>        by determining the sense

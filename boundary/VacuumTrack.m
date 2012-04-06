@@ -17,22 +17,28 @@ classdef VacuumTrack < BoundaryConditionMOC
         %>
         %> @return Instance of the VacuumTrack class.
         % ======================================================================
-        function this = VacuumTrack(boundary, mesh, quadrature, side)
-            this = this@BoundaryConditionMOC(boundary, mesh, quadrature, side); 
+        function this = VacuumTrack(boundary, input, mesh, quadrature, side)
+            this = this@BoundaryConditionMOC(boundary, input, mesh, quadrature, side); 
             
  
         end
-
+        
+        % ======================================================================
+        %> @brief Set the boundary flux.
+        %
+        %> Note, nothing needs to be done for reflective, since the initial
+        %> guess is zero.
+        % ======================================================================
+        function this = set(this)
+            % do nothing
+        end    
+        
         % ======================================================================
         %> @brief Update the boundary flux.
         % ======================================================================
         function this = update(this)
-            
             % Do nothing.
-            
-        end
-        
-        
+        end     
         
     end
     

@@ -19,8 +19,8 @@ classdef BoundaryConditionMOC < BoundaryCondition
         %>
         %> @return Instance of the Boundary class.
         % ======================================================================
-        function this = BoundaryConditionMOC(boundary, mesh, quadrature, side)
-            this = this@BoundaryCondition(boundary, mesh, quadrature, side); 
+        function this = BoundaryConditionMOC(boundary, input, mesh, quadrature, side)
+            this = this@BoundaryCondition(boundary, input, mesh, quadrature, side); 
             
  
         end

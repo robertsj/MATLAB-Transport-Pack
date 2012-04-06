@@ -40,8 +40,8 @@ classdef AppxReflectiveTrack < BoundaryConditionMOC
         %>
         %> @return Instance of the AppxReflectiveTrack class.
         % ======================================================================
-        function this = AppxReflectiveTrack(boundary, mesh, quadrature, side)
-            this = this@BoundaryConditionMOC(boundary, mesh, quadrature, side); 
+        function this = AppxReflectiveTrack(boundary, input, mesh, quadrature, side)
+            this = this@BoundaryConditionMOC(boundary, input, mesh, quadrature, side); 
             
             %this.d_index = boundary.d_side_index{side};
             this.d_number_tracks = length(boundary.d_side_index{side}(:,1));
@@ -56,6 +56,16 @@ classdef AppxReflectiveTrack < BoundaryConditionMOC
             
         end
 
+        % ======================================================================
+        %> @brief Set the boundary flux.
+        %
+        %> Note, nothing needs to be done for reflective, since the initial
+        %> guess is zero.
+        % ======================================================================
+        function this = set(this)
+            % do nothing
+        end      
+        
         % ======================================================================
         %> @brief Update the boundary flux.
         % ======================================================================

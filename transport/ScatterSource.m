@@ -79,10 +79,6 @@ classdef ScatterSource < handle
             q = phi .* this.d_sigma_s{g}(:, g);
         end % end function build_scatter_source
         
-        function q = fuckyou(this, g, phi)
-           q=0; 
-        end
-        
         
         % ======================================================================
         %> @brief Build the in-scatter source.
