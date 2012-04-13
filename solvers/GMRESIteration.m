@@ -110,6 +110,8 @@ classdef GMRESIteration < InnerIteration
         % ======================================================================
         function [flux_error, iteration] = solve(this, g)% phi, source)
 
+            this.d_g = g;
+            
             % Setup the boundary fluxes for this solve.
             set(this.d_boundary);          % Update the conditions.
             set_group(this.d_boundary, g); % Set the group
@@ -206,7 +208,7 @@ classdef GMRESIteration < InnerIteration
             if (initialized(this.d_external_source))
             	q = q + source(this.d_external_source, g);   
             end
-            q = apply(this.d_M, q);
+            %q = this.d_M.apply(q);
             
         end
         
@@ -215,7 +217,7 @@ classdef GMRESIteration < InnerIteration
         % ======================================================================
         function q = build_within_group_sweep_source(this, g, phi)
             q = build_within_group_source(this.d_scatter_source, g, phi);
-            q = apply(this.d_M, q);
+            %q = this.d_M.apply(q);
         end
         
     end
@@ -254,6 +256,6 @@ end
 function y = apply_m(x, this)
     C = this.d_diffop.get_1g_operator(this.d_g);
     % y <-  (I + inv(C)*S)x;  q <- S*x
-    q = build_within_group_source(this.d_sweep_souce, this.d_g, x); 
+    q = build_within_group_source(this.d_scatter_source, this.d_g, x); 
     y = x + C\q;
 end

@@ -43,6 +43,9 @@ classdef SweepBase < handle
         %> Number of sweeps
         d_number_sweeps;
         
+        %> Moment-to-Discrete
+        d_MtoD;
+        
     end
     
     methods
@@ -60,7 +63,7 @@ classdef SweepBase < handle
         %> @return              Instance of the SweepBase class.
         % ======================================================================
         function obj = SweepBase(input, mesh, mat, quadrature, boundary, ...
-                                 equation)
+                                 equation, MtoD)
             
             obj.d_input      = input;
             obj.d_mesh       = mesh;
@@ -75,6 +78,8 @@ classdef SweepBase < handle
             obj.d_nz = number_cells_z(mesh);
             
             obj.d_number_sweeps = 0;
+            
+            obj.d_MtoD = MtoD;
 
         end
         

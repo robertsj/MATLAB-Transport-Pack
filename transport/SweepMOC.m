@@ -81,11 +81,14 @@ classdef SweepMOC < handle
         %> applicable to all angles is provided, since we work only with 
         %> isotropic sources and scattering.
         %>
-        %> @param source    Discrete sweep source.
+        %> @param source    External source moments.
         %> @param g         Group of this problem.
         %> @return          Updated group flux.
         % ======================================================================
         function phi = sweep(obj, source, g)
+            
+            % Source is passed as discrete source.
+            %source = source * 4*pi;
             
             % 
             IN  = 1;
@@ -164,7 +167,7 @@ classdef SweepMOC < handle
                                 % Integration of scalar flux.  When all
                                 % sweeps are done, this is equivalent to
                                 % e.g. Eq. 3.347 in Hebert.
-                                phi(r) = phi(r) + 4*pi* w_a * w_p * ...
+                                phi(r) = phi(r) +  w_a * w_p * ...
                                 	psi_avg * spacing * len * inv_volume(r);
 
                             end % polar

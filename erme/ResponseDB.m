@@ -63,6 +63,8 @@ classdef ResponseDB < ResponseServerBase
         
         %> Do we have the high level HDF5 interface?
         d_have_hdf5 = 0;
+        
+       
     end
     
     methods (Access = public)
@@ -76,6 +78,7 @@ classdef ResponseDB < ResponseServerBase
             
             % Call base class
             this = this@ResponseServerBase(input);
+            
             
             % HDF5 file
             file = get(input, 'rf_db_name');
@@ -391,6 +394,8 @@ classdef ResponseDB < ResponseServerBase
         % ======================================================================    
         function [R, F, A, L] = get_responses(this, keff)
 
+            t = toc;
+            
             dim = this.d_dimension;
             len_R = 2*dim * ...
                     this.d_number_groups *  ...
@@ -463,6 +468,8 @@ classdef ResponseDB < ResponseServerBase
             this.d_A = A;
             this.d_L = L;
 
+            this.d_time = this.d_time + toc - t;
+            
         end        
         
         function set_interp_method(this, method)
@@ -526,6 +533,10 @@ classdef ResponseDB < ResponseServerBase
         
         function b = have_hdf5(this)
             b = this.d_have_hdf5;
+        end
+        
+        function t = mytime(this)
+            t = this.d_time; 
         end
         
     end

@@ -224,7 +224,7 @@ classdef InnerIteration < handle
                 end
 
                 this.d_sweeper = Sweep1D_mod(input, mesh, mat, quadrature, ...
-                    this.d_boundary, this.d_equation);                 
+                    this.d_boundary, this.d_equation, this.d_M);                 
                 
             elseif mesh.DIM == 2 && meshed(mesh)
                 
@@ -233,7 +233,7 @@ classdef InnerIteration < handle
 
                 % Sweeper
                 this.d_sweeper = Sweep2D_mod(input, mesh, mat, quadrature, ...
-                    this.d_boundary, this.d_equation); 
+                    this.d_boundary, this.d_equation, this.d_M); 
                 
             elseif mesh.DIM == 3
                 

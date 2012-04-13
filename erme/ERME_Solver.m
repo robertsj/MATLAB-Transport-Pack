@@ -25,6 +25,8 @@ classdef ERME_Solver < handle
         d_k
         %> Final current eigenvalue
         d_lambda
+        
+        d_time = 0;
     end
     
     methods (Access = public)
@@ -150,6 +152,10 @@ classdef ERME_Solver < handle
 
         function p = problem(this)
             p = this.d_problem; 
+        end
+        
+        function t = mytime(this)
+            t = this.d_time; 
         end
         
     end

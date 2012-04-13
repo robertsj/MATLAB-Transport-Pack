@@ -37,10 +37,10 @@ classdef Sweep1D_mod < SweepBase
         %> @return              Instance of the Sweep1D class.
         % ======================================================================
         function obj = Sweep1D_mod(input, mesh, mat, quadrature, boundary, ...
-                                   equation)
+                                   equation, MtoD)
             % Call base class.
             obj = obj@SweepBase(input, mesh, mat, quadrature, boundary, ...
-                                equation);
+                                equation, MtoD);
             
         end
         
@@ -60,6 +60,9 @@ classdef Sweep1D_mod < SweepBase
             
             % Initialize flux update.
             phi = zeros(size(s));
+            
+            % Discrete source from moments.
+            s = apply(obj.d_MtoD, s);
             
             % Get the precomputed cell cross section
             sig = obj.d_equation.d_sig;

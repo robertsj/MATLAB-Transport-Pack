@@ -20,7 +20,7 @@ classdef ResponseServerBase < handle
         %> User input database.
         d_input
         %> Time spent in the server.
-        d_time
+        d_time = 0;
         %> Problem dimension
         d_dimension
         %> Number of nodes

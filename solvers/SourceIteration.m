@@ -106,10 +106,9 @@ classdef SourceIteration < InnerIteration
             while flux_error > this.d_tolerance && iteration < this.d_max_iters
             
                 % Construct total sweep source.  This is just the sum of the
-                % within-group and other terms.  These are *discrete*
-                % values.  Note, in a more general implementation, the
-                % sweep source would be generated for each angle.  Here,
-                % since it's isotropic, we do it once before everything.
+                % within-group and other terms.  These are *moments*, and
+                % so the sweeper has to get the discrete component for an
+                % angle if needed.
                 sweep_source = build_sweep_source(this, g, phi);
                 
                 % Update incident boundary fluxes.
@@ -182,7 +181,7 @@ classdef SourceIteration < InnerIteration
             q = q + this.d_fixed_source;
             
             % Apply moments-to-discrete operator
-            q = apply(this.d_M, q);
+            %q = apply(this.d_M, q);
             
         end
  

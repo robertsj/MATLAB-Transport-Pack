@@ -30,6 +30,8 @@ classdef ERME_Picard < ERME_Solver
         d_pJ
         %> Do we use Steffensen acceleration?
         d_steffensen
+        %> Total inners
+        d_inners = 0;
     end
     
     methods (Access = public)
@@ -53,6 +55,9 @@ classdef ERME_Picard < ERME_Solver
         %> @brief  Solve the problem.
         % ======================================================================
         function this = solve(this)
+            
+            % start timer
+            t = toc;
             
             % Set convergence criteria.
             this.d_steffensen      = get(this.d_input, 'erme_steffensen'); 
@@ -127,6 +132,7 @@ classdef ERME_Picard < ERME_Solver
                     this.d_eps.Solve();
                     lambda = this.d_eps.GetEigenpair(1, this.d_pJ);
                     J = this.d_pJ(:);
+                    this.d_inners = this.d_inners + this.d_eps.GetIterationNumber();
                     % Destroy operator and solver.
                     %this.d_eps.Destroy();
                     %this.d_MR.Destroy();
@@ -183,6 +189,12 @@ classdef ERME_Picard < ERME_Solver
                 SlepcFinalize();
             end
             
+            this.d_time = this.d_time + toc - t;
+            
+        end
+        
+        function n = number_inners(this)
+            n = this.d_inners; 
         end
         
     end

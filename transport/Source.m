@@ -49,7 +49,7 @@ classdef Source < handle
             DBC.Require('length(sources(:, 1)) == this.d_number_groups');
 
             % Scale strengths to isotropic using appropriate angular norm.
-            this.d_sources = sources * Quadrature.angular_norm(this.d_mesh.DIM);
+            this.d_sources = sources;% * Quadrature.angular_norm(this.d_mesh.DIM);
             
             % ==================================================================
             % MESH

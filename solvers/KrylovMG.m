@@ -192,7 +192,7 @@ classdef KrylovMG < InnerIteration
                 
                 % Add all scattering and then fixed.
                 q = build_total_scatter_source(this.d_scatter_source, g, phi);
-                sweep_source = this.d_M.apply(q);
+                sweep_source = q;%this.d_M.apply(q);
                 sweep_source = sweep_source + build_fixed_sweep_source(this, g);
                     
                 % Update.
@@ -241,7 +241,7 @@ classdef KrylovMG < InnerIteration
             if (initialized(this.d_external_source))
             	q = q + source(this.d_external_source, g);   
             end   
-            q = this.d_M.apply(q);
+            %q = this.d_M.apply(q);
         end
         
         % ======================================================================
@@ -254,7 +254,7 @@ classdef KrylovMG < InnerIteration
         % ======================================================================
         function q = build_all_scatter_sweep_source(this, g, phi)
             q = build_total_scatter_source(this.d_scatter_source, g, phi);
-            q = this.d_M.apply(q); 
+            %q = this.d_M.apply(q); 
         end % build_fission_source   
   
         
@@ -328,7 +328,7 @@ function y = apply(x, this)
         % *external* source.
         if (this.d_fixed && initialized(this.d_fission_source))
             % Get the group gp fission source.
-            f = this.d_M.apply(source(this.d_fission_source, g));
+            f = source(this.d_fission_source, g);
             % Add it.  This *assumes* the fission source returns a
             % vector prescaled to serve as a discrete source.
             sweep_source = sweep_source + f;

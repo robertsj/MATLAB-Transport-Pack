@@ -22,7 +22,7 @@ classdef Sweep2D_mod < SweepBase
         %> Place holder horizontal edge flux [num_x]
         d_psi_horizontal      
         %
-        d_kernel = 1;
+        d_kernel = 0;
     end
     
     methods
@@ -40,11 +40,11 @@ classdef Sweep2D_mod < SweepBase
         %> @return              Instance of the Sweep2D class.
         % ======================================================================
         function obj = Sweep2D_mod(input, mesh, mat, quadrature, boundary, ...
-                                   equation)
+                                   equation, MtoD)
             
             % Call base class.
             obj = obj@SweepBase(input, mesh, mat, quadrature, boundary, ...
-                                equation);
+                                equation, MtoD);
 
             
             % Initialize place holders.  Currently, we sweep first along x and
@@ -70,6 +70,9 @@ classdef Sweep2D_mod < SweepBase
             
             % Initialize flux update.
             phi = zeros(size(s));
+            
+            % Discrete source from moments.
+            s = apply(obj.d_MtoD, s);
             
             % Get the precomputed cell cross section
             sig = obj.d_equation.d_sig;
